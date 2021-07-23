@@ -1,60 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>
-    
-    政者，正也。</title>
-  
-  <link rel="shortcut icon" href="/images/大猫头.jpg">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-  
-<script src="/js/pace.min.js"></script>
-
-<meta name="generator" content="Hexo 5.3.0"></head>
-
-<body>
-  <main class="content">
-    <section class="outer">
-  <article id="post-Unicode13.0.0中的17种空白字符" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-
-    
-    <div class="article-meta">
-      <a href="/Unicode13.0.0%E4%B8%AD%E7%9A%8417%E7%A7%8D%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6/" class="article-date">
-  <time datetime="2021-07-23T12:53:13.927Z" itemprop="datePublished">2021-07-23</time>
-</a>
-      
-    </div>
-    
-
-    
-    
-<div class="tocbot"></div>
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-      
-      <h1 id="Unicode13-0-0中的17种空白字符"><a href="#Unicode13-0-0中的17种空白字符" class="headerlink" title="Unicode13.0.0中的17种空白字符"></a>Unicode13.0.0中的17种空白字符</h1><h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2><table>
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title></title>
+    <url>/%E5%90%AF%E8%88%AA/</url>
+    <content><![CDATA[<h1 id="启航"><a href="#启航" class="headerlink" title="启航"></a>启航</h1><p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/Unicode13.0.0%E4%B8%AD%E7%9A%8417%E7%A7%8D%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6/</url>
+    <content><![CDATA[<h1 id="Unicode13-0-0中的17种空白字符"><a href="#Unicode13-0-0中的17种空白字符" class="headerlink" title="Unicode13.0.0中的17种空白字符"></a>Unicode13.0.0中的17种空白字符</h1><h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2><table>
 <thead>
 <tr>
 <th>Code 代码</th>
@@ -136,150 +92,9 @@
 <p>U+00A0 no-break space (NBSP) is the nonbreaking counterpart of U+0020 space. It has the same width, but behaves differently for line breaking. U+00A0无中断空格（NBSP）是U+0020空格的无中断对应者。它和U+0020空格具有相同的宽度，但在换行方面的表现不同。</p>
 <p>U+202F narrow no-break space (NNBSP) is a narrow version of U+00A0 no-break space. The NNBSP can be used to represent the narrow space occurring around punctuation characters in French typography, which is called an “espace fine insécable.” It is used especially in Mongolian text, before certain grammatical suffixes, to provide a small gap that not only prevents word breaking and line breaking, but also triggers special shaping for those suffixes. U+202F窄的无中断空格（NNBSP）是U+00A0无中断空格的一个狭窄版。NNBSP可以用来表示法语排版中标点符号周围出现的狭窄空间，即“espace fine insécable”。它还专用于蒙古文中，在某些语法后缀之前提供一个小的间隙，不仅可以防止断字和断行，还可以触发这些后缀的特殊形态。</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>The Unicode Consortium. <em>The Unicode® Standard: Version 13.0</em>. <a target="_blank" rel="noopener" href="https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf">https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf</a></li>
+<li>The Unicode Consortium. <em>The Unicode® Standard: Version 13.0</em>. <a href="https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf">https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf</a></li>
 <li>译文为自行翻译。对字符名称的翻译，部分参照了Windows 10系统工具“字符映射表”。</li>
 </ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pku-zyf.github.io/Unicode13.0.0%E4%B8%AD%E7%9A%8417%E7%A7%8D%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6/" data-id="ckrgh4wmd00014ovr920f2dvs" class="article-share-link">
-        分享
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-  
-<nav class="article-nav">
-  
-  
-  <a href="/%E5%90%AF%E8%88%AA/" class="article-nav-link">
-    <strong class="article-nav-caption">后一篇</strong>
-    <div class="article-nav-title"></div>
-  </a>
-  
-</nav>
-
-  
-
-  
-  
-  
-  
-
-</article>
-</section>
-    <footer class="footer">
-  <div class="outer">
-    <div class="float-right">
-      <ul class="list-inline">
-  
-  <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
-  
-  <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
-  
-</ul>
-    </div>
-    <ul class="list-inline">
-      <li>政者，正也。 &copy; 2021</li>
-      
-        <li></li>
-      
-      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
-      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
-    </ul>
-  </div>
-</footer>
-  </main>
-  <aside class="sidebar">
-    <button class="navbar-toggle"></button>
-<nav class="navbar">
-  
-  <div class="logo">
-    <a href="/"><img src="/images/大猫头.jpg" alt="政者，正也。"></a>
-  </div>
-  
-  <ul class="nav nav-main">
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/">Home</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link nav-item-search" title="搜索">
-        <i class="fe fe-search"></i>
-        搜索
-      </a>
-    </li>
-  </ul>
-</nav>
-<nav class="navbar navbar-bottom">
-  <ul class="nav">
-    <li class="nav-item">
-      <div class="totop" id="totop">
-  <i class="fe fe-rocket"></i>
-</div>
-    </li>
-    <li class="nav-item">
-      
-    </li>
-  </ul>
-</nav>
-<div class="search-form-wrap">
-  <div class="local-search local-search-plugin">
-  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
-  <div id="local-search-result" class="local-search-result"></div>
-</div>
-</div>
-  </aside>
-  
-<script src="/js/jquery-2.0.3.min.js"></script>
-
-
-<script src="/js/jquery.justifiedGallery.min.js"></script>
-
-
-<script src="/js/lazyload.min.js"></script>
-
-
-<script src="/js/busuanzi-2.3.pure.min.js"></script>
-
-
-
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/copybtn.js"></script>
-
-
-
-
-
-<script src="/js/tocbot.min.js"></script>
-
-<script>
-  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
-  tocbot.init({
-    tocSelector: '.tocbot',
-    contentSelector: '.article-entry',
-    headingSelector: 'h1, h2, h3, h4, h5, h6',
-    hasInnerContainers: true,
-    scrollSmooth: true,
-    positionFixedSelector: '.tocbot',
-    positionFixedClass: 'is-position-fixed',
-    fixedSidebarOffset: 'auto',
-  });
-</script>
-
-
-
-<script src="/js/ocean.js"></script>
-
-</body>
-
-</html>
+]]></content>
+  </entry>
+</search>
