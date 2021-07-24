@@ -94,17 +94,102 @@
       
       
       
-      <h1 id="Unicode13-0-0中的17种空白字符"><a href="#Unicode13-0-0中的17种空白字符" class="headerlink" title="Unicode13.0.0中的17种空白字符"></a>Unicode13.0.0中的17种空白字符</h1><h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2>
-      
-      <a class="article-more-link" href="/space_characters/">
-        Read More...
-      </a>
-      
+      <h1 id="Unicode13-0-0中的17种空白字符"><a href="#Unicode13-0-0中的17种空白字符" class="headerlink" title="Unicode13.0.0中的17种空白字符"></a>Unicode13.0.0中的17种空白字符</h1><h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2><table>
+<thead>
+<tr>
+<th>Code 代码</th>
+<th>Name 名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>U+0020</td>
+<td>space（空格）</td>
+</tr>
+<tr>
+<td>U+00A0</td>
+<td>no-break space（无中断空格）</td>
+</tr>
+<tr>
+<td>U+1680</td>
+<td>ogham space mark（欧甘文字间隔符）</td>
+</tr>
+<tr>
+<td>U+2000</td>
+<td>en quad（en间隙）</td>
+</tr>
+<tr>
+<td>U+2001</td>
+<td>em quad（em间隙）</td>
+</tr>
+<tr>
+<td>U+2002</td>
+<td>en space（en间隔）</td>
+</tr>
+<tr>
+<td>U+2003</td>
+<td>em space（em间隔）</td>
+</tr>
+<tr>
+<td>U+2004</td>
+<td>three-per-em space（三分之一的em间隔）</td>
+</tr>
+<tr>
+<td>U+2005</td>
+<td>four-per-em space（四分之一的em间隔）</td>
+</tr>
+<tr>
+<td>U+2006</td>
+<td>six-per-em space（六分之一的em间隔）</td>
+</tr>
+<tr>
+<td>U+2007</td>
+<td>figure space（数字间隔）</td>
+</tr>
+<tr>
+<td>U+2008</td>
+<td>punctuation space（标点间隔）</td>
+</tr>
+<tr>
+<td>U+2009</td>
+<td>thin space（窄间隔）</td>
+</tr>
+<tr>
+<td>U+200A</td>
+<td>hair space（微间隔）</td>
+</tr>
+<tr>
+<td>U+202F</td>
+<td>narrow no-break space（窄的无中断空格）</td>
+</tr>
+<tr>
+<td>U+205F</td>
+<td>medium mathematical space（中型数学空间）</td>
+</tr>
+<tr>
+<td>U+3000</td>
+<td>ideographic space（表意文字间隔）</td>
+</tr>
+</tbody></table>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>The most commonly used space character is U+0020 space. In ideographic text, U+3000 ideographic space is commonly used because its width matches that of the ideographs.</p>
+<p><strong>最常用的空白字符是U+0020空格（译注：即键盘上space键打出来的空格）。在表意文字（译注：如中文、日文、韩文）中，通常使用U+3000表意文字间隔（译注：即有些输入法可以打出来的“全角空格”），因为它的宽度与表意文字的宽度一致。</strong></p>
+<p>The main difference among other space characters is their width. U+2000..U+2006 are standard quad widths used in typography. U+2007 figure space has a fixed width, known as tabular width, which is the same width as digits used in tables. U+2008 punctuation space is a space defined to be the same width as a period. U+2009 thin space and U+200A hair space are successively smaller-width spaces used for narrow word gaps and for justification of type. The fixed-width space characters (U+2000..U+200A) are derived from conventional (hot lead) typography. Algorithmic kerning and justification in computerized typography do not use these characters. However, where they are used (for example, in typesetting mathematical formulae), their width is generally font-specified, and they typically do not expand during justification. The exception is U+2009 thin space, which sometimes gets adjusted.</p>
+<p>其他空白字符的主要区别在于其宽度。U+2000至U+2006是用于排版印刷的标准四方宽度。U+2007数字间隔有一个固定的宽度，被称为表格宽度，它与表格中使用的数字宽度相同。U+2008标点间隔是一个定义为与句号相同宽度的间隔。U+2009窄间隔和U+200A微间隔是连续的较小宽度的间隔，用于狭窄的单词间隙和排版的校正。固定宽度的空白字符（U+2000至U+200A）来自传统铅字排版。计算机排版中的字距调整和对齐不使用这些字符。然而一旦使用它们时（例如在数学公式的排版中），它们的宽度通常是由字体指定的，并且不会在对齐时增大。不过U+2009窄间隔是个例外，它的宽度有时会被调整。</p>
+<p>In addition to the various fixed-width space characters, there are a few script-specific space characters in the Unicode Standard. U+1680 ogham space mark is unusual in that it is generally rendered with a visible horizontal line, rather than being blank.</p>
+<p>除了各种固定宽度的空白字符外，Unicode标准中还有一些特定文字的空白字符。U+1680欧甘文字间隔符很特别，因为它通常呈现为可见的水平线，而不是空白。</p>
+<p>U+00A0 no-break space (NBSP) is the nonbreaking counterpart of U+0020 space. It has the same width, but behaves differently for line breaking.</p>
+<p>U+00A0无中断空格（NBSP）是无中断的U+0020空格。它和U+0020空格具有相同的宽度，但在换行方面的表现不同。</p>
+<p>U+202F narrow no-break space (NNBSP) is a narrow version of U+00A0 no-break space. The NNBSP can be used to represent the narrow space occurring around punctuation characters in French typography, which is called an “espace fine insécable.” It is used especially in Mongolian text, before certain grammatical suffixes, to provide a small gap that not only prevents word breaking and line breaking, but also triggers special shaping for those suffixes.</p>
+<p>U+202F窄的无中断空格（NNBSP）是狭窄版的U+00A0无中断空格。NNBSP可以用来表示法语排版中标点符号周围出现的狭窄空间，即“espace fine insécable”。它还专用于蒙古文中，在某些语法后缀之前提供一个小的间隙，不仅可以防止断字和断行，还可以触发这些后缀的特殊形态。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>The Unicode Consortium. <em>The Unicode® Standard: Version 13.0</em>. <a target="_blank" rel="noopener" href="https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf">https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf</a></li>
+<li>译文为自行翻译。对字符名称的翻译，部分参照了Windows 10系统工具“字符映射表”。</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/space_characters/" data-id="ckrhuyvb00000h4vrelkwh1a3" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/space_characters/" data-id="ckrhv2s00000588vrb3ij7xpb" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
@@ -161,7 +246,7 @@
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/start/" data-id="ckrhuyvbg0003h4vrdx8z7oe0" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/start/" data-id="ckrhv2rzm000088vr0s31016j" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
