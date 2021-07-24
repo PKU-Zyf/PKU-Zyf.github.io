@@ -90,7 +90,6 @@
 <td>ideographic space（表意文字间隔）</td>
 </tr>
 </tbody></table>
-<p>&lt; !– more –&gt;</p>
 <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p><strong>The most commonly used space character is U+0020 space. In ideographic text, U+3000 ideographic space is commonly used because its width matches that of the ideographs.</strong></p>
 <p><strong>最常用的空白字符是U+0020空格（译注：即键盘上space键打出来的空格）。在表意文字（译注：如中文、日文、韩文）中，通常使用U+3000表意文字间隔（译注：即有些输入法可以打出来的“全角空格”），因为它的宽度与表意文字的宽度一致。</strong></p>
 <p>The main difference among other space characters is their width. U+2000..U+2006 are standard quad widths used in typography. U+2007 figure space has a fixed width, known as tabular width, which is the same width as digits used in tables. U+2008 punctuation space is a space defined to be the same width as a period. U+2009 thin space and U+200A hair space are successively smaller-width spaces used for narrow word gaps and for justification of type. The fixed-width space characters (U+2000..U+200A) are derived from conventional (hot lead) typography. Algorithmic kerning and justification in computerized typography do not use these characters. However, where they are used (for example, in typesetting mathematical formulae), their width is generally font-specified, and they typically do not expand during justification. The exception is U+2009 thin space, which sometimes gets adjusted.</p>
