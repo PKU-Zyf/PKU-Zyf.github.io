@@ -238,7 +238,9 @@
 <ul>
 <li>测量政党的相关性【p. 414】：</li>
 </ul>
-<p>[  ]</p>
+<p><span class="math display">\[
+\dfrac{n}{\sum C_i}
+\]</span></p>
 <ul>
 <li>分裂指数（雷）【p. 422】：</li>
 </ul>
