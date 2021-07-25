@@ -1,31 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>四书</tag>
-        <tag>Bible</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”，其实并不简单。在一些编辑不规范的网页或文档中，混用的空白字符（space characters）正是乱码的根源所在。</p>
 <a id="more"></a>
-<h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2><div class="table-container">
-<table>
+
+<h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2><table>
 <thead>
 <tr>
 <th>Code 代码</th>
 <th>Name 名称</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>U+0020</td>
 <td>space（空格）</td>
 </tr>
@@ -93,9 +81,7 @@
 <td>U+3000</td>
 <td>ideographic space（表意文字间隔）</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>The most commonly used space character is U+0020 space. In ideographic text, U+3000 ideographic space is commonly used because its width matches that of the ideographs.</p>
 <p><strong>最常用的空白字符是U+0020空格（译注：即键盘上space键打出来的空格）。在表意文字（译注：如中文、日文、韩文）中，通常使用U+3000表意文字间隔（译注：即有些输入法可以打出来的“全角空格”），因为它的宽度与表意文字的宽度一致。</strong></p>
 <p>The main difference among other space characters is their width. U+2000..U+2006 are standard quad widths used in typography. U+2007 figure space has a fixed width, known as tabular width, which is the same width as digits used in tables. U+2008 punctuation space is a space defined to be the same width as a period. U+2009 thin space and U+200A hair space are successively smaller-width spaces used for narrow word gaps and for justification of type. The fixed-width space characters (U+2000..U+200A) are derived from conventional (hot lead) typography. Algorithmic kerning and justification in computerized typography do not use these characters. However, where they are used (for example, in typesetting mathematical formulae), their width is generally font-specified, and they typically do not expand during justification. The exception is U+2009 thin space, which sometimes gets adjusted.</p>
@@ -116,10 +102,22 @@
       </tags>
   </entry>
   <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>四书</tag>
+        <tag>Bible</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>萨托利《政党与政党体制》摘要</title>
     <url>/sartori/</url>
     <content><![CDATA[<p>版本：乔万尼·萨托利：《政党与政党体制》，王明进译，北京：商务印书馆，2006。</p>
 <a id="more"></a>
+
 <p>乔万尼·萨托利（Giovanni Sartori，1924-2017），出生于佛罗伦萨，后加入美国国籍。其著述有《政党与政党体制》《民主新论》《比较宪法工程学》等数十种。萨托利分别于2005年和2006年荣膺欧洲政治研究联合会终身成就奖与美国政治科学学会终身成就奖。罗伯特·达尔（Robert Dahl）称萨托利“对当代民主理论作出了富有生命力的、非常重要的和杰出的贡献”，阿伦·利普哈特（Arend Lijphart）认为，萨托利在民主理论领域“没有真正的对手”。</p>
 <p>《政党与政党体制》（1976）是萨托利的经典著作，常被认为是独立的政党学的发端，出版22年之后，该书获评1998年美国政治科学学会“杰出著作奖”。全书分为两部分，第一部分阐述政党的基本原理，第二部分则应用这一理论体系对政党体制展开具体分析。原书已轶的第三部分，本将讨论政党的类型、组织和功能。</p>
 <p>书的第一部分包括四章，结合历史视角，从结构和功能两方面，分析了作为部分和整体的政党。第一部分从“从宗派到政党”的历史视角出发，以“从政党到宗派”的结构视角收尾。书的第二部分包含六章，在以迪维尔热为代表的既有政党研究的基础上进一步深化。第二部分以“竞争”为主线，先是串联了对政党计数标准、竞争性与非竞争性体制、不稳定政体和伪政党等研究对象的讨论，然后细化了第三章提出的初步理论框架。最后，萨托利从唐斯理论出发，构建了多向度的“政治空间”，论述了极化多党制对民主政党体制发展的危害所在。</p>
@@ -138,7 +136,7 @@
 <p>托克维尔，奥斯特罗果尔斯基，米歇尔斯：担心政党之恶。【pp. 48-50】</p>
 <p>三个基础前提：1. 政党不是宗派；2. 政党是整体的部分；3. 政党是表达的渠道。【p. 52】</p>
 <p>政党的功能：代表机构和表达工具，重点在后者。【pp. 56-57】</p>
-<h2 id="第二章：作为整体的政党"><a href="#第二章：作为整体的政党" class="headerlink" title="　第二章：作为整体的政党"></a>　第二章：作为整体的政党</h2><p>无党的两种情况：没有（未出现）政党，敌视（镇压）政党。【p. 62】</p>
+<h2 id="第二章：作为整体的政党"><a href="#第二章：作为整体的政党" class="headerlink" title="第二章：作为整体的政党"></a>第二章：作为整体的政党</h2><p>无党的两种情况：没有（未出现）政党，敌视（镇压）政党。【p. 62】</p>
 <p>植入一党制的西方民主：大范围选举权；以群众性政党为轴心的结构化的政党体制。【p. 64】一党制存在的原因：现代社会不能没有表达渠道。一党制更需要普遍政治化的社会。【p. 65】单一政党无法产生“政党体系”，但可以是一个系统。【p. 69】</p>
 <p>党国体制是国家的复本，是“一元系统”。【p. 70】党国体制不允许次体系的自治。【p. 72】一党多元主义：党内分歧是“私人的”而远不是“功能性的”竞争，迪韦尔热陷入了“单位跳跃的谬误”。【pp. 78-79】</p>
 <h2 id="第三章：初步的框架"><a href="#第三章：初步的框架" class="headerlink" title="第三章：初步的框架"></a>第三章：初步的框架</h2><p>政党的两个功能：表达（expression），引导（channelment）；引入第三个功能：交流（communication）。【p. 82】交流被置于表达之下且包含于其中。【p. 85】</p>
@@ -202,16 +200,16 @@
 <h2 id="第九章：总体框架"><a href="#第九章：总体框架" class="headerlink" title="第九章：总体框架"></a>第九章：总体框架</h2><p>强调非连续性。自然语言中“连续统”概念难以数学化，且吸引单向演变的乐观主义。【pp. 373-374】连续统是否“连续”的关键在于，两种体制在没有断裂的情况下，能否连续地通过内部变革相互转换？这是事实问题。【p. 377】</p>
 <p>我们在处理两个异质的连续统：多党制/两党制/主导党体制，和霸权党制/一党制。前者是竞争性/多元主义的，后者不是。【pp. 385-386】</p>
 <p>总的分析框架。【pp. 392-393】</p>
-<p><img src="sartori.assets/image-20210725210528368.png" alt="总分析框架1"></p>
-<p><img src="sartori.assets/image-20210725210559683.png" alt="总分析框架2"></p>
+<p><img src="/image-20210725210528368.png" alt="总分析框架1"></p>
+<p><img src="/image-20210725210559683.png" alt="总分析框架2"></p>
 <p>总分析框架的简化模型。【p. 400】</p>
-<p><img src="sartori.assets/image-20210725210623254.png" alt="简化模型"></p>
+<p><img src="/image-20210725210623254.png" alt="简化模型"></p>
 <p>对作者的三种反对意见，其中主要的一种批评在于：分类的逻辑已被测量所取代。【pp. 401-402】</p>
 <p>定性科学是如何处理“是什么”的问题的？1. 对概念的分类处理；2. 包括“多或少”（程度）的处理的“分级逻辑”；3. 把数学数学赋予数字。【pp. 404-405】</p>
 <ul>
 <li>测量政党的相关性：$\dfrac{n}{\sum C_i}$.【p. 414】</li>
 <li>分裂指数（雷）：$F = 1 - \sum\limits_{i=1}^N p_i^2$.【p. 422】</li>
-<li>碎片化指数（弗兰纳根）：$F<em>t = \sqrt{\sum\limits</em>{i=1}^n V_i^2}$.【p. 423】</li>
+<li>碎片化指数（弗兰纳根）：$F_t = \sqrt{\sum\limits_{i=1}^n V_i^2}$.【p. 423】</li>
 </ul>
 <p>标称和数学相结合的途径。【p. 434】</p>
 <h2 id="第十章：空间竞争"><a href="#第十章：空间竞争" class="headerlink" title="第十章：空间竞争"></a>第十章：空间竞争</h2><p>从三个角度重评唐斯理论：1. 民主理论的一般背景；2. 经济前提和选举理论的更好切合；3. 空间模型和经验发现。【p. 442】</p>
@@ -221,8 +219,8 @@
 <p>较宽松的假设：政党越多，它们之间的竞争越倾向于沿着一个线性的、左/右空间展开；政党体系越是展现出意识形态格局越是如此;但在意识形态意识低的分裂型政体中，竟争的空间也可能是单向度的，因为一个政党偏离到另一个向度。【p. 472】</p>
 <p>意识形态空间的属性：1. 左-右顺序空间；2. 不均等的间隔；3. 空间弹性。【pp. 473-474】</p>
 <p>向心性竞争与离心性竞争。【p. 478, p.484】</p>
-<p><img src="sartori.assets/image-20210725211657418.png" alt="向心性竞争"></p>
-<p><img src="sartori.assets/image-20210725211725705.png" alt="离心性竞争"></p>
+<p><img src="/image-20210725211657418.png" alt="向心性竞争"></p>
+<p><img src="/image-20210725211725705.png" alt="离心性竞争"></p>
 <p>极化多党制模式：中间一极所获得的势力支点不鼓励、且实际上阻碍了中间性；极端政党在极化程度越高而不是越低的情况下，才能更加强盛。这种模式是长久不了的。【p. 486】</p>
 <p>两点结论如下：1. 这里的模式是预测趋势的，而不是预测某一次选举；2. 对这里所遵循的研究方法的最好辩护来自唐斯本人：模型“从根本上说应该由其预见的精确性而不是由其假定的现实来验证”。【p. 487】</p>
 ]]></content>
