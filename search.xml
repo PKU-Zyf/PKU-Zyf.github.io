@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hexo渲染数学公式</title>
+    <url>/formula/</url>
+    <content><![CDATA[<p>在Markdown文档编写中，我们可以使用$\LaTeX$的语法输入数学公式。常见的Markdown编辑器如Typora都可以方便地渲染数学公式。然而，Hexo在默认设置下部署博客时，并不能渲染数学公式。</p>
+<a id="more"></a>
+<p>原因在于，<strong>渲染数学公式需要使用MathJax</strong>（一种模块化的JavaScript框架）；而Hexo的默认渲染器是hexo-renderer-marked引擎，它并不支持MathJax。</p>
+<h2 id="1-更换渲染引擎"><a href="#1-更换渲染引擎" class="headerlink" title="1. 更换渲染引擎"></a>1. 更换渲染引擎</h2><p>Hexo-renderer-kramed引擎在hexo-renderer-marked渲染引擎的基础上修改了一些bug（“kram”这个名字目测是把“mark”倒过来拼写得到的），支持了MathJax。因此，<strong>将渲染引擎改为Hexo-renderer-kramed可以解决数学公式渲染的问题</strong>。</p>
+<p>使用Git Bash打开自己的博客文件夹，输入下面的代码即可卸载marked、安装kramed：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+<p>中国用户还可使用<code>cnpm</code>命令代替<code>npm</code>，获得更好体验。<code>cnpm</code>命令的安装可自行搜索，这里不再赘述。</p>
+<p>更换渲染引擎之后，还需要相应地更改一些其他配置。</p>
+<h2 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2. 修改配置文件"></a>2. 修改配置文件</h2><p>诸多网文混淆了站点配置文件和主题配置文件。二者的文件名都是<code>_config.yml</code>，但文件的位置不同。站点配置文件位于博客的根目录，即<code>.\_config.yml</code>，管理的是整个博客的全局设置；而主题配置文件则位于对应的主题文件夹之下，例如Ocean主题的配置文件路径为<code>.\themes\ocean\_config.yml</code>，管理的是与该主题的相关的具体设置。</p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”，其实并不简单。在一些编辑不规范的网页或文档中，混用的空白字符（space characters）正是乱码的根源所在。</p>
