@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>四书</tag>
-        <tag>Bible</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”，其实并不简单。在一些编辑不规范的网页或文档中，混用的空白字符（space characters）正是乱码的根源所在。</p>
@@ -116,6 +105,17 @@
       </tags>
   </entry>
   <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>四书</tag>
+        <tag>Bible</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>萨托利《政党与政党体制》摘要</title>
     <url>/sartori/</url>
     <content><![CDATA[<p>版本：乔万尼·萨托利：《政党与政党体制》，王明进译，北京：商务印书馆，2006。</p>
@@ -210,7 +210,7 @@
 <p>定性科学是如何处理“是什么”的问题的？1. 对概念的分类处理；2. 包括“多或少”（程度）的处理的“分级逻辑”；3. 把数学数学赋予数字。【pp. 404-405】</p>
 <p>测量政党的相关性：$\dfrac{n}{\sum C_i}$​。【pp. 414】</p>
 <p>分裂指数（雷）：$F = 1 - \sum\limits_{i=1}^N p_i^2$。【pp. 422】</p>
-<p>碎片化指数（弗兰纳根）：$F<em>t = \sqrt{\sum\limits</em>{i=1}^n V_i^2}$。【pp. 423】</p>
+<p>碎片化指数（弗兰纳根）：$F_t = \sqrt{\sum\limits_{i=1}^n V_i^2}$。【pp. 423】</p>
 <p>标称和数学相结合的途径。【p. 434】</p>
 <h2 id="第十章：空间竞争"><a href="#第十章：空间竞争" class="headerlink" title="第十章：空间竞争"></a>第十章：空间竞争</h2><p>从三个角度重评唐斯理论：1. 民主理论的一般背景；2. 经济前提和选举理论的更好切合；3. 空间模型和经验发现。【p. 442】</p>
 <p>基本问题：一个投票空间是否是单一向度的。【p. 444】理解投票的三个概念：1. 议题；2. 认同；3. 形象。【p. 448】</p>
