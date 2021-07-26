@@ -100,14 +100,14 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <p>再找到<code>em</code>变量，注释掉原来的值，并更新：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span></span><br><span class="line">  <span class="attr">em</span>: <span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br></pre></td></tr></table></figure>
 <p>这样就<strong>停用了以下划线标注斜体/强调（em）的语法</strong>。</p>
-<p>此时，形如<code>\$N = P_1 ^ &#123;\alpha _1&#125; P_2 ^ &#123;\alpha _2&#125; \cdots P_n ^ &#123;\alpha _n&#125;\$</code>这样的复杂行内公式，就可以正确渲染了：$N = P_1 ^ {\alpha _1} P_2 ^ {\alpha _2} \cdots P_n ^ {\alpha _n}$.</p>
+<p>此时，形如<code>\$N = P\_1 ^ &#123;\alpha \_1&#125; P\_2 ^ &#123;\alpha \_2&#125; \cdots P\_n ^ &#123;\alpha \_n&#125;\$</code>这样的复杂行内公式，就可以正确渲染了：$N = P_1 ^ {\alpha _1} P_2 ^ {\alpha _2} \cdots P_n ^ {\alpha _n}$.</p>
 <p>当然，调整行内渲染设置之后，在Markdown文档中就要<strong>用星号<code>*</code>标注斜体文字</strong>，因为用下划线<code>_</code>标注斜体的语法已经被停用了。</p>
 
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/formula/" data-id="ckrkjybgj0000dkvrdj0bf5eb" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/formula/" data-id="ckrkk0mdo0000awvrbjjxd13k" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
