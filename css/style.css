@@ -860,6 +860,14 @@ template {
 [hidden] {
   display: none;
 }
+@charset "UTF-8";
+
+@font-face {
+  font-family: "FZSSK";
+  src: url("source/fonts/FZSSK/test.TTF") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 *,
 *::before,
 *::after {
@@ -879,7 +887,7 @@ html {
 body {
   position: relative;
   background-color: #fff;
-  font-family: "Times New Roman", "宋体";
+  font-family: "FZSSK";
   font-size: 1.4rem;
   line-height: 1.7;
   color: #1e3e3f;
