@@ -864,7 +864,18 @@ template {
 
 @font-face {
   font-family: "FZSSK";
-  src: url("../fonts/FZSSK/test.TTF") format("truetype");
+  src: url("../fonts/FZSSK/FZSSK.TTF") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@charset "UTF-8";
+
+@font-face {
+  font-family: "times_new_roman";
+  src: url("../fonts/times_new_roman/times.ttf") format("truetype"),
+       url("../fonts/times_new_roman/timesbd.ttf") format("truetype"),
+       url("../fonts/times_new_roman/timesi.ttf") format("truetype"),
+       url("../fonts/times_new_roman/timesbi.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -887,7 +898,7 @@ html {
 body {
   position: relative;
   background-color: #fff;
-  font-family: FZSSK;
+  font-family: times_new_roman, FZSSK;
   font-size: 1.4rem;
   line-height: 1.7;
   color: #1e3e3f;
