@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: "FZSSK";
-  src: url("source/fonts/FZSSK/test.TTF") format("truetype");
+  src: url("../fonts/FZSSK/test.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
