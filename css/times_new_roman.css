@@ -2,10 +2,8 @@
 
 @font-face {
   font-family: "times_new_roman";
-  src: url("../fonts/times_new_roman/times.ttf") format("truetype"),
-       url("../fonts/times_new_roman/timesbd.ttf") format("truetype"),
-       url("../fonts/times_new_roman/timesi.ttf") format("truetype"),
-       url("../fonts/times_new_roman/timesbi.ttf") format("truetype");
+  src: url("../fonts/times_new_roman/times.woff") format("woff"),
+       url("../fonts/times_new_roman/times.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
