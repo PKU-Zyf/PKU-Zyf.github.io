@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数学公式</title>
+    <url>/math/</url>
+    <content><![CDATA[<p>数学公式测试。</p>
+<a id="more"></a>
+<script type="math/tex; mode=display">
+i = 1</script>]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”，其实并不简单。在一些编辑不规范的网页或文档中，混用的空白字符（space characters）正是乱码的根源所在。</p>
@@ -102,17 +113,6 @@
 ]]></content>
       <tags>
         <tag>Unicode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数学公式</title>
-    <url>/math/</url>
-    <content><![CDATA[<p>数学公式测试。</p>
-<a id="more"></a>
-<script type="math/tex; mode=display">
-i = 1</script>]]></content>
-      <tags>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
