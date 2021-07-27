@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>四书</tag>
+        <tag>Bible</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo渲染数学公式：配置方法与原理浅释</title>
     <url>/formula/</url>
     <content><![CDATA[<p>在Markdown文档编写中，我们可以使用$\LaTeX$的语法输入数学公式。常见的Markdown编辑器如Typora都可以方便地渲染数学公式。然而，Hexo在默认设置下部署博客时，并不能渲染数学公式。</p>
@@ -82,17 +93,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>四书</tag>
-        <tag>Bible</tag>
       </tags>
   </entry>
   <entry>
