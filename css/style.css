@@ -1379,8 +1379,7 @@ img {
 }
 .article-entry {
   margin-top: 3rem;
-  margin-bottom: 2rem;
-  border: 0.1rem #e6e6e6 dashed;
+  margin-bottom: 1.5rem;
   color: #1e3e3f;
 }
 .article-entry::before,
