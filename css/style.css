@@ -890,7 +890,7 @@ body {
   position: relative;
   background-color: #fff;
   font-family: Times, FZSSK, Arial, sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.75rem;
   line-height: 1.7;
   color: #1e3e3f;
   padding: 0;
@@ -2176,7 +2176,7 @@ pre .javascript .function {
 }
 .gitalk,
 .markdown-body {
-  font-size: 1.8rem !important;
+  font-size: 1.75rem !important;
 }
 .gt-container .gt-avatar.gt-comment-avatar img {
   -webkit-border-radius: 50%;
