@@ -85,16 +85,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”，其实并不简单。在一些编辑不规范的网页或文档中，混用的空白字符（space characters）正是乱码的根源所在。</p>
@@ -196,6 +186,16 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>Unicode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1803,7 +1803,7 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <p><strong>P1. 复杂问语</strong>（Complex Question）：以预设掩藏在问句中的某些论断为真的方式来问问题。当一个问语是复杂的，而且掩藏着多个预设时，就必须对它们逐个地进行否定。仅仅否定一个预设可能会导致对其他假定的肯定。</p>
 <p><strong>P2. 虚假原因</strong>（False Cause）：设定一个并不真实存在的因果联系，即“无因之因”（<em>non causa pro causa</em>）的谬误。有时人们假定一事件是另一事件的原因，只因为另一事件<strong>在时间上紧随着前者</strong>。我们当然知道，纯粹的时间连续并不能确证一种因果联系，但是很容易被欺骗。</p>
 <p><strong>P3. 丐题</strong>（Begging the Question: <em>Petitio Principii</em>）：在证明论题的努力中，却又假定了所要寻求证明的论题。</p>
-<p><strong>P4. 和P5. 偶然和逆偶然</strong>（Accident and Converse Accident）：当我们把一个概括运用于个别事例中而该事例并不适于这种运用时，我们就犯了偶然谬误。反之，当我们无心或故意地把对一个特殊事例为真的东西直接看做对大量事例为真，我们就犯了逆偶然谬误。在中文文献中，这两种谬误亦称为“以全赅偏”和“以偏赅全”。</p>
+<p><strong>P4. 和P5. 偶然和逆偶然</strong>（ident and Converse Accident）：当我们把一个概括运用于个别事例中而该事例并不适于这种运用时，我们就犯了偶然谬误。反之，当我们无心或故意地把对一个特殊事例为真的东西直接看做对大量事例为真，我们就犯了逆偶然谬误。在中文文献中，这两种谬误亦称为“以全赅偏”和“以偏赅全”。</p>
 <h4 id="4-4-含混谬误"><a href="#4-4-含混谬误" class="headerlink" title="4.4 含混谬误"></a>4.4 含混谬误</h4><p>一个词项在前提中可能具有一种意义，但是在结论中却是另一种相当不同的意义。当推论依赖这样的变化时，称做“含混谬误”。</p>
 <p><strong>A1. 歧义</strong>：当人们有意无意地混淆一个词或短语的几个意义时，就是在歧义地使用这个词或短语。如果在论证中这样做，就犯了歧义谬误。</p>
 <p><strong>A2. 双关</strong>：一个陈述是双关的，是指由于它的词汇组合松散或笨拙导致它的意义不确定。一个双关陈述可能在一种解释下可能是真的，而在另一种解释下却是假的。当以使其为真的解释来表述论证前提，而以使其为假的解释得出结论时，那么就犯了双关谬误。</p>
