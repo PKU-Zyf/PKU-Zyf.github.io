@@ -79,11 +79,11 @@
 <p>将<code>font-family</code>改为：</p>
 <pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> 宋体<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
-<p><img src="/image-20210801153118358.png" alt="image-20210801153118358"></p>
+<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
 <p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
-<p><img src="/image-20210801153543944.png" alt="image-20210801153543944"></p>
+<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
 <p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
-<p><img src="/image-20210801154750461.png" alt="image-20210801154750461"></p>
+<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
 <p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
 <p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
 <p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
@@ -108,9 +108,9 @@
 <p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
 <pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>即可在Typora主界面实现效果：</p>
-<p><img src="/image-20210801161147876.png" alt="image-20210801161147876"></p>
+<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
 <p><strong>再导出PDF，也可正常显示粗体：</strong></p>
-<p><img src="/image-20210801162528864.png" alt="image-20210801162528864"></p>
+<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
 <p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
 <pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> print</span> <span class="token punctuation">&#123;</span>
 	<span class="token selector">html</span> <span class="token punctuation">&#123;</span>
@@ -123,7 +123,7 @@
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/typora/" data-id="ckrsyejrz0004h4vrd5mh3xbx" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/typora/" data-id="ckrsyi8hf0004ywvr284bgca5" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
@@ -138,15 +138,6 @@
   
   
 <nav class="article-nav">
-  
-  <a href="/typora/test/" class="article-nav-link">
-    <strong class="article-nav-caption">前一篇</strong>
-    <div class="article-nav-title">
-      
-      (no title)
-      
-    </div>
-  </a>
   
   
   <a href="/football/" class="article-nav-link">
