@@ -200,6 +200,74 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
+    <url>/typora/</url>
+    <content><![CDATA[<p>以Whitey主题为例。</p>
+<a id="more"></a>
+<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
+<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
+<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
+<p>找到开头的：</p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">body</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"Vollkorn"</span><span class="token punctuation">,</span> Palatino<span class="token punctuation">,</span> Times<span class="token punctuation">;</span>
+    ...
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>将<code>font-family</code>改为：</p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> 宋体<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
+<p><img src="/image-20210801153118358.png" alt="image-20210801153118358"></p>
+<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
+<p><img src="/image-20210801153543944.png" alt="image-20210801153543944"></p>
+<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
+<p><img src="/image-20210801154750461.png" alt="image-20210801154750461"></p>
+<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
+<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
+<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
+<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
+<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
+<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
+<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@font-face</span></span><span class="token punctuation">&#123;</span>
+	<span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span>
+	<span class="token property">font-style</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
+    <span class="token property">font-weight</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
+	<span class="token property">src</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>whitey_cjk/FZSSK.TTF<span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token atrule"><span class="token rule">@font-face</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span>
+    <span class="token property">font-style</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
+    <span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span>
+    <span class="token property">src</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>whitey_cjk/FZHT_Document.TTF<span class="token punctuation">)</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
+<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>即可在Typora主界面实现效果：</p>
+<p><img src="/image-20210801161147876.png" alt="image-20210801161147876"></p>
+<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
+<p><img src="/image-20210801162528864.png" alt="image-20210801162528864"></p>
+<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> print</span> <span class="token punctuation">&#123;</span>
+	<span class="token selector">html</span> <span class="token punctuation">&#123;</span>
+		<span class="token property">font-size</span><span class="token punctuation">:</span> 13px<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
+]]></content>
+      <tags>
+        <tag>Typora</tag>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/typora/test/</url>
+    <content><![CDATA[<h1 id="测试文档"><a href="#测试文档" class="headerlink" title="测试文档"></a>测试文档</h1><p>这是一段普通的文本。<strong>这是一段加粗的文本。</strong></p>
+<p>This is a normal text. <strong>This is a bolded text.</strong></p>
+]]></content>
+  </entry>
+  <entry>
     <title>萨托利《政党与政党体制》摘要</title>
     <url>/sartori/</url>
     <content><![CDATA[<p>版本：乔万尼·萨托利：《政党与政党体制》，王明进译，北京：商务印书馆，2006。</p>
@@ -318,7 +386,7 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
     <url>/football/</url>
     <content><![CDATA[<p>版本：蔡惠强：《解球：你所看到的90分钟》，上海：上海科学技术出版社，2019。</p>
 <a id="more"></a>
-<h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1 基础"></a>1 基础</h2><h3 id="1-1-足球场上的号码与位置与阵型"><a href="#1-1-足球场上的号码与位置与阵型" class="headerlink" title="1.1 足球场上的号码与位置与阵型"></a>1.1 足球场上的号码与位置与阵型</h3><ul>
+<h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1 基础"></a>1 基础</h2><h3 id="1-1-足球场上的号码、位置与阵型"><a href="#1-1-足球场上的号码、位置与阵型" class="headerlink" title="1.1 足球场上的号码、位置与阵型"></a>1.1 足球场上的号码、位置与阵型</h3><ul>
 <li>1：门将</li>
 <li>2：右边后卫，在3-5-2或3-4-3阵型里称为右翼卫</li>
 <li>3：左边后卫</li>
@@ -1462,7 +1530,7 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <li><strong>区域</strong>：<ul>
 <li>半场全宽，可以在30米区域画一条分割线，来控制球员的移动</li>
 <li>通过增加区域线分隔区域一和区域二，来帮助球员理解战术以及控制难易度<ul>
-<li>如果防守方边前卫进场压到前场30米区域，会让蓝队阵型变成不均衡的4-3—3体系</li>
+<li>如果防守方边前卫进场压到前场30米区域，会让蓝队阵型变成不均衡的4-3-3体系</li>
 <li>但周末比赛的对手使用的是4-4-2阵型体系</li>
 <li>这时白色区域就可以限制防守球员，更好地让（进攻方）后腰6号回撤到两个中后卫中间，在区域一形成外场球员3v2的局面</li>
 </ul>
@@ -1503,7 +1571,8 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 </ul>
 <p>训练的逻辑性和指向性非常关键。球场下的工作量非常庞大，因为每个足球教练都知道，是训练决定了比赛。</p>
 <blockquote>
-<p>世界上本没有最好的战术，只有最适合让11个人的团队在同一时间做同一件事的战术。<br>重要的是需从千变万化的战术图片中寻找出足球原则。</p>
+<p>世界上本没有最好的战术，只有最适合让11个人的团队在同一时间做同一件事的战术。</p>
+<p>重要的是需从千变万化的战术图片中寻找出足球原则。</p>
 </blockquote>
 ]]></content>
       <tags>
