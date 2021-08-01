@@ -1,1581 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Hexo渲染数学公式：配置方法与原理浅释</title>
-    <url>/formula/</url>
-    <content><![CDATA[<p>在Markdown文档编写中，我们可以使用$\LaTeX$的语法输入数学公式。常见的Markdown编辑器如Typora都可以方便地渲染数学公式。然而，Hexo在默认设置下部署博客时，并不能渲染数学公式。</p>
-<a id="more"></a>
-<p>原因在于，<strong>渲染数学公式需要使用MathJax</strong>（一种模块化的JavaScript框架）；而Hexo的默认渲染器是hexo-renderer-marked引擎，它并不支持MathJax。</p>
-<h2 id="1-更换渲染引擎"><a href="#1-更换渲染引擎" class="headerlink" title="1. 更换渲染引擎"></a>1. 更换渲染引擎</h2><p>Hexo-renderer-kramed引擎在hexo-renderer-marked渲染引擎的基础上修改了一些bug（“kram”这个名字目测是把“mark”倒过来拼写得到的），支持了MathJax。因此，<strong>将渲染引擎改为Hexo-renderer-kramed可以解决数学公式渲染的问题</strong>。</p>
-<p>使用Git Bash打开自己的博客文件夹，输入下面的代码即可卸载marked、安装kramed：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> uninstall hexo-renderer-marked --save
-<span class="token function">npm</span> <span class="token function">install</span> hexo-renderer-kramed --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>中国用户还可使用<code>cnpm</code>命令代替<code>npm</code>，获得更好体验。<code>cnpm</code>命令的安装可自行搜索，这里不再赘述。</p>
-<p>更换渲染引擎之后，还需要相应地更改一些其他配置。</p>
-<h2 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2. 修改配置文件"></a>2. 修改配置文件</h2><p>诸多网文混淆了<strong>站点配置文件</strong>和<strong>主题配置文件</strong>。二者的文件名都是<code>_config.yml</code>，但文件的位置不同。站点配置文件位于博客的根目录，即<code>.\_config.yml</code>，管理的是整个博客的全局设置；而主题配置文件则位于对应的主题文件夹之下，例如Ocean主题的配置文件路径为<code>.\themes\ocean\_config.yml</code>，管理的是与该主题的相关的具体设置。</p>
-<p>更换kramed引擎之后，需要在<strong>主题配置文件</strong>中增加这样几行：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">mathjax</span><span class="token punctuation">:</span>
-  <span class="token key atrule">enable</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">cdn</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js<span class="token punctuation">?</span>config=TeX<span class="token punctuation">-</span>AMS<span class="token punctuation">-</span>MML_HTMLorMML<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>还要在<strong>站点配置文件</strong>中增加：</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">math</span><span class="token punctuation">:</span>
-  <span class="token key atrule">engine</span><span class="token punctuation">:</span> <span class="token string">'mathjax'</span>
-  <span class="token key atrule">mathjax</span><span class="token punctuation">:</span>
-    <span class="token key atrule">src</span><span class="token punctuation">:</span> custom_mathjax_source<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="3-添加JavaScript脚本"><a href="#3-添加JavaScript脚本" class="headerlink" title="3. 添加JavaScript脚本"></a>3. 添加JavaScript脚本</h2><p>根据一些网文的说法，如果博客使用的是<strong>Next主题</strong>，那么至此已经可以实现行间公式的渲染。不过，对于有些<strong>并未引入MathJax功能的主题</strong>，还需要自行增加JavaScript脚本文件。</p>
-<p>以<strong>Ocean主题</strong>为例。首先打开<code>.\themes\ocean\layout</code>文件夹，如果该目录下没有<code>mathjax.ejs</code>文件，则<strong>新建</strong> <code>mathjax.ejs</code>文件。可以先新建一个txt文本文档，将后缀更改为<code>.ejs</code>即可。</p>
-<p>在<code>mathjax.ejs</code>中写入如下内容：</p>
-<pre class="line-numbers language-ejs" data-language="ejs"><code class="language-ejs"><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%</span><span class="token language-javascript"> <span class="token keyword">if</span> <span class="token punctuation">(</span>theme<span class="token punctuation">.</span>mathjax<span class="token punctuation">.</span>enable<span class="token punctuation">)</span><span class="token punctuation">&#123;</span> </span><span class="token delimiter punctuation">%></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text/x-mathjax-config<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-      MathJax<span class="token punctuation">.</span>Hub<span class="token punctuation">.</span><span class="token function">Config</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-        tex2jax<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-          inlineMath<span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span><span class="token string">'$'</span><span class="token punctuation">,</span><span class="token string">'$'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"\\("</span><span class="token punctuation">,</span><span class="token string">"\\)"</span><span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
-          processEscapes<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-          skipTags<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'script'</span><span class="token punctuation">,</span> <span class="token string">'noscript'</span><span class="token punctuation">,</span> <span class="token string">'style'</span><span class="token punctuation">,</span> <span class="token string">'textarea'</span><span class="token punctuation">,</span> <span class="token string">'pre'</span><span class="token punctuation">,</span> <span class="token string">'code'</span><span class="token punctuation">]</span>
-        <span class="token punctuation">&#125;</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      MathJax<span class="token punctuation">.</span>Hub<span class="token punctuation">.</span><span class="token function">Queue</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">var</span> all <span class="token operator">=</span> MathJax<span class="token punctuation">.</span>Hub<span class="token punctuation">.</span><span class="token function">getAllJax</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> i<span class="token punctuation">;</span>
-        <span class="token keyword">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> all<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            all<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">SourceElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>parentNode<span class="token punctuation">.</span>className <span class="token operator">+=</span> <span class="token string">' has-jax'</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text/javascript<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%-</span><span class="token language-javascript"> theme<span class="token punctuation">.</span>mathjax<span class="token punctuation">.</span>cdn </span><span class="token delimiter punctuation">%></span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-    <span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%</span><span class="token language-javascript"> <span class="token punctuation">&#125;</span> </span><span class="token delimiter punctuation">%></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>此外，还要在<code>.\themes\ocean\layout\post.ejs</code>中追加如下代码：</p>
-<pre class="line-numbers language-ejs" data-language="ejs"><code class="language-ejs"><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%</span><span class="token language-javascript"> <span class="token keyword">if</span> <span class="token punctuation">(</span>theme<span class="token punctuation">.</span>mathjax<span class="token punctuation">)</span><span class="token punctuation">&#123;</span> </span><span class="token delimiter punctuation">%></span></span>
-  <span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%-</span><span class="token language-javascript"> <span class="token function">partial</span><span class="token punctuation">(</span><span class="token string">'mathjax'</span><span class="token punctuation">)</span> </span><span class="token delimiter punctuation">%></span></span>
-<span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%</span><span class="token language-javascript"> <span class="token punctuation">&#125;</span> </span><span class="token delimiter punctuation">%></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h2 id="4-打开MathJax开关"><a href="#4-打开MathJax开关" class="headerlink" title="4. 打开MathJax开关"></a>4. 打开MathJax开关</h2><p>如果仍未能正确渲染数学公式，那么可能还需在Markdown文档的顶部配置里打开MathJax开关，即<code>mathjax: true</code>：</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token front-matter-block"><span class="token punctuation">---</span>
-<span class="token font-matter yaml language-yaml"><span class="token key atrule">title</span><span class="token punctuation">:</span> 文章标题
-<span class="token key atrule">date</span><span class="token punctuation">:</span> <span class="token datetime number">2021-01-01 00:00:00</span>
-<span class="token key atrule">mathjax</span><span class="token punctuation">:</span> <span class="token boolean important">true</span></span>
-<span class="token punctuation">---</span></span>
+<!DOCTYPE html>
+<html lang="en">
 
-$$
-e ^ &#123;i\pi&#125; + 1 = 0
-$$<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>即可显示：</p>
-<script type="math/tex; mode=display">
-e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用到数学公式的文章中<strong>手动添加</strong>。不添加这行设置，文章就不会加载MathJax，以提高页面渲染的速度。</p>
-<h2 id="5-调整行内渲染设置"><a href="#5-调整行内渲染设置" class="headerlink" title="5. 调整行内渲染设置"></a>5. 调整行内渲染设置</h2><p>Markdown的公式分为<strong>行间公式</strong>和<strong>行内公式</strong>。经过上述配置之后，行间公式已经可以正确渲染。但行内公式仍有可能渲染错误。</p>
-<p>原因在于<strong>Markdown语法和$\LaTeX$数学公式语法有一定冲突</strong>。例如，用两个下划线<code>_</code>或两个星号<code>*</code>包围的文字，在Markdown语法中都被识别为<strong>斜体</strong>；但在$\LaTeX$​​数学公式中，下划线<code>_</code>用于表示<strong>下标</strong>。因此，当同一个行内公式中出现两个下标时，下划线<code>_</code>会被转化为<code>&lt;em&gt;</code>标签，二者之间的部分就会被渲染为斜体。这就造成了混乱。此外，<strong>反斜杠</strong> <code>\</code>和<strong>花括号</strong> <code>&#123;&#125;</code>也有可能造成渲染错误。</p>
-<p>为此，<strong>需要更改与行内渲染相关的JavaScript脚本</strong>。回到博客根目录，打开<code>.\node_modules\kramed\lib\rules\inline.js</code>（注意打开<code>node_modules</code>文件夹之后选择的是<code>kramed</code>文件夹，而不是<code>hexo-renderer-kramed</code>文件夹），找到<code>escape</code>变量，注释掉原来的值，并更新：</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_>])/,</span>
-  escape<span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">^\\([`*\[\]()#$+\-.!_>])</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>这样就<strong>取消了对反斜杠和花括号的转义（escape）</strong>。 </p>
-<p>再找到<code>em</code>变量，注释掉原来的值，并更新：</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span>
-  em<span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">^\*((?:\*\*|[\s\S])+?)\*(?!\*)</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>这样就<strong>停用了以下划线标注斜体/强调（em）的语法</strong>。</p>
-<p>此时，形如</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">$N = P_1 ^ &#123;\alpha _1&#125; P_2 ^ &#123;\alpha _2&#125; \cdots P_n ^ &#123;\alpha _n&#125;$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>这样的复杂行内公式，就可以正确渲染了：$N = P_1 ^ {\alpha _1} P_2 ^ {\alpha _2} \cdots P_n ^ {\alpha _n}$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。</p>
-<p>当然，调整行内渲染设置之后，在Markdown文档中就要<strong>用星号<code>*</code>标注斜体文字</strong>，因为用下划线<code>_</code>标注斜体的语法已经被停用了。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Hexo博客支持数学公式. <a href="https://blog.csdn.net/qq_38496329/article/details/104065659">https://blog.csdn.net/qq_38496329/article/details/104065659</a></li>
-<li>在Hexo中渲染MathJax数学公式. <a href="https://www.jianshu.com/p/7ab21c7f0674">https://www.jianshu.com/p/7ab21c7f0674</a></li>
-<li>让 Hexo 支持 LaTeX 公式. <a href="https://blog.xiangfa.org/2020/09/let-hexo-support-latex-formulas/">https://blog.xiangfa.org/2020/09/let-hexo-support-latex-formulas/</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Unicode13.0中的17种空白字符</title>
-    <url>/space_characters/</url>
-    <content><![CDATA[<p>看似简单的“空格”，其实并不简单。在一些编辑不规范的网页或文档中，混用的空白字符（space characters）正是乱码的根源所在。</p>
-<a id="more"></a>
-<h2 id="17种空白字符（Space-Characters）一览表"><a href="#17种空白字符（Space-Characters）一览表" class="headerlink" title="17种空白字符（Space Characters）一览表"></a>17种空白字符（Space Characters）一览表</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Code 代码</th>
-<th>Name 名称</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>U+0020</td>
-<td>space（空格）</td>
-</tr>
-<tr>
-<td>U+00A0</td>
-<td>no-break space（无中断空格）</td>
-</tr>
-<tr>
-<td>U+1680</td>
-<td>ogham space mark（欧甘文字间隔符）</td>
-</tr>
-<tr>
-<td>U+2000</td>
-<td>en quad（en间隙）</td>
-</tr>
-<tr>
-<td>U+2001</td>
-<td>em quad（em间隙）</td>
-</tr>
-<tr>
-<td>U+2002</td>
-<td>en space（en间隔）</td>
-</tr>
-<tr>
-<td>U+2003</td>
-<td>em space（em间隔）</td>
-</tr>
-<tr>
-<td>U+2004</td>
-<td>three-per-em space（三分之一的em间隔）</td>
-</tr>
-<tr>
-<td>U+2005</td>
-<td>four-per-em space（四分之一的em间隔）</td>
-</tr>
-<tr>
-<td>U+2006</td>
-<td>six-per-em space（六分之一的em间隔）</td>
-</tr>
-<tr>
-<td>U+2007</td>
-<td>figure space（数字间隔）</td>
-</tr>
-<tr>
-<td>U+2008</td>
-<td>punctuation space（标点间隔）</td>
-</tr>
-<tr>
-<td>U+2009</td>
-<td>thin space（窄间隔）</td>
-</tr>
-<tr>
-<td>U+200A</td>
-<td>hair space（微间隔）</td>
-</tr>
-<tr>
-<td>U+202F</td>
-<td>narrow no-break space（窄的无中断空格）</td>
-</tr>
-<tr>
-<td>U+205F</td>
-<td>medium mathematical space（中型数学空间）</td>
-</tr>
-<tr>
-<td>U+3000</td>
-<td>ideographic space（表意文字间隔）</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>The most commonly used space character is U+0020 space. In ideographic text, U+3000 ideographic space is commonly used because its width matches that of the ideographs.</p>
-<p><strong>最常用的空白字符是U+0020空格（译注：即键盘上space键打出来的空格）。在表意文字（译注：如中文、日文、韩文）中，通常使用U+3000表意文字间隔（译注：即有些输入法可以打出来的“全角空格”），因为它的宽度与表意文字的宽度一致。</strong></p>
-<p>The main difference among other space characters is their width. U+2000..U+2006 are standard quad widths used in typography. U+2007 figure space has a fixed width, known as tabular width, which is the same width as digits used in tables. U+2008 punctuation space is a space defined to be the same width as a period. U+2009 thin space and U+200A hair space are successively smaller-width spaces used for narrow word gaps and for justification of type. The fixed-width space characters (U+2000..U+200A) are derived from conventional (hot lead) typography. Algorithmic kerning and justification in computerized typography do not use these characters. However, where they are used (for example, in typesetting mathematical formulae), their width is generally font-specified, and they typically do not expand during justification. The exception is U+2009 thin space, which sometimes gets adjusted.</p>
-<p>其他空白字符的主要区别在于其宽度。U+2000至U+2006是用于排版印刷的标准四方宽度。U+2007数字间隔有一个固定的宽度，被称为表格宽度，它与表格中使用的数字宽度相同。U+2008标点间隔是一个定义为与句号相同宽度的间隔。U+2009窄间隔和U+200A微间隔是连续的较小宽度的间隔，用于狭窄的单词间隙和排版的校正。固定宽度的空白字符（U+2000至U+200A）来自传统铅字排版。计算机排版中的字距调整和对齐不使用这些字符。然而一旦使用它们时（例如在数学公式的排版中），它们的宽度通常是由字体指定的，并且不会在对齐时增大。不过U+2009窄间隔是个例外，它的宽度有时会被调整。</p>
-<p>In addition to the various fixed-width space characters, there are a few script-specific space characters in the Unicode Standard. U+1680 ogham space mark is unusual in that it is generally rendered with a visible horizontal line, rather than being blank.</p>
-<p>除了各种固定宽度的空白字符外，Unicode标准中还有一些特定文字的空白字符。U+1680欧甘文字间隔符很特别，因为它通常呈现为可见的水平线，而不是空白。</p>
-<p>U+00A0 no-break space (NBSP) is the nonbreaking counterpart of U+0020 space. It has the same width, but behaves differently for line breaking.</p>
-<p>U+00A0无中断空格（NBSP）是无中断的U+0020空格。它和U+0020空格具有相同的宽度，但在换行方面的表现不同。</p>
-<p>U+202F narrow no-break space (NNBSP) is a narrow version of U+00A0 no-break space. The NNBSP can be used to represent the narrow space occurring around punctuation characters in French typography, which is called an “espace fine insécable.” It is used especially in Mongolian text, before certain grammatical suffixes, to provide a small gap that not only prevents word breaking and line breaking, but also triggers special shaping for those suffixes.</p>
-<p>U+202F窄的无中断空格（NNBSP）是狭窄版的U+00A0无中断空格。NNBSP可以用来表示法语排版中标点符号周围出现的狭窄空间，即“espace fine insécable”。它还专用于蒙古文中，在某些语法后缀之前提供一个小的间隙，不仅可以防止断字和断行，还可以触发这些后缀的特殊形态。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>The Unicode Consortium. <em>The Unicode® Standard: Version 13.0</em>. <a href="https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf">https://www.unicode.org/versions/Unicode13.0.0/UnicodeStandard-13.0.pdf</a></li>
-<li>译文为自行翻译。对字符名称的翻译，部分参照了Windows 10系统工具“字符映射表”。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Unicode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
-    <url>/typora/</url>
-    <content><![CDATA[<p>以Whitey主题为例。</p>
-<a id="more"></a>
-<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
-<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
-<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
-<p>找到开头的：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">body</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"Vollkorn"</span><span class="token punctuation">,</span> Palatino<span class="token punctuation">,</span> Times<span class="token punctuation">;</span>
-    ...
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>将<code>font-family</code>改为：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> 宋体<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
-<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
-<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
-<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
-<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
-<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
-<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
-<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
-<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
-<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
-<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
-<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
-<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@font-face</span></span><span class="token punctuation">&#123;</span>
-	<span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span>
-	<span class="token property">font-style</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
-    <span class="token property">font-weight</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
-	<span class="token property">src</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>whitey_cjk/FZSSK.TTF<span class="token punctuation">)</span></span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    柯匹、科恩《逻辑学导论》摘要 |
+    
+    明</title>
+  
+  <link rel="shortcut icon" href="/images/quill.svg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-<span class="token atrule"><span class="token rule">@font-face</span></span> <span class="token punctuation">&#123;</span>
-    <span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span>
-    <span class="token property">font-style</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
-    <span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span>
-    <span class="token property">src</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>whitey_cjk/FZHT_Document.TTF<span class="token punctuation">)</span></span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
-<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>即可在Typora主界面实现效果：</p>
-<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
-<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
-<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
-<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> print</span> <span class="token punctuation">&#123;</span>
-	<span class="token selector">html</span> <span class="token punctuation">&#123;</span>
-		<span class="token property">font-size</span><span class="token punctuation">:</span> 13px<span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
-]]></content>
-      <tags>
-        <tag>Typora</tag>
-        <tag>css</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>萨托利《政党与政党体制》摘要</title>
-    <url>/sartori/</url>
-    <content><![CDATA[<p>版本：乔万尼·萨托利：《政党与政党体制》，王明进译，北京：商务印书馆，2006。</p>
-<a id="more"></a>
-<p>乔万尼·萨托利（Giovanni Sartori，1924-2017），出生于佛罗伦萨，后加入美国国籍。其著述有《政党与政党体制》《民主新论》《比较宪法工程学》等数十种。萨托利分别于2005年和2006年荣膺欧洲政治研究联合会终身成就奖与美国政治科学学会终身成就奖。罗伯特·达尔（Robert Dahl）称萨托利“对当代民主理论作出了富有生命力的、非常重要的和杰出的贡献”，阿伦·利普哈特（Arend Lijphart）认为，萨托利在民主理论领域“没有真正的对手”。</p>
-<p>《政党与政党体制》（1976）是萨托利的经典著作，常被认为是独立的政党学的发端，出版22年之后，该书获评1998年美国政治科学学会“杰出著作奖”。全书分为两部分，第一部分阐述政党的基本原理，第二部分则应用这一理论体系对政党体制展开具体分析。原书已轶的第三部分，本将讨论政党的类型、组织和功能。</p>
-<p>书的第一部分包括四章，结合历史视角，从结构和功能两方面，分析了作为部分和整体的政党。第一部分从“从宗派到政党”的历史视角出发，以“从政党到宗派”的结构视角收尾。书的第二部分包含六章，在以迪维尔热为代表的既有政党研究的基础上进一步深化。第二部分以“竞争”为主线，先是串联了对政党计数标准、竞争性与非竞争性体制、不稳定政体和伪政党等研究对象的讨论，然后细化了第三章提出的初步理论框架。最后，萨托利从唐斯理论出发，构建了多向度的“政治空间”，论述了极化多党制对民主政党体制发展的危害所在。</p>
-<h2 id="第一章：作为部分的政党"><a href="#第一章：作为部分的政党" class="headerlink" title="第一章：作为部分的政党"></a>第一章：作为部分的政党</h2><p>从“宗派”（faction）到“政党”（party）的演变史：伏尔泰，马基雅维里，孟德斯鸠，【pp. 11-16】</p>
-<p>“政党”的两个词源。宗派是具体的集团（concrete group）；政党是分析性的分割（analytic partition）。【pp. 13-14】</p>
-<ul>
-<li>博林布鲁克：宗派比政党邪恶，但它们都是同样的祸患。总的来说，博林布鲁克反对政党。【pp. 16-19】</li>
-<li>休谟：对政党的态度更宽厚；类型学的贡献：个人的集团vs真正的集团，后者又分为源自利益的、源自原则的和源自情感的。【pp. 19-22】</li>
-<li>伯克：“政党是建立在一些人们集体认同的特别的原则之上、以共同努力促进国家利益的联合起来的实体。”伯克的靶子：国王的人。【pp. 22-23】</li>
-<li>孔多塞：反对英国式的政党。原因：卢梭影响、尊崇理性、个人主义。基本事实：严酷的现实和宗派主义的毒性。【pp. 26-27】</li>
-<li>联邦党人：对政党依然未作出本质让步。【p. 28】</li>
-</ul>
-<p>多元主义是政党的腹地/背景因素，包括三个层次：文化，社会，政治。【pp. 32-33】多元主义→政党作为“部分”【p. 35】</p>
-<p>四个特别之处：多元主义相对于共识与冲突的立足点；多元主义与多数统治的关联；多元主义成长于战争和宗教迫害；多元主义不仅仅包含多个团体，团体还必须是自愿的、非排他的。【pp. 35-41】多元主义世界观的核心：分歧以及对分歧的赞许。【pp. 35-36】</p>
-<p>从负责任的政府到反应型的政府/政党政府。【p. 44】我们得到的不仅是现代政党，而且还有作为政治体制结构性要求的、从而成为政治体制的次体制之一的政党体制。【p. 47】</p>
-<p>托克维尔，奥斯特罗果尔斯基，米歇尔斯：担心政党之恶。【pp. 48-50】</p>
-<p>三个基础前提：1. 政党不是宗派；2. 政党是整体的部分；3. 政党是表达的渠道。【p. 52】</p>
-<p>政党的功能：代表机构和表达工具，重点在后者。【pp. 56-57】</p>
-<h2 id="第二章：作为整体的政党"><a href="#第二章：作为整体的政党" class="headerlink" title="第二章：作为整体的政党"></a>第二章：作为整体的政党</h2><p>无党的两种情况：没有（未出现）政党，敌视（镇压）政党。【p. 62】</p>
-<p>植入一党制的西方民主：大范围选举权；以群众性政党为轴心的结构化的政党体制。【p. 64】一党制存在的原因：现代社会不能没有表达渠道。一党制更需要普遍政治化的社会。【p. 65】单一政党无法产生“政党体系”，但可以是一个系统。【p. 69】</p>
-<p>党国体制是国家的复本，是“一元系统”。【p. 70】党国体制不允许次体系的自治。【p. 72】一党多元主义：党内分歧是“私人的”而远不是“功能性的”竞争，迪韦尔热陷入了“单位跳跃的谬误”。【pp. 78-79】</p>
-<h2 id="第三章：初步的框架"><a href="#第三章：初步的框架" class="headerlink" title="第三章：初步的框架"></a>第三章：初步的框架</h2><p>政党的两个功能：表达（expression），引导（channelment）；引入第三个功能：交流（communication）。【p. 82】交流被置于表达之下且包含于其中。【p. 85】</p>
-<p>政党体制和党国体制都为社会提供了引导渠道，但除此之外，二者迥异。【p. 86】</p>
-<p>政党是从行为者、行为、结果或目的、范围等方面定义的，但也可从功能、结构定义，也可从输入、输出定义。【pp. 90-91】最小定义策略：政党是“一个在选举中系统地表达全面的问题并提出候选人的集团”/“向民选议会的选举提名候选人的组织”/“追求把其支持的代表安排进政府职位这一目标的组织”【pp. 92-94】</p>
-<p>萨托利的定义：政党是由在选举中提出的正式标识来辨明身份的、能够通过选举（自由的或不自由的）提名候选人占据公共职位的政治集团。【p. 95】</p>
-<ol>
-<li>部分与整体的框架→多党制理论：如果政党是部分，那么整体就不能仅由一个政党来代表或构成，尽管不能由此推导出每一个政党应该为自己而作为部分、作为与整体无关的部分而行为。</li>
-<li>部分与整体的框架→一党制政党/党国的原理：如果政党是部分，则它是一个“坏”的政党，如果整体不能与其好的部分协调,则它是一个“假的”整体。【p. 98】</li>
-</ol>
-<h2 id="第四章：从内部看政党"><a href="#第四章：从内部看政党" class="headerlink" title="第四章：从内部看政党"></a>第四章：从内部看政党</h2><p>政党次单元如何连接/肢解政党。【p. 104】</p>
-<p>次政党的连续统：宗派（特定的权力集团，最分裂）——派别（一般的类别）——倾向（固定的态度，分裂最不突出）。另两种可能性：非结盟的党员；粉碎性的政党。【p. 109】次政党解剖的四个向度：组织；动机；意识形态；左与右。【p. 110】</p>
-<p>政党派别分析框架与类型清单。【p. 119】</p>
-<p>美国南方政治有宗派无政党？并非如此。美国的联邦结构拥有两层的政党体系，导致了这一混乱认识。实际只是两党未能形成两党制运作机制这一形势。【p. 124】</p>
-<p>竞争越弱，党内派别主义越强。在南方州，接近竞争的一组倾向两宗派，亚竞争的一组倾向多宗派。【pp. 128-129】</p>
-<ul>
-<li>美国不是没有政党的派别，而是建立于政党之上的派别；不是一党/无党制，而是主导党体制。【p. 132】</li>
-<li>意大利：极化多党制。【p. 132】</li>
-<li>日本：“派系的重要性超越政党”。【p. 138】</li>
-</ul>
-<p>两国都有牢固的派别次体系在党内运作，但都不可以说取代了政党。两国的区别主要是体制层面。【p. 140】</p>
-<p>机会结构塑造政党体制。【p. 142】机会结构塑造次政党过程。【p. 144】</p>
-<p>政治在政党层次可见，在次政党层次不可见，这影响了政客的行为。【p. 146】</p>
-<p>政党规章的三个主要因素：禁忌，组织结构，选举制度。【p. 147】</p>
-<p>政党的基本变量：内部的选举安排。竞选行为代表了其机会结构的核心因素，从而包含两个方面的预见：政党精英的行为反映最大限度利用选举制度的战略；得票最大化的奖励战术将随选举制度的变化而变化。【p. 149】</p>
-<p>迪维尔热定律对政党可能是错误的，而对派别是正确的。不过这需要对他的定律作特别修改，推出五个假定：</p>
-<ol>
-<li>胜者全取（winner takes all）型的选举制度，即超过票数制度（最多票数制）（the plurality system），将抑制并减少派别的数量，就是说，将维持并鼓励合并。假定在意识形态背景下，可能出现派别的最大化。假设是在非意识形态（实用主义）背景下，则可能出现多数和少数的二元互动。</li>
-<li>高度比例性的选举制度（纯粹的PR）将允许高度的派别化，即将鼓励并产生分裂。不考虑背景-不论是意识形态的还是实用主义的派别的最大化都是不可能的，但是中等的或小型的派别则是可能的。</li>
-<li>如果比例代表制受到排斥条款的矫正，派别性的次体系是可能把自己定位在中等规模的派别的，它们的规模视门槛的高低而定。另一方面，排斥条款对20%水平以下的门槛是不可能有效的。</li>
-<li>意识形态派别的数量是和政党的数量相关的，利益之派别的数量则和政党的数量没有关系。</li>
-<li>如果机会结构奖励小派别（mini-fraction），派别化的程度则更可能很高，而不论派别是否是意识形态型的。【pp. 150-157】</li>
-</ol>
-<p>从政党回到宗派。次政党研究会遇到和政党研究一样的恶性循环：一般理论要求基本信息，但不存在一般理论就不会出现这些基本信息。【pp. 162-163】</p>
-<h2 id="第五章：计数标准"><a href="#第五章：计数标准" class="headerlink" title="第五章：计数标准"></a>第五章：计数标准</h2><p>问题不在政党数目是否重要，而在分类标准能否使我们领会什么是重要的。【p. 170】</p>
-<p>技术规则的难题：哪些政党是相关的？【p. 171】</p>
-<p>政党实力：“席位实力”；执政潜力。由此推出两个规则：</p>
-<ol>
-<li>较小的政党只要它在一段时间里是多余的，也就是在任何可能的联盟多数中不再被需要或可利用，就可以作为不相关的政党而被忽略。反过来，一个较小的政党，不论它有多么小，如果它在一段时间或在某些时刻处在至少是可能的政府多数之一的位置上，则不能被忽略不计。</li>
-<li>一个政党，无论何时，只要它的存在或出现影响到政党竞争的战术，特别是当它改变了定位于执政的政党的竞争方向——通过决定从向心的到离心的转变，不论是左向、右向，或在两个方向，那么它就具有了相关性。【pp. 172-174】</li>
-</ol>
-<p>新的数目分类：1. 一党制；2. 霸权党制；3. 主导党制；4. 两党制；5. 有限多党制；6. 极端多党制；7. 粉碎型体制。【p. 178】</p>
-<p>双向度的分类图示：横轴是数目分类；纵轴是权力结构分类，采用“集中→垄断”的向度，包括完全垄断、等级（宽松垄断）、单向集中（无权力更替）、平衡集中（有权力更替）、低度分裂、分裂、极化且高度碎片化共7种类型。权力分布类型和政党体制类型各自对应。【p. 182】</p>
-<h2 id="第六章：竞争性体制"><a href="#第六章：竞争性体制" class="headerlink" title="第六章：竞争性体制"></a>第六章：竞争性体制</h2><p>极化的多党制不引人注目的两个原因：二元论的障眼法；计数法的局限。【pp. 184-185】</p>
-<p>极化多党制的特征：1. 具有相关性的反体制政党；2. 双边反对党；3. 中央存在一个或一组政党；4. 是一个极化的体制；5. 离心性驱动力对向心性驱动力可能的超越；6. 固有的意识形态型式；7. 不负责的反对党；8. 抬价政治或过度承诺。【pp. 186-199】</p>
-<p>意识形态的距离→极化。【p. 192】</p>
-<p>极化多党制、温和多党制的个案验证、数据分析与图表列举。【pp. 208-267】</p>
-<p>两党制的难题：定义模糊，很难找到个案。【p. 269】放宽两党制的标准：两党处于竞争绝对多数议席的地位；两党之一实际上成功地获得足够的议席多数；该党愿意单独执政；权力的轮替或轮转一直是一个可信的期待。【p. 273】</p>
-<p>用唐斯模型解释两党制：政党将进行向心性的竞争。【p. 280】观念分布越少，两党制越平稳；意识形态距离大，两党式样的功能就会失灵。【pp. 281-282】</p>
-<p>主导党体制：大党持续地获得选举的整理多数（席位的绝对多数）的支持。【p. 288】主导党体制下的政党仍然享有霸权体制下小党所享受不到的机会均等。【p. 297】</p>
-<h2 id="第七章：非竞争性体制"><a href="#第七章：非竞争性体制" class="headerlink" title="第七章：非竞争性体制"></a>第七章：非竞争性体制</h2><p>竞争性结构中，选民有言论自由、退出的自由，最低的、不可剥夺的条件是自由的、不受阻碍的退出；非竞争性结构中，这些选择中至多只有一项是被允许的。【p. 304】</p>
-<p>一党制的三种式样：1. 极权主义（totalitarian）一党制；2. 独裁主义（authoritarian）一党制；3. 实用主义（pragmatic）一党制。【p. 306】</p>
-<p>决定（度量）一党制国家的榨取性-压迫性能力的最强大的唯一因素是意识形态因素。再次采用意识形态-实用主义标准。【p. 308】</p>
-<ol>
-<li>根据“意识形态-强制”标准：极权主义一党制：强烈意识形态化的、高度强制性的、压榨性和动员性的，并致力于强加的（政治）发展；独裁主义一党制：具有较低意识形态烈度、较低压榨性和动员能力的，致力于排斥性政策：既没有力量也没有野心要渗透到整个社会；实用主义一党制：不具备上述所有特征，特点是包容性的或凝聚性的政策，致力于自然的发展。</li>
-<li>根据与外部的和中介集团的关系：极权主义样式是全面主义的；独裁主义样式阻碍次体系但却容忍某种次集团的自主性；实用主义样式则对次集团的自主性相当开放。【pp. 314-315】</li>
-</ol>
-<p>霸权党制：既不允许正式的、也不允许事实的权力竞争。【p. 321】次类型：1. 意识形态霸权党；2. 实用主义霸权党。【p. 323】</p>
-<h2 id="第八章：不稳定政体和伪政党"><a href="#第八章：不稳定政体和伪政党" class="headerlink" title="第八章：不稳定政体和伪政党"></a>第八章：不稳定政体和伪政党</h2><p>方法论的警告：不稳定政体的政党体制分类问题。【p. 335】非洲的政党体制。【pp. 343-354】为不稳定政体特别提出的分析框架。【p. 364, p.366】</p>
-<p>飞去来器效应：对不定型国家研究的比较失当对定型国家研究所造成的损害。【p. 369】</p>
-<h2 id="第九章：总体框架"><a href="#第九章：总体框架" class="headerlink" title="第九章：总体框架"></a>第九章：总体框架</h2><p>强调非连续性。自然语言中“连续统”概念难以数学化，且吸引单向演变的乐观主义。【pp. 373-374】连续统是否“连续”的关键在于，两种体制在没有断裂的情况下，能否连续地通过内部变革相互转换？这是事实问题。【p. 377】</p>
-<p>我们在处理两个异质的连续统：多党制/两党制/主导党体制，和霸权党制/一党制。前者是竞争性/多元主义的，后者不是。【pp. 385-386】</p>
-<p>总的分析框架。【pp. 392-393】</p>
-<p><img src="image-20210725210528368.png" alt="总分析框架1"></p>
-<p><img src="image-20210725210559683.png" alt="总分析框架2"></p>
-<p>总分析框架的简化模型。【p. 400】</p>
-<p><img src="image-20210725210623254.png" alt="简化模型"></p>
-<p>对作者的三种反对意见，其中主要的一种批评在于：分类的逻辑已被测量所取代。【pp. 401-402】</p>
-<p>定性科学是如何处理“是什么”的问题的？1. 对概念的分类处理；2. 包括“多或少”（程度）的处理的“分级逻辑”；3. 把数学数学赋予数字。【pp. 404-405】</p>
-<p>测量政党的相关性：$\dfrac{n}{\sum C_i}$​。【pp. 414】</p>
-<p>分裂指数（雷）：$F = 1 - \sum\limits_{i=1}^N p_i^2$。【pp. 422】</p>
-<p>碎片化指数（弗兰纳根）：$F_t = \sqrt{\sum\limits_{i=1}^n V_i^2}$。【pp. 423】</p>
-<p>标称和数学相结合的途径。【p. 434】</p>
-<h2 id="第十章：空间竞争"><a href="#第十章：空间竞争" class="headerlink" title="第十章：空间竞争"></a>第十章：空间竞争</h2><p>从三个角度重评唐斯理论：1. 民主理论的一般背景；2. 经济前提和选举理论的更好切合；3. 空间模型和经验发现。【p. 442】</p>
-<p>基本问题：一个投票空间是否是单一向度的。【p. 444】理解投票的三个概念：1. 议题；2. 认同；3. 形象。【p. 448】</p>
-<p>斯托克斯的三点批评。【pp. 451-454】政党竞争的空间模型的适用条件。【pp. 457-458】</p>
-<p>四个基本的分野向度：独裁-民主；世俗-宗教；种族-融合；左-右。【p. 463】“左-右”的空洞性有助于多样的排序被挤压进同一个空间向度但宗教向度似乎难以吸纳。【pp. 466-467】</p>
-<p>较宽松的假设：政党越多，它们之间的竞争越倾向于沿着一个线性的、左/右空间展开；政党体系越是展现出意识形态格局越是如此;但在意识形态意识低的分裂型政体中，竟争的空间也可能是单向度的，因为一个政党偏离到另一个向度。【p. 472】</p>
-<p>意识形态空间的属性：1. 左-右顺序空间；2. 不均等的间隔；3. 空间弹性。【pp. 473-474】</p>
-<p>向心性竞争与离心性竞争。【p. 478, p.484】</p>
-<p><img src="image-20210725211657418.png" alt="向心性竞争"></p>
-<p><img src="image-20210725211725705.png" alt="离心性竞争"></p>
-<p>极化多党制模式：中间一极所获得的势力支点不鼓励、且实际上阻碍了中间性；极端政党在极化程度越高而不是越低的情况下，才能更加强盛。这种模式是长久不了的。【p. 486】</p>
-<p>两点结论如下：1. 这里的模式是预测趋势的，而不是预测某一次选举；2. 对这里所遵循的研究方法的最好辩护来自唐斯本人：模型“从根本上说应该由其预见的精确性而不是由其假定的现实来验证”。【p. 487】</p>
-]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-        <tag>政治科学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蔡惠强《解球：你所看到的90分钟》摘要</title>
-    <url>/football/</url>
-    <content><![CDATA[<p>版本：蔡惠强：《解球：你所看到的90分钟》，上海：上海科学技术出版社，2019。</p>
-<a id="more"></a>
-<h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1 基础"></a>1 基础</h2><h3 id="1-1-足球场上的号码、位置与阵型"><a href="#1-1-足球场上的号码、位置与阵型" class="headerlink" title="1.1 足球场上的号码、位置与阵型"></a>1.1 足球场上的号码、位置与阵型</h3><ul>
-<li>1：门将</li>
-<li>2：右边后卫，在3-5-2或3-4-3阵型里称为右翼卫</li>
-<li>3：左边后卫</li>
-<li>4：右中卫，在早期欧洲足球学术文献中，也时常被定义为组织型中场</li>
-<li>5：左中卫</li>
-<li>6：经常被称为拖后中场，在3中卫的体系里可以代表当中的中卫</li>
-<li>8：双后腰位置中较为靠前的中场</li>
-<li>7：右边锋，或右边前卫</li>
-<li>11：左边锋，或左边前卫</li>
-<li>10：前腰，在中场体系里最靠前的一个</li>
-<li>9：中锋，单箭头</li>
-</ul>
-<p>现代足球，更多的基本阵型只有在<strong>防守时</strong>才容易识别，特别是对手开球门球时。</p>
-<p><strong>阵型变化</strong>对应的四个阶段：</p>
-<ul>
-<li>进攻由后向前阶段</li>
-<li>进攻中前场渗透阶段</li>
-<li>防守高位逼抢阶段</li>
-<li>深度防守阶段</li>
-</ul>
-<p><strong>不在由攻转守和由守转攻阶段设立固定阵型</strong>，因为涵盖的变量太多，取而代之的是一些原则性的安排。</p>
-<h3 id="1-2-足球场上的四个阶段"><a href="#1-2-足球场上的四个阶段" class="headerlink" title="1.2 足球场上的四个阶段"></a>1.2 足球场上的四个阶段</h3><p><strong>“足球原则”</strong>——四个阶段：</p>
-<ul>
-<li>进攻阶段</li>
-<li>由守转攻</li>
-<li>防守阶段</li>
-<li>由攻转守</li>
-</ul>
-<p>在进攻和防守两阶段，根据场地三等分进一步区分，由此确立“八个足球阶段”：</p>
-<ul>
-<li>进攻一至三阶段</li>
-<li>防守一至三阶段</li>
-<li>两个转换期</li>
-</ul>
-<h3 id="1-3-进攻防守原则"><a href="#1-3-进攻防守原则" class="headerlink" title="1.3 进攻防守原则"></a>1.3 进攻防守原则</h3><p><strong>进攻原则</strong>：</p>
-<ul>
-<li>深度</li>
-<li>宽度</li>
-<li>渗透</li>
-<li>支援：无球进攻者为持球者提供传球线路或带开防守队员来创造有效空间</li>
-<li>创造：各种一对一甚至一对多过人、寻找特殊传球路线或者射门线路</li>
-</ul>
-<p><strong>防守原则</strong>：</p>
-<ul>
-<li>逼抢：在瞬时可以采取逼抢和压迫去干扰威胁对方</li>
-<li>保护：先在进攻方可能威胁到球门或者身后空间时提供保护</li>
-<li>紧密：缩小进攻空间，保持整体阵型的“紧密度”</li>
-<li>平衡：缩小进攻空间，保持整体阵型的“平衡”</li>
-<li>控制：对有球者重点“控制”</li>
-</ul>
-<h2 id="2-进攻阶段"><a href="#2-进攻阶段" class="headerlink" title="2 进攻阶段"></a>2 进攻阶段</h2><h3 id="2-1-由后向前组织"><a href="#2-1-由后向前组织" class="headerlink" title="2.1 由后向前组织"></a>2.1 由后向前组织</h3><p>这个阶段是指<strong>从本方30米区域内开始的推进</strong>，如球门球或在一次成功的防守后门将持球开始组织进攻。</p>
-<p>这个战术阶段可以划分为两种方式：一种是意在将球过渡到中场再形成最后一传；另一种是直接找到本方的前场球员（长传球）。即便是长传球也需要精心设计。</p>
-<blockquote>
-<p>最后一传：能够在完成技术动作后为队友创造射门的传球。</p>
-</blockquote>
-<p>足球<strong>没有一个最佳的战术，只有最合适的</strong>。</p>
-<h4 id="2-1-1-地面渗透的起始站位"><a href="#2-1-1-地面渗透的起始站位" class="headerlink" title="2.1.1 地面渗透的起始站位"></a>2.1.1 地面渗透的起始站位</h4><p><strong>（1）中后卫</strong>：</p>
-<ul>
-<li><strong>经典</strong>中后卫起始站位：两个大禁区角上</li>
-<li><strong>新式</strong>中后卫门球站位：大禁区直角边的中点<ul>
-<li>拉长了对方球员对持球中后卫施压的跑动距离</li>
-<li>门将开始把球放在小禁区中点，缩短与中后卫的距离，提高出球方向隐蔽性</li>
-</ul>
-</li>
-<li><strong>激进型</strong>中后卫门球站位：底线和大禁区线的交界处<ul>
-<li>1个甚至2个后腰拖到大禁区弧顶附近控制中路</li>
-</ul>
-</li>
-</ul>
-<p><strong>（2）边后卫</strong>：</p>
-<ul>
-<li><strong>保守型</strong>边后卫起始站位<ul>
-<li>防守：丢失球权后较为安全</li>
-<li>进攻：对方边前卫可立即向前施压，阻止球向前发展</li>
-</ul>
-</li>
-<li><strong>进攻型</strong>边后卫起始站位<ul>
-<li>进攻：边后卫接到球马上向前，导致对方3人甚至6人处于无效防守位置</li>
-<li>防守：如果门将长传球失误，边后卫很难对对方边前卫造成防守干扰</li>
-</ul>
-</li>
-<li><strong>平衡型</strong>边后卫起始站位：与盯防者平肩的站位<ul>
-<li>进攻：只要处理好第一脚触球方向，亦可摆脱对方边前卫正面防守</li>
-<li>防守：如果门将长传球被断，边后卫仍可干扰断球者并回到后防4人体系</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>无效防守位置：防守队员相较于持球进攻队员更远离本方球门的位置。</p>
-</blockquote>
-<p><strong>（3）后腰</strong>：</p>
-<ul>
-<li>平均阵型图的趋势：<ul>
-<li>防守型后腰位置更趋靠前</li>
-<li>出球型后腰反而成为中场里最靠近后卫线的</li>
-</ul>
-</li>
-<li>进攻一阶段后腰选位的<strong>两个原则</strong>：<ul>
-<li>为持球者创造出可以传球的路线</li>
-<li>在后场形成除门将以外的外场球员人数优势，为潜在的由攻转守做准备</li>
-</ul>
-</li>
-<li><strong>面对单前锋逼抢</strong>的后腰起始位置<ul>
-<li>一种观点：后腰无需回撤<ul>
-<li>因为后场2v1人数优势已经形成，多一人回撤只会减少双中卫持球空间</li>
-<li>当足球可以向前传递时，要尽可能让球员在保持原则的情况下向前选择站位</li>
-<li>当中后卫出球能力突出时，6号位的回撤显得有些多余</li>
-</ul>
-</li>
-<li>一种观点：后腰可以回撤<ul>
-<li>增加传球路线，即使形成3v1也没问题</li>
-<li>球队里有一个皮尔洛式的长传手，则回撤是理所当然的</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>后腰位置向强侧的<strong>移动</strong><ul>
-<li>门将第一脚传球给边中卫后，后腰向球移动，创造局部2v1</li>
-<li>但有时反向移动效果更好，关键在于用无球跑动为进攻创造出空间</li>
-<li>选择移动时间的原则：在移动的过程中，球、对方前锋和接球后腰不形成一条直线</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>现代足球的关注点已经不停留在如何强调由攻转守和由守转攻阶段了，鉴于比赛的节奏，重要的是如何最小化这两个阶段。如果一支球队能够在丢失球权后直接进入防守阶段，跳过转换期，那将是非常恐怖的。——保罗·克莱门特</p>
-</blockquote>
-<h4 id="2-1-2-起始阵型"><a href="#2-1-2-起始阵型" class="headerlink" title="2.1.2 起始阵型"></a>2.1.2 起始阵型</h4><p><strong>（1）由后向前3-3-3-1起始阵型 vs 4-4-2阵型</strong>：</p>
-<ul>
-<li>阵型特点<ul>
-<li>从4后卫基础阵型演变</li>
-<li>后腰回撤+两边边后卫起始位置前提→后场一阶段人数优势，抵御双前锋的高位逼抢</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>强弱侧转移</strong><ul>
-<li>前提：防守方双前锋在球传出瞬间就<strong>一起向强侧移动</strong></li>
-<li>门将-中后卫传球质量的重要性：球速要快，同时又要让中后卫触球时可以打开身体面向进攻方向</li>
-<li>不能让防守方预测到后场出球者下一步意图：在由后向前的体系里，容错率微乎其微</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>寻找拖后中场</strong><ul>
-<li>适用情况：防守方前锋为了创造强侧，用（向内凸的）<strong>弧线跑位</strong>逼抢限制进攻方出球方向</li>
-<li>拖后中场后腰提供给中卫可选择的<strong>直线传球线路</strong></li>
-<li>拖后中场来不及到位时，<strong>强侧边后卫</strong>回撤通过连接传球破局</li>
-</ul>
-</li>
-<li>成功标准：攻方接球者处于比防守方双前锋或第一条防守线更靠近进攻方球门的位置</li>
-</ul>
-<p><strong>（2）由后向前3-4-3起始阵型 vs 4-3-3阵型</strong>：</p>
-<ul>
-<li>阵型特点<ul>
-<li>回撤一个后腰→中场局部区域4v3人数优势</li>
-<li>相较于3-3-3-1阵型，前腰10号回撤，减少了向对手中场线后渗透传球的选择</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>直接寻找边后卫</strong><ul>
-<li>简单粗暴：若边后卫第一脚触球完美控球并向前推进，则瞬间破解高位逼抢</li>
-<li>但对门将-边后卫传球质量要求高：球速，柔和，精确</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>寻找弱侧边后卫</strong><ul>
-<li>空间产生的原因：4-3-3阵型高位逼抢方弱侧的中场球员会在球移动时向强侧靠近</li>
-<li>适用情况：中后卫回传给门将</li>
-<li>门将<strong>主动迎球</strong>，将球打向弱侧：对门将传接球能力要求高</li>
-<li>（弱侧）<strong>中场10号</strong>内收吸引对手的中场10号内收</li>
-<li>无球移动影响防守方：<strong>弱侧中卫</strong>向门将的靠近干扰对手边锋的回退</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>中场的连接传球（萨里）</strong><ul>
-<li>4v3的局部人数优势：（一侧的）中后卫、边中场、边后卫、边锋</li>
-<li>适用情况：防守方边锋利用（向外凸的）弧线无球跑动<strong>封堵边后卫</strong>有效接球点</li>
-<li>两个后腰或回撤的边前卫通过连接传球找到边后卫</li>
-<li>回撤过程中，接球者要在对的时机到达接球点，直线匀速回撤遇到贴身紧逼会导致连接传球失误</li>
-</ul>
-</li>
-<li>七条走廊：走廊的重叠=进攻队员纵向站位的重叠→有效传球路线的丧失（一般不考虑挑传）</li>
-<li><strong>直接寻找中锋</strong><ul>
-<li>适用情况：激进高位逼抢<ul>
-<li>防守方强侧中后卫移向进攻方边前卫区域，以填补边后卫前压后的空间，形成边路4v4</li>
-<li>此时，起始由后向前已经成功了一半</li>
-<li>因为前场出现1v1，或<strong>局部进攻人数=防守人数</strong>，都可视作对进攻有利的局面</li>
-</ul>
-</li>
-<li>进攻方中锋利用防守方强侧中卫向前移动所留下的身后空间</li>
-<li>中锋能控制住球并转身，就可能1v1中后卫</li>
-<li>性质：<strong>跨阶段推进</strong>战术，从第一阶段的后场直接越过中场找到第三阶段的前场</li>
-<li>由后向前<strong>绝不是沉迷后场倒传而拒绝一切长传机会</strong></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>边后卫传球：门将在由后向前的推进过程中，向边后卫位置传送并破解对手高位逼抢的传球。</p>
-</blockquote>
-<p><strong>（3）由后向前4-3-3起始阵型（埃梅里）</strong>：</p>
-<ul>
-<li>阵型特点<ul>
-<li>后场4：双中卫+双后腰</li>
-<li>中场3：边后卫+前腰</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>双后腰连线</strong><ul>
-<li>中路2v1，进攻方直接在中路渗透</li>
-<li>接球后腰起始位置必须隐蔽地选择在对方中锋和边锋的空档处</li>
-<li>弱侧后腰的接应时机也必须足够及时</li>
-</ul>
-</li>
-<li>推进到第二阶段的方法：<strong>强弱侧转移</strong><ul>
-<li>适用情况：防守方弱侧边锋利用移动速度或预判及时在<strong>中路形成2v2</strong></li>
-<li>一侧中卫拿球时，通过门将转移让弱侧队友获得空间</li>
-<li><strong>弱侧边路</strong>：进攻方边后卫和边前卫<strong>2v1</strong>防守方边后卫</li>
-</ul>
-</li>
-<li><strong>高位逼抢战术会让防守方后场拥有更多可探索空间</strong>，因此瓜迪奥拉和克洛普这样的4-3-3教练开始把第一条高位防守线后移，让对手门将更少参与到由后向前渗透</li>
-</ul>
-<h4 id="2-1-3-提供传球选择"><a href="#2-1-3-提供传球选择" class="headerlink" title="2.1.3 提供传球选择"></a>2.1.3 提供传球选择</h4><blockquote>
-<p>在足球场上哪怕是核心队员90分钟中的持球时间也大多在200秒，而其余的80余分钟时间里球员必须学会如何无球跑动。</p>
-</blockquote>
-<p><strong>中后卫拿球时的传球选择：</strong></p>
-<ul>
-<li>持球者和3个接球点形成一个菱形<ul>
-<li>第一传球选择是<strong>后腰</strong>，因为这是球向前传送中距离中后卫最近的队友</li>
-<li>第二传球选择是中路回撤的<strong>边锋/边前卫</strong><ul>
-<li>优先边前卫的原因：位置更靠前，传球更具渗透意义</li>
-</ul>
-</li>
-<li>第三传球选择是<strong>边后卫</strong><ul>
-<li>边后卫回传时可能落入高位逼抢的陷阱</li>
-<li>过早让球发展到边路，会让防守队员创造强侧变得更为简单</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>先中后边所创造的空间<ul>
-<li>当防守方边前卫将注意力放在强侧接球边后卫时，往往<strong>中后卫直接将球传向边前卫</strong>的走廊会敞开</li>
-<li>进一步打开边路：<strong>边前卫</strong>连接传球给到前插边后卫</li>
-<li>边前卫的连接作用也可出现在<strong>强侧后腰</strong>身上</li>
-<li><strong>边后卫</strong>不能过早前插</li>
-<li>接应持球者的进攻方球员选位不能重叠（保持菱形）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>先中后边：持球进攻的球队通过将球往中路的渗透传递，吸引防守者向中路收缩阵型，并利用此时所制造的边路空间</p>
-</blockquote>
-<ul>
-<li><strong>3v2直接传球至边后卫</strong><ul>
-<li>适用情况：防守方<strong>前锋</strong>更靠近中路，<strong>边前卫</strong>直线移动对持球中后卫施压</li>
-<li>进攻左边后卫回撤创造接球角度，并利用第一脚触球使身体向前</li>
-<li>边后卫接球后，前场进攻球员要再次提供从中场渗透到前场的选择<ul>
-<li><strong>前锋和弱侧边锋</strong>提供深度传球选择</li>
-<li><strong>强侧边前卫</strong>则可以提供2过1或短传选择</li>
-</ul>
-</li>
-<li>在对方双前锋逼抢时更多发生：防守第一条逼抢线人数不足导致对宽度覆盖不充分</li>
-</ul>
-</li>
-<li><strong>中后卫直接寻找前锋</strong><ul>
-<li>进攻方前锋利用中路的空间回撤接球</li>
-<li><strong>前腰</strong>同时前插保持整体进攻阵型平衡</li>
-<li><strong>弱侧边前卫</strong>也可向深侧移动来影响防守方移动选择</li>
-<li>强侧的<strong>前锋、边前卫和边后卫</strong>与持球者形成了新的菱形体系</li>
-</ul>
-</li>
-<li><strong>拖后中场拿球转边路</strong><ul>
-<li>适用情况：防守方选择了注重对中路的保护，此时进攻空间就会存在于边路</li>
-<li>进攻方<strong>边前卫</strong>活动于防守边后卫内侧，<strong>吸引对手内收</strong>，创造边路空间</li>
-<li><strong>拖后中场</strong>6号处于接近对方双前锋平行位置，<strong>保持潜在的由攻转守时中路局部人数优势</strong></li>
-<li>让两个<strong>边后卫</strong>可以选择较高的站位</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>更多的教练已不再将由攻转守的重点放在丢球后的6秒内，而是在设计进攻路线的时候，已经开始考虑到在最容易被对手反击的地点保持布防和人数优势。</p>
-</blockquote>
-<ul>
-<li><strong>拖后中场拿球寻找中路空间</strong><ul>
-<li>适用情况：防守方<strong>边前卫</strong>想要靠近进攻方边后卫，站在更宽的起始位置上；防守方中后场中路近似由<strong>四个后卫和两个后腰</strong>组成的4-2连线</li>
-<li>后腰-边前卫传球<ul>
-<li>进攻方<strong>前腰10号</strong>内收站在两线之间</li>
-<li>一侧<strong>边后卫</strong>前插</li>
-<li>该侧边前卫和持球者传球走廊被打开</li>
-</ul>
-</li>
-<li>边前卫-前腰传球<ul>
-<li>边前卫触球时，强侧防守边后卫会立马上前干扰</li>
-<li>隐蔽于两线之间的<strong>前腰10号</strong>：无效选位→有效选位</li>
-<li>前腰10号在接球时可以处于面对球门的身位</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>延时有效接应点：在第一持球者控球时的无效接球位置，但在将球传给第二持球者时，转化为有效位置的接应点。</p>
-</blockquote>
-<h4 id="2-1-4-中路人数优势的创造"><a href="#2-1-4-中路人数优势的创造" class="headerlink" title="2.1.4 中路人数优势的创造"></a>2.1.4 中路人数优势的创造</h4><p><strong>（1）边前卫内收创造中路人数优势</strong>：</p>
-<ul>
-<li>类似前腰的10号位球员出任边前卫，称“<strong>内锋</strong>”，用连接传球串联后场三人与靠前两中场</li>
-<li>边前卫回撤可以由<strong>强侧边后卫高速前插</strong>触发</li>
-<li>对手边后卫<strong>如果没有及时压上</strong>：回撤接球的边前卫拿球转身推进</li>
-<li>对手边后卫<strong>如果紧跟回撤边前卫</strong>：<ul>
-<li>中路3v2→3v3</li>
-<li>强侧进攻中场10号<strong>回撤</strong>提供回传球选择</li>
-<li>弱侧中场8号<strong>前插</strong>提供延时有效接应位置，带走防守弱侧后腰</li>
-</ul>
-</li>
-<li>中后卫也可以直接选择对手边路身后的空间找到前插的边后卫</li>
-</ul>
-<p><strong>（2）边后卫内收创造中路人数优势（瓜迪奥拉）</strong>：</p>
-<ul>
-<li>强侧中后卫拿球时，边后卫收到<strong>原先后腰的位置</strong>提供传球选择</li>
-<li>边后卫拿球后：<ul>
-<li>转身向前，推进到中场</li>
-<li>无法转身时通过连接传球，找到弱侧中场</li>
-</ul>
-</li>
-<li><strong>无球跑位（跨区域换位）</strong>：<ul>
-<li>强侧中场向前跑动，提供在对手两线之间接球的选择</li>
-<li>弱侧中场回接提供传球选择</li>
-</ul>
-</li>
-<li>边后卫内收创造<strong>边路1v1</strong>：<ul>
-<li>若防守边前卫内收，则边路空间暴露，给进攻<strong>边锋</strong>接球空间</li>
-<li><strong>中后卫与边前卫</strong>之间的传球路线没有任何阻挡</li>
-<li>边前卫在边路获得与防守边后卫1v1机会，到达<strong>个人能力最大化</strong>区域</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-1-5-长传球"><a href="#2-1-5-长传球" class="headerlink" title="2.1.5 长传球"></a>2.1.5 长传球</h4><p>一些适用情况：</p>
-<ul>
-<li>对手把三条线的整体阵型提得很高</li>
-<li>球队刚经历了对方长时间的30米区域围攻</li>
-<li>对方高位逼抢出色，本方刚在从后向前过程中失误，需要平复心理状态</li>
-<li>前场拥有一个很出色的高空球争夺者</li>
-</ul>
-<p><strong>（1）球门球强侧长传</strong>：</p>
-<ul>
-<li>防守方优势：球员正面面对来球，局部人数有优势</li>
-<li>无球跑位：一个球员向对方防线身后冲击，其他球员在更靠近本方球门的方向试图控制二点球</li>
-<li>长传球使用4-2-2-2阵型：中路安全+二点球保护</li>
-</ul>
-<p><strong>（2）球门球长传不创造强侧</strong>：</p>
-<ul>
-<li>进攻方球员按照地面渗透的起始站位吸引出对手高位逼抢</li>
-<li>进攻队员有更多空间去争顶，削弱防守方人数优势</li>
-<li>问题：进攻阵型被拉开，如果传球失误，对方反击会更具威胁，因此在长传球后球队<strong>向强侧及时靠拢</strong>非常重要</li>
-</ul>
-<blockquote>
-<p>每一个足球战术中一定存在机会成本，也就是为得到某一利益而放弃的另一利益。</p>
-</blockquote>
-<h3 id="2-2-中场渗透"><a href="#2-2-中场渗透" class="headerlink" title="2.2 中场渗透"></a>2.2 中场渗透</h3><p>经过一阶段的由后向前组织，当中场任意一个球员拿到球权以后，进攻就进入了下一个阶段一一中场渗透。</p>
-<p>虽然最终的目标是射门，但此时<strong>更现实的概念是“如何创造出最后一传”</strong>。</p>
-<h4 id="2-2-1-进攻空间划分"><a href="#2-2-1-进攻空间划分" class="headerlink" title="2.2.1 进攻空间划分"></a>2.2.1 进攻空间划分</h4><ul>
-<li><strong>纵向空间划分</strong>：<ul>
-<li><strong>两线之间的空间</strong>：在这个区域利用中锋、前腰或者其他球员的接球创造最后一传</li>
-<li><strong>身后空间</strong>：这个区域的有效无球跑动可以直接创造出最后一传的选择</li>
-<li><strong>边路空间</strong>：在防守方保持紧密中路防守时，这片区域是将传中转换成最后一传的重要地点</li>
-</ul>
-</li>
-<li><strong>横向空间划分</strong>：左路空间、左路半区、中路空间、右路半区、右路空间</li>
-<li><strong>半区</strong>成为阵地战传控球队最喜欢利用的地方：<ul>
-<li>对方中后卫会顾及身后前插的前锋而不敢轻易施压</li>
-<li>对方边后卫在前顶半区进攻方时会损失对边路的保护</li>
-<li>在半区接球可以更好地威胁防守方<strong>肋部身后空间</strong></li>
-<li>4-3-3阵型的兴起，重要原因在于两个进攻型边中场对于两侧半区的利用——4-2-3-1阵型的前腰更多地只能探索中路空间或者一侧半区</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-2-2-中路渗透：中锋支点"><a href="#2-2-2-中路渗透：中锋支点" class="headerlink" title="2.2.2 中路渗透：中锋支点"></a>2.2.2 中路渗透：中锋支点</h4><p><strong>（1）中锋回撤拿球：转身面对球门方向</strong>：</p>
-<ul>
-<li>中锋不是简单直线回撤，而是先向进攻方向移动，然后再次撤回到对方中场和后防线之间的位置</li>
-<li>球周围的队员一起整体移动为中锋提供空间</li>
-<li>中锋回领球<strong>转身</strong>后：<ul>
-<li>必须有队友<strong>向深处移动</strong>：<ul>
-<li><strong>弱侧边前卫</strong>前插限制对手后防线前提并创造进攻深度</li>
-<li>（弱侧）<strong>边后卫</strong>前插让对手边后卫面临内收或外扩选择</li>
-</ul>
-</li>
-<li><strong>前腰10号</strong>接应，拉开防守双后腰与后防线距离</li>
-<li>这一切都要在同一触发点发生</li>
-</ul>
-</li>
-<li>若中锋拿球<strong>不能转身</strong>或者拿球空间太小，<strong>前腰和另一侧边前卫</strong>必须接应（“露头”）：<strong>回传</strong>也是创造空间的重要方式</li>
-</ul>
-<blockquote>
-<p>战术触发点：在某一个特定时间点，队友之间根据对方所处的地点和情况作出预设的战术反应。</p>
-</blockquote>
-<p><strong>（2）中锋回撤拿球：串联前腰</strong>：</p>
-<ul>
-<li>适用情况：中锋回撤伴随对方中后卫贴身跟随，难以持球面对进攻方向</li>
-<li>利用中锋回撤和回做球是激活前腰延时有效接应点的重要一步</li>
-<li>中锋等待持球中后卫获得与他的传球路线后，移动到两线之间的空间并调整身位回做来球</li>
-<li>此时防守中后卫的盯防通常是<strong>优先防止前锋转身</strong>面对球门</li>
-<li>10号前腰<strong>不能过早地进入两线</strong></li>
-<li>串联前腰后的<strong>盲侧跑位</strong>：<ul>
-<li>前锋必须向两个防守中后卫之间的空档移动</li>
-<li>边前卫前插起始位置是对方边后卫外侧，要注意启动时机：<ul>
-<li>启动早，自身越位</li>
-<li>启动晚，对方弱侧中后卫的补位，丧失接球空间</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>盲侧跑位：进攻队员利用相对足球所处的防守队员的弱侧位置，进行无球移动。</p>
-</blockquote>
-<p><strong>（3）中锋回撤拿球：第三人跑位</strong>：</p>
-<ul>
-<li>适用情况：<strong>中锋</strong>来不及转身但有时间侧身，<strong>边前卫</strong>起始位置和防守边后卫持平</li>
-<li>前锋在两线之间拿球瞬间，边锋启动准备接应</li>
-<li>利用对方边后卫和中后卫之间的空间传球，在防守边后卫身后接球：处理球的时间越短越好</li>
-<li>边后卫接球后的发展：<ul>
-<li>最理想状况：第一脚触球→内切射门</li>
-<li>进攻方<strong>前腰、远端边前卫</strong>在禁区提供传中选择</li>
-<li><strong>前锋</strong>覆盖大禁区弧，创造进攻层次感</li>
-<li><strong>后场球员</strong>收紧阵型，准备潜在的由攻转守</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>第三人跑位：当进攻持球队员传球给第二个队员的同时，第三进攻队员已经启动准备接应第二个队员的传球的预设性跑位。</p>
-</blockquote>
-<h4 id="2-2-3-中路渗透：边锋内收"><a href="#2-2-3-中路渗透：边锋内收" class="headerlink" title="2.2.3 中路渗透：边锋内收"></a>2.2.3 中路渗透：边锋内收</h4><p><strong>（1）边锋回撤拿球</strong>：</p>
-<ul>
-<li>时机：防守边前卫被前插的边后卫所吸引</li>
-<li><strong>强侧后腰</strong>也需要在纵向位置上和内收边前卫不重叠，防止对手后腰切断线路</li>
-<li><strong>9号中锋</strong>要压制住强侧中后卫</li>
-<li><strong>后续发展：边锋第一脚触球向内</strong>：<ul>
-<li>直接威胁球门</li>
-<li><strong>中锋</strong>和<strong>弱侧边前卫</strong>向对手身后空间移动并做好接应最后一传准备</li>
-<li><strong>弱侧的边后卫</strong>也可以插上，应对球传到后点的情况</li>
-<li><strong>前腰10号</strong>在两线之间接应，应对对手后防四人紧密站位限制边前卫传身后球的情况</li>
-<li><strong>强侧后腰</strong>提供给持球者回传并重新组织进攻的选择</li>
-</ul>
-</li>
-<li><strong>后续发展：边锋第一脚触球向外</strong>：<ul>
-<li>前提：防守方强侧后腰6号很快回收，边后卫选择内线门侧防守</li>
-<li>寻找<strong>前插的进攻方边后卫</strong></li>
-<li>边后卫插上后，<strong>前锋和弱侧边锋</strong>在禁区里提供传中选择</li>
-<li><strong>回撤边前卫</strong>和<strong>前腰</strong>提供倒三角选择</li>
-<li><strong>拖后中场</strong>必须和<strong>两个中后卫</strong>在后场保持由攻转守人数优势，而不是过度前压</li>
-<li><strong>强侧后腰</strong>也需要提供过渡选择</li>
-</ul>
-</li>
-</ul>
-<p><strong>（2）边前卫内收至中路（穆里尼奥）</strong>：</p>
-<ul>
-<li>与中锋串联<ul>
-<li>得到<strong>中锋回传球</strong>后，进攻边前卫处在持球面对球门的位置</li>
-<li><strong>另一侧边前卫</strong>和<strong>中锋</strong>斜插对手防线身后空间</li>
-<li>内切边前卫也可以直接选择射门</li>
-<li>如果防守中后卫盯防及时，内切边前卫还可以继续带球沿<strong>另一条边路</strong>发展</li>
-<li><strong>逆足边前卫</strong>内收接球的优势</li>
-</ul>
-</li>
-<li>为边后卫创造空间<ul>
-<li>防守方边后卫跟着内收边前卫一起移动</li>
-<li>该侧进攻<strong>边后卫</strong>可以前插得球</li>
-<li>禁区里已经存在了三个前插接应选择</li>
-<li>进攻方<strong>前腰</strong>争夺二点球或创造倒三角接球路线</li>
-<li><strong>后腰</strong>站在更靠外的位置应对对手反击或把握潜在远射机会</li>
-</ul>
-</li>
-<li><strong>由攻转守</strong>的层次：<ul>
-<li>第一层：禁区弧顶附近的前腰和及时回夹的前场三人</li>
-<li>第二层：禁区外围的后腰和内收的弱侧边后卫</li>
-<li>第三层：拖后后腰和两个中后卫</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-2-4-边路渗透：边路过载"><a href="#2-2-4-边路渗透：边路过载" class="headerlink" title="2.2.4 边路渗透：边路过载"></a>2.2.4 边路渗透：边路过载</h4><blockquote>
-<p>边路过载：在特定边路创造局部人数优势。</p>
-</blockquote>
-<p><strong>中锋横向移动至边路</strong>：</p>
-<ul>
-<li>起始：进攻方前腰10号和前锋9号纵向换位，前腰前插压制对手后卫线<ul>
-<li>前锋可以撤到一个原先盯防前腰的球员无法照顾到的边路位置</li>
-<li>起始位置上，<strong>边前卫和边后卫纵向选位重叠</strong>，就是为了给中锋回撤空间</li>
-</ul>
-</li>
-<li>过程：<ul>
-<li><strong>边后卫</strong>作为连接中转串联<strong>强侧中后卫</strong>和<strong>强侧后腰</strong>，后腰接球转身面对进攻方向</li>
-<li>中锋横向移动让对方非常被动：<ul>
-<li>如果防守中后卫跟出，前腰就会进入最危险的空间</li>
-<li><strong>强侧边前卫</strong>的坚决前插瞬时让防守边后卫陷入1v2</li>
-</ul>
-</li>
-<li><strong>中锋拿球后——转身</strong>：<ul>
-<li>弱侧边前卫、边后卫、前腰利用对方深处防守空间</li>
-<li>强侧边前卫继续向深处走，给持球者在前两条传球路线被封堵时的第三选择</li>
-</ul>
-</li>
-<li><strong>中锋拿球后——不能转身</strong>：<ul>
-<li>再次回传给到强侧后腰重新组织</li>
-<li>寻求转移利用<strong>对手弱侧的空间</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>连接中转：当队友之间直线传球无法直接完成时，第三人接应后的一脚出球或者极短触球时间内的过渡传球，通过角度的变化避开对方的防守并串联进攻，激活“延时性有效接应点”。</p>
-</blockquote>
-<p><strong>后腰的连接中转</strong>：</p>
-<ul>
-<li>情况1：<ul>
-<li>对手前锋9号用切（向外凸的）弧线跑位逼抢<strong>拖后中场</strong>，<strong>中卫</strong>此时处在无效接球位置</li>
-<li>强侧<strong>后腰</strong>处在拿球无法转身的位置，但可以回撤并接到传球过渡给中卫</li>
-</ul>
-</li>
-<li>情况2：<ul>
-<li><strong>中后卫</strong>拿球，对手边前卫切（向外凸的）弧线跑位让<strong>边后卫</strong>无法接到球</li>
-<li><strong>后腰</strong>连接传球也可以激活边后卫的接球位置，破解对手局部逼抢</li>
-</ul>
-</li>
-<li>看似简单的一脚触球要考虑的问题：<ul>
-<li>高对抗下如何把握移动创造空间的时机</li>
-<li>怎样打开身位触球又不将球暴露给对手</li>
-<li>传到前插队友哪一只脚下才方便其推进</li>
-</ul>
-</li>
-</ul>
-<p><strong>3-2-5阵型（瓜迪奥拉）</strong>：</p>
-<ul>
-<li><strong>边后卫前插利用边路空间</strong>：<ul>
-<li>一侧边后卫内收保护中路区域</li>
-<li>另一侧边后卫前移，该侧<strong>中场内收形成双后腰</strong></li>
-<li>该侧<strong>边前卫</strong>选位到对手中后卫与边后卫之间的肋部位置<ul>
-<li>若防守边前卫跟随前插边后卫，则持球中后卫直接找到边前卫</li>
-<li>若防守边前卫封堵内接进攻边前卫的线路，则前插边后卫就有很大空间接球并创造传中机会</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>边中场前插肋部空间</strong>：<ul>
-<li>两侧的边后卫都内收</li>
-<li><strong>一侧的中后卫前提到后腰</strong>位置</li>
-<li>两边锋为了拉开防守方后防线四人距离，选择<strong>非常靠近边线</strong>的起始位置</li>
-<li><strong>后腰</strong>将球交给边线位置的两个边锋</li>
-<li>两个边中场探索对手肋部空间</li>
-<li>由于中路区域<strong>中锋</strong>的存在，防守中后卫不会轻易丢掉自己的防区</li>
-</ul>
-</li>
-<li><strong>人员位置可以不停轮换，但是宏观的阵型和体系一直保持</strong></li>
-<li><strong>变体：4-2-4阵型</strong>：<ul>
-<li>（1）中后卫前移作为后腰使用时，对手的后腰和前腰会因为区域防守的交接出现空间</li>
-<li>（2）在一支球队里往往边后卫拥有出色的一对一单防能力和速度，由攻转守时把握性更大</li>
-<li>（3）充分为边路球员创造空间，可以踩着边线踢球并获得一对一的机会</li>
-<li>（4）中场球员可以最大限度地探索后卫线的肋部空间，也就是边后卫和中后卫之间的位置</li>
-</ul>
-</li>
-<li>2018-2019赛季的流行打法：边后卫踩着边线踢球来创造出跨度，边锋更多地往中路移动成为内锋</li>
-<li>瓜迪奥拉的返璞归真：边锋再次撤到最大宽度的区域，把肋部空间留给两个边中场</li>
-</ul>
-<h4 id="2-2-5-边路渗透：斜向转移"><a href="#2-2-5-边路渗透：斜向转移" class="headerlink" title="2.2.5 边路渗透：斜向转移"></a>2.2.5 边路渗透：斜向转移</h4><p><strong>（1）斜向转移至弱侧边后卫</strong>：</p>
-<ul>
-<li>适用情况：中后卫持球失去向前寻找边前卫或者前锋的路线</li>
-<li>具体做法：寻求<strong>后腰的中转</strong>（8号-6号）并寻找弱侧前插边后卫</li>
-<li>斜向转移的一个优势：球被传出去的时候，接球者处于防守队员的盲侧</li>
-</ul>
-<p><strong>（2）斜向转移至弱侧边前卫</strong>：</p>
-<ul>
-<li>为了减少肋部空间，防守方在后腰或回撤的边前卫没有到位时，边后卫不会贸然地前扑接边前卫的球</li>
-<li>如果边后卫前扑——边路1v1的形成：<ul>
-<li>边前卫控球，对方边后卫贴近上抢，中后卫被前插的前腰（或边后卫）牵制，不能提供足够保护</li>
-<li><strong>前腰或边后卫</strong>须坚决探索肋部空间，否则强侧防守后腰和回防边前卫会过早靠近边路进行保护，导致边前卫失去1v1机会</li>
-<li>边后卫内套可以干扰到防守方边前卫的移动</li>
-<li>前腰和强侧边后卫<strong>只需要有一人插肋部</strong>，另一人提供回传选项</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-防守阶段"><a href="#3-防守阶段" class="headerlink" title="3 防守阶段"></a>3 防守阶段</h2><h3 id="3-1-高位逼抢"><a href="#3-1-高位逼抢" class="headerlink" title="3.1 高位逼抢"></a>3.1 高位逼抢</h3><p>防守的逼抢可以存在于<strong>球场上的任何部分</strong>。从<strong>个体角度</strong>来解释就是个人对于持球对手的施压，而<strong>整体角度</strong>可以被定义为一支球队在无球状态下减少对手持球空间和调整时间的集体性战术。</p>
-<p>这样的战术目的在于减少持球者的进攻选择，并且为防守方再次获得球权创造条件。</p>
-<p><strong>逼抢的分类</strong>：</p>
-<ul>
-<li>按区域划分逼抢战术：高位逼抢，进攻型逼抢，深度逼抢</li>
-<li>局部逼抢和全场逼抢：<ul>
-<li>局部逼抢：将持球对手引入指定预设区域后再进行对球权的争夺</li>
-<li>全场逼抢：在球场的任何区域实施对球权的抢夺</li>
-</ul>
-</li>
-<li>创造强侧和终极逼抢</li>
-</ul>
-<p><strong>逼抢的时间点</strong>：</p>
-<ul>
-<li>对手局部位置或者球员在技术上有明显弱点时</li>
-<li>持球者接到很难控制的传球时</li>
-<li>持球者在一个缺少接应和敏感位置接球时</li>
-</ul>
-<p><strong>逼抢的优缺点</strong>：</p>
-<ul>
-<li>高位逼抢会混淆防守的优先顺序</li>
-<li>没有一支球队可以把这种战术持续90分钟</li>
-<li>高位逼抢能在越位规则的条件下，减少全队的防守面积</li>
-<li>成功果实非常丰厚，往往在重新得到球权之后直接面对对方后防线甚至球门</li>
-</ul>
-<blockquote>
-<p>防守的优先顺序：以防守球门，身后空间和身前空间的顺序来定义防守优先级。</p>
-</blockquote>
-<p><strong>逼抢的战术特点</strong>：</p>
-<ul>
-<li>所有的防守都是从前锋开始的</li>
-<li>前锋或离球最近的进攻队员决定整支球队的阵型和移动</li>
-<li>4-3-3和3-4-3阵型是比较平衡的高位逼抢阵型</li>
-</ul>
-<h4 id="3-1-1-创造强侧"><a href="#3-1-1-创造强侧" class="headerlink" title="3.1.1 创造强侧"></a>3.1.1 创造强侧</h4><p><strong>起始位置（4-5-1或4-4-2阵型）</strong>：</p>
-<ul>
-<li>9号和10号形成小单位去准备控制对方中后卫，其中拖后的那一个必须<strong>先限制门将直接找拖后中场6号的线路</strong></li>
-<li>两个边前卫11号、7号站在和对方边后卫平肩位置</li>
-<li>中后场球员8号、6号一一对应进攻队员</li>
-<li>中卫保持对前锋的2防1</li>
-<li>根据对手出球能力调整，如逼抢逆足中卫</li>
-</ul>
-<p><strong>（1）局面发展：对手中后卫拿球</strong>：</p>
-<ul>
-<li><strong>局部2v4</strong>是整个战术成败的关键</li>
-<li><strong>10号</strong>接近对方一侧中卫时采取（向内凸的）弧线跑动，阻止中后卫一脚回传门将</li>
-<li><strong>9号</strong>以最快速度到达对方拖后中场位置，阻碍其接球</li>
-<li>这两位球员主要是影响和控制出球路线，创造球发展方向的可判断性，减少防守面积</li>
-<li><strong>强侧边前卫</strong>不能直接扑向边后卫，应移动到一个让对方中后卫不能把球直塞给进攻强侧边前卫的位置</li>
-<li>在高位逼抢战术中，整体阵型的前提会让渗透球的威胁变得更加明显</li>
-<li><strong>弱侧边后卫</strong>要移动至强侧和后防线其余球员保持距离，同时观察弱侧进攻队员跑位，避免弱侧防守完全真空</li>
-<li>弱侧边前卫处于1v2防守状态，但可以接受——<strong>弱侧的1v2才能在强侧创造出人数均势或优势</strong></li>
-</ul>
-<blockquote>
-<p>创造强侧最重要的是让持球者不能横向或斜向转移，借此减少横向防守空间，并在强侧局部创造人数均势甚至优势。</p>
-</blockquote>
-<p><strong>（2）对手边后卫进入1v2陷阱</strong>：</p>
-<ul>
-<li>局部2v1：<strong>强侧边前卫</strong>沿遮挡住对方边前卫的路线逼近持球者，<strong>前腰10号</strong>沿遮挡住对方强侧中后卫的路线接近持球者</li>
-<li>其他中场对应的防守队员也必须到位，阻断一切传球路线</li>
-<li><strong>对手边后卫第一脚触球向前</strong>：<ul>
-<li>防守方<strong>边后卫</strong>成为第二个逼抢者并和<strong>边前卫</strong>形成局部2v1</li>
-<li>高位逼抢第一条线已破，整体阵型需<strong>向后移动并向强侧联动</strong></li>
-<li><strong>强侧后腰</strong>盯防进攻方强侧边前卫的接球路线，<strong>弱侧后腰</strong>也要横移保护</li>
-<li><strong>弱侧边前卫</strong>应放弃对进攻方弱侧边后卫和中后卫的干扰，回撤保持中场横向平衡</li>
-<li>也可让强侧中卫去看防对手强侧边前卫，但<strong>两中卫之间的空间</strong>需要后腰及时填补</li>
-</ul>
-</li>
-</ul>
-<p><strong>（3）对手中后卫回传门将</strong>：</p>
-<ul>
-<li><strong>前锋9号</strong>必须通过（向弱侧凸的）弧线施压门将，不让球轻易转移到弱侧，否则弱侧边前卫就会陷入1v2</li>
-<li>同时<strong>8号后腰</strong>需前提到对手8号中场和进攻拖后后腰6号之间，防止门将穿透球找到拖后后腰</li>
-<li>整体后防线在看到回传发生时，可以继续向强侧移动一些，但仍须前提以减少防守面积</li>
-</ul>
-<p>创造强侧高位逼抢的一个明显弱点：进攻方如果将球成功转移到弱侧，防守方一定会在局部区域出现人数劣势。</p>
-<p><strong>（4）菱形4-4-2阵型（波切蒂诺）</strong>：</p>
-<ul>
-<li>平行中场4-4-2高位逼抢的局限：双前锋在前场难以覆盖对手双中卫及回撤后腰，陷入2v3人数劣势</li>
-<li>波切蒂诺的菱形中场4-4-2：复古阵型和先进打法结合</li>
-<li>前腰位置球员前移，整体阵型偏向4-3-3结构</li>
-<li>两个边前卫覆盖更大面积，处于对手两线之间，兼顾进攻方靠前的两个中场和两个高位边后卫</li>
-<li><strong>当对方中后卫拿球</strong>：<ul>
-<li>菱形中场体系缺乏对防守宽度的覆盖，所以创造强侧仍是主要概念</li>
-<li>前场三人及时用跑动路线来影响对手的出球方向<ul>
-<li><strong>前锋</strong>采用直线逼抢方式，目标不是把对手引入陷阱，而<strong>是直接争夺球权</strong></li>
-<li>因为防守方有着更多的人数，不需要将战区延后</li>
-<li><strong>前腰</strong>选位限制对手拖后后腰6号接球路线</li>
-<li><strong>另一个前锋</strong>为潜在进攻方回传门将的线路做逼抢准备</li>
-</ul>
-</li>
-<li>中场球员的跑动会相对难度更大<ul>
-<li><strong>强侧边前卫</strong>要及时限制中后卫找到强侧边前卫的线路，同时准备施压强侧边后卫</li>
-<li><strong>弱侧边前卫</strong>及<strong>后腰</strong>也要向强侧移动，保持中场球员之间距离</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>当对方边后卫拿球</strong>：<ul>
-<li><strong>边前卫</strong>及时到位，盯防对手边后卫</li>
-<li><strong>前腰</strong>和<strong>另一侧前锋</strong>要有对进攻方6号的<strong>交接</strong>，前腰回落强化阵型紧密度</li>
-<li><strong>弱侧边前卫</strong>也要回收到对方弱侧后腰位置，保持后场的人数优势</li>
-<li>缺陷：进攻方的弱侧中卫与边后卫处在完全空位上，对弱侧保护不足</li>
-</ul>
-</li>
-<li><strong>当对方前腰拿球</strong>：<ul>
-<li>必须瞬时形成3人包围圈：拖后中场施压防止其转身，前腰和强侧边前卫回撤夹抢</li>
-<li><strong>前锋</strong>和前腰有对进攻方6号的交接任务，防止6号上前提供10号回传选择</li>
-<li><strong>整条后防线</strong>：盯人，上压减少防守面积，保持几条线之间的距离</li>
-</ul>
-</li>
-<li><strong>防守长传球</strong>：<ul>
-<li><strong>在球落点位置的后防线球员</strong>前提争顶</li>
-<li><strong>后防线其他三个球员</strong>向落点附近靠拢，并适当<strong>向斜后方移动落位（斜落）</strong>，防止队友争顶失败后球越过整条防线</li>
-<li><strong>拖后后腰</strong>回夹干扰，或争取抢断</li>
-<li>中场其余三人向球侧靠拢，保持盯人并准备好第二落点的保护和争抢</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>现代足球的四大特征：由后向前的地面渗透推进；门将更多参与到后场的组织进攻过程；相对更高的后防线；在前场向对手施压。</p>
-</blockquote>
-<h4 id="3-1-2-终极逼抢"><a href="#3-1-2-终极逼抢" class="headerlink" title="3.1.2 终极逼抢"></a>3.1.2 终极逼抢</h4><p>终极逼抢战术看起来和防守的原则有些背道而驰。常规的防守战术会让进攻方往边路方向延缓发展；然而在终极逼抢战术中，时常会让进攻方往中路渗透，使其进入布局好的包围圈里。</p>
-<p>当然，如果防守圈被破，造成的后果也比创造强侧的高位逼抢严重得多。</p>
-<p><strong>起始位置</strong>：</p>
-<ul>
-<li>与创造强侧最大的不同：<strong>两个边前卫或边锋</strong>的位置都处于进攻方边后卫和中后卫之间<ul>
-<li>优点：不管球到了边后卫还是中后卫脚下时，逼抢边锋都可以减小与其中一个的距离</li>
-<li>问题：在对手传接球质量非常出色时，对中后卫以及边后卫都不造成足够压力</li>
-</ul>
-</li>
-<li>拖后中场保护后防线并避免出现4v4情况</li>
-<li>另两个中场在对手边后卫和后腰之间，任何一个对手接球都能及时施加压力</li>
-<li>风险：在遇到<strong>控制能力极强的对手</strong>时，“一半一半”的选位会让防守队员来不及到达指定区域</li>
-<li>特点：<ul>
-<li>门将开球进入活球状态时，防守方立即抱着获得球权的目的，在任何方位对球进行直接逼抢，而不是将对手引入某块区域再进行逼抢</li>
-<li>消耗非常多体力，更多地只会在一场比赛的一个时间段出现</li>
-</ul>
-</li>
-<li>体能问题：<ul>
-<li>微观视角：5-15秒时间，球员耗费的体能是很大的</li>
-<li>宏观视角：如果能让对手失去球权，避免整体队形退守和被动移动跑动，甚至能够减少球队的整体体能消耗</li>
-</ul>
-</li>
-<li>硬件条件：<strong>拥有极强活动能力和出色抢断能力的进攻型球员</strong></li>
-</ul>
-<p><strong>（1）当中后卫拿球</strong>：</p>
-<ul>
-<li><strong>强侧边锋</strong>以（向外凸的）弧线移动，快速逼迫持球中卫，阻挡向边后卫的出球路线<ul>
-<li>强侧边锋面对1v2局部的跑位非常重要</li>
-<li>但第一时间判断身后的防守阴影方位是很困难的</li>
-</ul>
-</li>
-<li><strong>前锋</strong>也要用（向球门方向凸的）弧线逼迫，阻止对手中后卫回传守门员并转移到弱侧</li>
-<li><strong>强侧中场</strong>的逼抢路线不让对手6号接球</li>
-<li>此时<strong>强侧边后卫要违背防守原则</strong>，站到靠近对手边前卫的稍外侧区域，以防对手将球给到强侧边后卫时无人盯防</li>
-<li>整体阵型也要随之靠拢</li>
-<li><strong>后场防守球员</strong>：<ul>
-<li>准备适时的跨区域防守——偏向人盯人的紧贴防守</li>
-<li>同时保持球侧门侧原则，以在争夺潜在高空球和二分之一球时占据优势</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>防守阴影：假设持球者是一个光源而防守者是阻挡物，那阻挡传球路线就好比用手去阻挡一个手电简照射出来的光线，防守阴影处就是传球无法到达的地方。</p>
-<p>球侧门侧：相对于盯防对手，距离球侧更近，离本方球门更近的位置。</p>
-</blockquote>
-<p><strong>（2）对手高位边后卫拿球</strong>：</p>
-<ul>
-<li>前锋没来得及封堵中后卫回传路线时，门将可以直接找到高位边后卫</li>
-<li>此时防守方整体阵型的移动成了持续前场高位逼抢的重中之重</li>
-<li><strong>强侧边后卫</strong>放弃盯防边前卫，前压到拿球边后卫身前</li>
-<li><strong>后防其余3人</strong>保持整体距离并向强侧靠近</li>
-<li><strong>中场球员</strong>继续遵循球侧门侧原则</li>
-<li><strong>前场3人</strong>快速回退，强侧边锋尽快回到有效防守位置，尝试形成和边后卫的2v1夹防</li>
-</ul>
-<p><strong>（3）对手渗透球找到前腰</strong>：</p>
-<ul>
-<li>从进攻方中后卫到前腰10号的这条路线很难形成防守阴影</li>
-<li>对方前腰10号接球后，<strong>后腰</strong>首要任务：不让对方轻易转身面对进攻方向</li>
-<li><strong>强侧边前卫</strong>和<strong>中场</strong>及时向进攻方边后卫靠拢，<strong>强侧防守边后卫</strong>盯防</li>
-<li><strong>后防线3人</strong>保持距离，同时谨防身后空间被对手前锋利用</li>
-<li>其余高位逼抢球员快速回撤到有效防守位置，保持三线紧密度</li>
-</ul>
-<blockquote>
-<p>高位逼抢不是一锤子买卖，第一层压迫被破之后，战术成功的关键是处于无效防守位置的球员如何快速回追并压缩空间。</p>
-</blockquote>
-<h3 id="3-2-深度防守"><a href="#3-2-深度防守" class="headerlink" title="3.2 深度防守"></a>3.2 深度防守</h3><p>防守战术更多的是设置一种框架，建立一些原则去应对不同的对手。比如根据对手边锋是否逆足等情况边后卫是防内线还是防外线。</p>
-<p>防守的优先原则为：<strong>球门-身后空间-身前空间</strong>。当球处于任何位置的时候，都应该遵守这条黄金定律。</p>
-<p>在深度防守区域中，<strong>防守移动</strong>和<strong>深度逼抢</strong>是必须提及的两个技战术重点。</p>
-<p>遵循区域分配原则，在深度防守中，我们可以将结构分为三个部分：中路防守，边路防守，禁区内防守。</p>
-<h4 id="3-2-1-防守移动"><a href="#3-2-1-防守移动" class="headerlink" title="3.2.1 防守移动"></a>3.2.1 防守移动</h4><blockquote>
-<p>防守移动：球员个体或者单位根据预设的球队战术从起始的防守选位移动至新的防守位置。</p>
-</blockquote>
-<p><strong>防守移动的目的</strong>：</p>
-<ul>
-<li>避免球队陷入潜在的局部防守人数劣势局面</li>
-<li>减少进攻方的持球空间与时间</li>
-<li>创造局部的防守人数优势</li>
-</ul>
-<p>在防守的起始站位里，防守球员职责分配更多是区域防守，但<strong>如何去覆盖更重要的防守区域或强侧位置</strong>是防守移动过程中最值得思考的问题。</p>
-<ul>
-<li>分类：纵向移动，横向移动</li>
-<li>防守移动速度的两个因素：球员本身无球移动的速度，根据球场上不同情况而预判的速度</li>
-</ul>
-<h4 id="3-2-2-深度逼抢"><a href="#3-2-2-深度逼抢" class="headerlink" title="3.2.2 深度逼抢"></a>3.2.2 深度逼抢</h4><p>深度逼抢：等待对手进入特定区域，然后创造出局部的防守人数优势并对持球者发起攻击。</p>
-<p><strong>一对一的盯防、相互之间的协防以及夹防</strong>是这种战术中的3个重要技术点。</p>
-<p><strong>（1）一对一盯防——T字选位</strong>：</p>
-<ul>
-<li><strong>T字竖线：攻守两人的垂直平分线</strong><ul>
-<li>T字竖线内侧的任何一点都距离内线的防守队员更近，反之亦然</li>
-<li>T字竖线内侧部分区域，是防守方拒绝让进攻队员拿球的区域</li>
-<li>如果身后球传入T字竖线外侧部分区域，虽然离攻方更近，但却远离了球门</li>
-<li>防守队员不仅需要根据盯防者选择站位，同时也要保持好和<strong>后防线队友</strong>的相对距离</li>
-</ul>
-</li>
-<li>盯防持球进攻方时防守队员的三种选择：<ul>
-<li>延缓持球者的进攻</li>
-<li>限制持球者特定的技术动作</li>
-<li>实施对球权的直接抢夺</li>
-</ul>
-</li>
-<li>选择依据：对手的特点，持球者的身位，本方防守整体的情况</li>
-</ul>
-<p><strong>（2）夹防</strong>：</p>
-<blockquote>
-<p>夹防：在局部区域防守方获得了对于持球者的防守人数优势后，防守方直接对持球者发起攻击。</p>
-</blockquote>
-<ul>
-<li><strong>情况一：</strong>两个或两个以上防守球员都处于更靠近本方球门的位置<ul>
-<li>把持球者限制在远离本方球门的区域</li>
-<li>优势：在最大限度确保进攻方无法向进攻方向传球的情况下，一起正面对球发起攻击</li>
-<li>弊端：无法很好控制回传或者回带路线</li>
-</ul>
-</li>
-<li><strong>情况二：</strong>防守球员分别处在相较于足球门侧和非门侧的位置<ul>
-<li>更多出现在进攻方持球者处于防守两线之间的时候</li>
-<li>优势：能够对持球者进行前后控制</li>
-<li>弊端：在突破距离防守球门更近一侧的防守者后，所有夹防球员都会被置于无效防守位置</li>
-</ul>
-</li>
-</ul>
-<p><strong>（3）协防——T字协防选位</strong>：</p>
-<blockquote>
-<p>协防：防守队员借助相互之间的距离，协助防守保护潜在的威胁区域。</p>
-</blockquote>
-<ul>
-<li>情况：边后卫一对一面对进攻方边锋<ul>
-<li>该侧中卫的选位：要站在一个<strong>假设本方边后卫被突破后</strong>，自身处在比持球者距离危险区域更近的位置</li>
-<li><strong>中卫-边锋连线（的垂直平分线）形成的T字形的内线区域</strong>，是中卫更有距离优势的区域</li>
-<li>中卫还要考量到对方中锋潜在的接球区域，<strong>根据中卫-中锋连线形成的T字形选位</strong></li>
-<li>无论是对<strong>持球者</strong>还是<strong>接球者</strong>，中卫都要占据对于危险区域覆盖的距离优势，要在不同情况下都能对危险区域进行保护</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-2-3-中路防守"><a href="#3-2-3-中路防守" class="headerlink" title="3.2.3 中路防守"></a>3.2.3 中路防守</h4><blockquote>
-<p>防守的优先顺序：球门-身后空间-身前空间。</p>
-</blockquote>
-<ul>
-<li><strong>4-4-1-1整体阵型</strong><ul>
-<li>很平衡的选择</li>
-<li>以4人为单位快速横向移动</li>
-<li>比4-5-1或4-1-4-1中场横移更多，但是前锋和前腰一前一后选位可以干扰双中卫和拖后后腰</li>
-<li>4-2-3-1转换成4-4-1-1很便捷，只需要让两个边前卫适当回落</li>
-</ul>
-</li>
-<li>选择深度防守的位置大多从对方半场中圈弧开始</li>
-<li>最关键的是保持每个人之间的横向距离和三线之间距离<ul>
-<li>中场线和后卫线之间的距离大致保持在最大10-12米</li>
-<li>横向距离则牵涉到相互保护的概念</li>
-</ul>
-</li>
-</ul>
-<p><strong>（1）控制对手的传球路线</strong>：</p>
-<ul>
-<li>原则上中路圆圈区域内不允许对手轻易地拿球转身</li>
-<li>留给对手空间更多的是向两边外围的U字形路线</li>
-<li>做到每个局部的夹防</li>
-</ul>
-<p><strong>（2）防守阴影</strong>：</p>
-<ul>
-<li>防守阴影最小化（错误做法）</li>
-<li>防守阴影合理运用：防守对于进攻的控制（提升接下来对方特定球员拿球的可能性）<ul>
-<li>逼抢时上前速度的重要性</li>
-<li>要考虑对手的第一脚触球的质量、方向，以及队友接球位置</li>
-</ul>
-</li>
-<li>保持整体阵型</li>
-</ul>
-<blockquote>
-<p>哈维：“足球是关乎时间和空间的运动。”</p>
-</blockquote>
-<p><strong>（3）两线之间：前锋线和中场线</strong>：</p>
-<ul>
-<li>情况：对手的后腰或者前腰回撤到这里接球</li>
-<li>有效防守位置的队员要最快时间接近施压防止其转身</li>
-<li>所有球附近的无效防守位置球员也要快速回防或创造夹防</li>
-<li>防守方在球附近的<strong>边前卫</strong>和<strong>前锋</strong>以最快的速度帮助后腰</li>
-<li>离球稍远的其他球员在有队友前提盯防的情况下<strong>向球侧收拢</strong>，保持整体紧密度和平衡</li>
-</ul>
-<blockquote>
-<p>职业教练设计训练画面时常会遵循的顺序：持球或者对持球者直接干扰的球员-在球附近的球员-相对远离球的球员。</p>
-</blockquote>
-<p><strong>（4）中场线和后卫线</strong>：</p>
-<ul>
-<li>情况：进攻方边前卫在这两线之间接球时，防守的警报拉响</li>
-<li>遵循防守原则选择是最有难度的一个部分</li>
-<li><strong>强侧防守后腰</strong>必须放弃对进攻10号的盯防，而去干扰当前处于更危险位置的接球者</li>
-<li>中场防守球员需要更清楚前后两侧进攻队员的位置和传球路线，起到过滤网的作用</li>
-<li>原则上身后空间优先于身前空间，但特殊情况下，如果后腰来不及回防干扰对手拿球转身，中后卫就需要离开自己的防守位置去帮忙盯防，后腰球员则回撤去填补后防线的空间</li>
-</ul>
-<p><strong>（5）防守渗透球</strong>：</p>
-<ul>
-<li>把球场分成3×6=18个区域，进攻方向的葫芦顶区域14区是进攻的黄金区域</li>
-<li>当进攻方把球传向一侧时，整个<strong>中场</strong>都需要随球移动<ul>
-<li>4人中场的横向距离非常重要</li>
-<li>弱侧边前卫基本和弱侧门柱保持一条直线，保证横向上限制对方渗透球</li>
-<li>“逼抢-协防-保护-平衡”的4人原则</li>
-</ul>
-</li>
-<li><strong>后卫线</strong>也必须同时跟着中场线的前提斜向移动，保持相互之间的距离<ul>
-<li><strong>后卫线的回落</strong>——两个条件决定整体防线的后撤：<ul>
-<li>没有防守队员对持球者进行干扰并让其获得了长传的空间</li>
-<li>进攻方有无球跑动队员威胁着防守方身后空间</li>
-<li>防守时后防4人侧身选位以便于前后移动</li>
-<li>在对手有任何机会探索身后空间时，都应提前选择有利于防守对方前插的位置</li>
-</ul>
-</li>
-<li><strong>后卫线的前提</strong>：<ul>
-<li>情况：进攻方很难在两个人的近距离逼抢下获得长传的机会</li>
-<li>整条防线可以向前移动保持和中场线的距离并减少总体防守面积</li>
-<li>后防线和门将都必须有足够的弹性，不停地根据球的运动前提或回落</li>
-</ul>
-</li>
-<li>越位线的控制——<strong>强侧中后卫控制越位线</strong>：<ul>
-<li>原因：更多的时候身前球员决定身后球员的选位，而不是身后球员指挥身前队友</li>
-<li>弱侧中卫控制越位线，球在强侧中卫的盲侧，容易失误</li>
-<li>如果用弱侧中卫控制越位线，两中卫的默契与沟通要保持高水准，门将和边后卫也要良好呼应</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-2-4-边路防守"><a href="#3-2-4-边路防守" class="headerlink" title="3.2.4 边路防守"></a>3.2.4 边路防守</h4><p><strong>（1）边后卫和边前卫的职责对换</strong>：</p>
-<ul>
-<li>情况：进攻边前卫内收提供传球路线</li>
-<li>问题：边后卫如果跟随内收会导致边路空间被进攻方边后卫利用</li>
-<li><strong>防守边前卫</strong>：<ul>
-<li>应处于一个靠近中路的位置，第一任务是阻止对手边前卫接球路线，</li>
-<li>同时在对手边前卫拿球时能够第一时间回防施加压力，尝试与后腰形成局部2v1</li>
-</ul>
-</li>
-<li><strong>强侧防守边后卫</strong>：<ul>
-<li>时刻注意前插的攻方边后卫</li>
-<li>在对方边前卫转身突破夹防向前时能有直接上前干扰的机会</li>
-</ul>
-</li>
-<li>中路较边路防守优先，防守永远是悲观大于乐观</li>
-</ul>
-<p><strong>（2）边前卫和边后卫边路2v2分配</strong>：</p>
-<ul>
-<li>情况：对手边后卫回传，中后卫找到强侧进攻边前卫</li>
-<li>问题：防守方边前卫很难短时间内收</li>
-<li><strong>防守边后卫</strong>要跟随对方进攻边前卫到中场，防止其拿球转身</li>
-<li><strong>边前卫</strong>紧紧地跟住上前的边后卫</li>
-</ul>
-<p><strong>（3）中场回撤边后卫外扩</strong>：</p>
-<ul>
-<li>情况：对手边后卫有很强的助攻能力，或教练的特殊战术设置</li>
-<li><strong>防守方边后卫</strong>第一时间上前施压</li>
-<li><strong>强侧防守后腰</strong>第一时间看防对手的接球边前卫</li>
-<li>整条后防线也要向强侧靠拢</li>
-<li><strong>弱侧边前卫</strong>在需要时要收到原先弱侧边后卫的位置</li>
-<li><strong>后腰</strong>无法第一时间到位时，强侧防守中后卫也可以上抢，瞬时与后腰换位</li>
-</ul>
-<h4 id="3-2-5-禁区防守"><a href="#3-2-5-禁区防守" class="headerlink" title="3.2.5 禁区防守"></a>3.2.5 禁区防守</h4><p><strong>禁区防守区域划分</strong>：</p>
-<ul>
-<li>进球概率最高（红框）：小禁区线和两根立柱形成的区域</li>
-<li>其次（黄框）：两根立柱的延长线、点球点到小禁区线的范围</li>
-<li>威胁更小（蓝框）：大禁区内、底线到点球点范围内的其余区域</li>
-</ul>
-<p><strong>防守传中球</strong>：</p>
-<ul>
-<li>情形：进攻方边前卫有传中机会</li>
-<li>禁区里的防守方都选择一个相对自身盯防的队员<strong>更靠近球门</strong>的位置</li>
-<li>任何战术体系都不可接受禁区内以少防多</li>
-<li><strong>防守方第一个中后卫</strong>站在门柱延长线的前点地方</li>
-<li><strong>第二个中后卫</strong>盯防前插的进攻9号</li>
-<li>弱侧进攻边前卫往往会处于禁区里后门柱的位置，故<strong>弱侧防守边后卫</strong>选择内收并盯防对方边前卫的前插</li>
-<li>鉴于进攻者从盲侧切入，弱侧防守队员必须提早退到合适的深度，因为回追时的身位很难同时观察到球和人</li>
-<li><strong>强侧后腰</strong>在必须根据第一中后卫的选位来决定自己的任务（填补空间、创造协防）</li>
-<li><strong>弱侧后腰</strong>和<strong>边前卫</strong>要内收保护14区，在大禁区葫芦顶防守二点球</li>
-<li>时间充裕或传中被延缓时，弱侧后腰也应取道禁区协助传中球防守，并阻止对方前腰前插争点</li>
-</ul>
-<p><strong>禁区防守后腰中后卫互换职责</strong>：</p>
-<ul>
-<li><strong>强侧中后卫</strong>选择边后卫的身后空间并创造协防</li>
-<li>由<strong>强侧后腰</strong>来保护两个中后卫之间的空间</li>
-<li>这时<strong>弱侧中卫</strong>就不能轻易地站在抢点前锋身后位置，而需要紧紧贴住进攻9号</li>
-<li>后腰往往需要随球的发展移动，需要更久的时间回退到红框区域，所以一般情况下是由后腰填补肋部空间，而不是中后卫离开红框区域</li>
-<li>通常一支球队中防空能力最强的就是双中卫，逻辑上说他们应该出现在进球概率最高的地方</li>
-</ul>
-<h2 id="4-训练"><a href="#4-训练" class="headerlink" title="4 训练"></a>4 训练</h2><h3 id="4-1-训练与战术的结合"><a href="#4-1-训练与战术的结合" class="headerlink" title="4.1 训练与战术的结合"></a>4.1 训练与战术的结合</h3><h4 id="4-1-1-周训练计划"><a href="#4-1-1-周训练计划" class="headerlink" title="4.1.1 周训练计划"></a>4.1.1 周训练计划</h4><ul>
-<li>周日：比赛日</li>
-<li>周一：恢复性训练/自我调整<ul>
-<li>身体疲劳和心理疲劳</li>
-</ul>
-</li>
-<li>周二：针对比赛日的问题进行反馈训练；比赛视频分析<ul>
-<li>球员在比赛中犯错、教练员指出、双方一起修正的逻辑顺序最好发生在72小时内</li>
-</ul>
-</li>
-<li>周三：按照主教练足球哲学选择阶段性训练<ul>
-<li>按长期训练计划进行，注重“周期性”概念</li>
-</ul>
-</li>
-<li>周四：进攻三阶段选择性训练（包括由攻转守特殊安排）</li>
-<li>周五：防守三阶段选择性训练（包括由守转攻特殊安排）<ul>
-<li>周四和周五的训练以下一个对手的特点作为重点去设计</li>
-</ul>
-</li>
-<li>周六：赛前战术训练和定位球布置；对手视频分析<ul>
-<li>训练<strong>强度</strong>需要提升，达到比赛强度，但是在<strong>时间</strong>上有所控制，队员踩在草地上的时间不超过90分钟</li>
-<li>需要结合针对对手的所有攻防及转换阶段，并让球员牢记<strong>定位球</strong>的部署</li>
-<li>对手的<strong>视频分析</strong>也可以在这一天交待给球员</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-1-2-战术周期性"><a href="#4-1-2-战术周期性" class="headerlink" title="4.1.2 战术周期性"></a>4.1.2 战术周期性</h4><ul>
-<li>微周期：一周的训练计划</li>
-<li>月周期</li>
-<li>季周期</li>
-</ul>
-<p>周期性体现在：</p>
-<ul>
-<li>体能计划（如训练强度的分配）<ul>
-<li>比较主流的做法是在<strong>赛前72小时</strong>安排一次高强度的训练课，然后给予球员足够的时间去恢复并在比赛时再次达到最佳状态</li>
-<li>2016-17赛季莱斯特城的特殊做法：英超比赛日前做几组20-30米的冲刺练习——球员的拉伤频率明显下降（当然变量并未完全控制）</li>
-</ul>
-</li>
-<li>战术的适应性（如通过训练把一些思路深入到球员的潜意识）<ul>
-<li>孔蒂的切尔西：每周的训练课都会有30分钟的无球防守移动练习——前提回落和横向移动</li>
-</ul>
-</li>
-</ul>
-<p>战术周期性的关键点：</p>
-<ul>
-<li>每一堂训练课的特殊性<ul>
-<li>有球热身-区域对抗-11v11：每一个环节都要扣紧一个主题</li>
-<li>细化到每—个环节，才能真正利用训练的特殊性去和比赛相结合</li>
-</ul>
-</li>
-<li>对特定要求的规定<ul>
-<li>在创造出了合理的环境后，必须清晰地罗列出球员在这些条件下要做的事情</li>
-<li>背后的战术逻辑</li>
-</ul>
-</li>
-<li>重复性<ul>
-<li>训练模式可以不断创新改变，但背后所遵循的原则在一个周期里必须保持一致</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-2-训练的结构"><a href="#4-2-训练的结构" class="headerlink" title="4.2 训练的结构"></a>4.2 训练的结构</h3><ul>
-<li>（1）热身以及准备<ul>
-<li>生理和心理准备</li>
-<li>生理准备：让体温提高1-2°C并活动开相关的肌肉以及关节：可以是无球的奔跑变向或力量训练，也可以是用身体各种部位触球</li>
-</ul>
-</li>
-<li>（2）技术性无对抗训练<ul>
-<li>强调球员执行指定技术的能力，如传球练习</li>
-<li>球员不需要做太多的战术选择，只要按既定的路线完成对技术的掌控</li>
-<li>所以在这个阶段会特别注重细节</li>
-</ul>
-</li>
-<li>（3）设计战术主题的小范围对抗<ul>
-<li>与战术设定紧密地联系在一起</li>
-<li>遇到各种情况，并按照既定规则去解决</li>
-<li>从比赛的大图片里截取某一个区域和时间段，设计出相对应的练习</li>
-</ul>
-</li>
-<li>（4）带有进攻方向的对抗<ul>
-<li>与第三部分连接在一起，但覆盖球员数量和球场范围扩大</li>
-<li>8v8，11v11，或不相等的对抗人数</li>
-<li>更多地规定进攻方向，以此来模拟真实比赛场景</li>
-</ul>
-</li>
-<li>（5）身体恢复<ul>
-<li>慢跑、补水、拉伸等</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-3-由后向前主题训练课"><a href="#4-3-由后向前主题训练课" class="headerlink" title="4.3 由后向前主题训练课"></a>4.3 由后向前主题训练课</h3><h4 id="4-3-1-热身以及准备"><a href="#4-3-1-热身以及准备" class="headerlink" title="4.3.1 热身以及准备"></a>4.3.1 热身以及准备</h4><ul>
-<li><strong>区域</strong>：<ul>
-<li>在一个20-30米的区间设定身体和标志杆，按照球员的年龄以及教练训练课的强度进行排布</li>
-<li>在训练设备和项目不变的情况下，场区的范围往往能够决定训练的强度</li>
-<li>还有对时间的控制：90秒的间歇和60秒的间歇是天差地别的</li>
-<li>这都需要按照训练周期性去严格设计</li>
-</ul>
-</li>
-<li><strong>规则</strong>：球员分成两组，按照指定的动作通过绳梯或者障碍物，然后在标志杆区域进行变向及变速训练</li>
-<li><strong>要点</strong>：<ul>
-<li>跨越障碍物或者通过绳梯时对身体协调的掌控</li>
-<li>身位的保持以及对视野的控制，不能在越过障碍物时全程低头看地面——教练可以举标志盘，让球员喊出颜色</li>
-<li>在变速和变向过程里，球员需要在离开标志杆时加速，并在接近时减速</li>
-<li>球员的行进轨迹是否为切线而不是弧线（距离更远），这是足球运动中变向的关键</li>
-<li>在高速奔跑过程中，球员上肢的协调性以及对平衡性的把握</li>
-<li>双足和地面的接触面积，避免脚后跟在变向中过多触地的情况</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-3-2-由后向前传球练习"><a href="#4-3-2-由后向前传球练习" class="headerlink" title="4.3.2 由后向前传球练习"></a>4.3.2 由后向前传球练习</h4><p>这个设定的传球练习与比赛中的画面很相似，起始点是比赛中接到球的中后卫b与A，c和D球员则处在边后卫的位置，d和B球员就是回撤后腰。</p>
-<p>归纳比赛中的路线并设计出相应的传球练习，比常规的直线传球或者无目的性的传球练习更加符合战术周期性概念。</p>
-<p>在这个循环当中，每个球员都要体验不同位置的传球职责以及接球触球位置，借此提升对整体战术的理解。</p>
-<ul>
-<li><strong>区域</strong>：<ul>
-<li>设定传球练习区域需要与球员处理球能力以及体能训练要求相匹配</li>
-<li>在复杂的传球练习中，空间可以决定训练的因难程度</li>
-</ul>
-</li>
-<li><strong>规则</strong>：<ul>
-<li>从a到e球员为第一个半循环，再从A到a则完成一整个循环</li>
-<li>按照教练所设定的传球路线，球员需要完成每一站的传球，并在完成后进入下一个位置</li>
-</ul>
-</li>
-<li><strong>要点</strong>：<ul>
-<li>球员接球第一脚触球时，如何在对应位置上用后脚触球来面对进攻方向。如（类似右边后卫的）D球员在接球时能否右脚触球向前行进</li>
-<li>球员需要利用接球前的无球移动来创造处理球的空间；如（类似边前卫的）e和C球员在身后可能有盯防球员时，如何先虚晃前压再回撤创造空间和时间</li>
-<li>传跑的时机，特别是在出现第三人跑位时，无球跑动者如何观察队友的触球情况决定跑动时机，来契合队友的传球点，如球员A、C、D之间的第三人传球</li>
-<li>持球者需要在接近对手，又能保证对手无法拦截传球路线的情况下出球，以此来为队友创造出空间，如b队员需要带球接近假人后再传球给c</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-3-3-4v4-2"><a href="#4-3-3-4v4-2" class="headerlink" title="4.3.3 4v4+2"></a>4.3.3 4v4+2</h4><p>传球练习过后是小范围对抗。</p>
-<ul>
-<li><strong>区域</strong>：15米×25米的长方形区域，按照球员能力控制练习的面积</li>
-<li><strong>规则</strong>：<ul>
-<li>分成4人小组进行对抗，将球传向两侧处于进攻方向的中立队员则得1分</li>
-<li>从一侧中立队员处得球后需向另一侧进攻，回传中立球员不得分</li>
-<li>防守方抢得球权后，由守转攻过程可以直接传向进攻方向的中立队员并得分</li>
-<li>中立球员互相之间不能传球</li>
-<li>时间区间在90-120秒</li>
-</ul>
-</li>
-<li><strong>要点</strong>：<ul>
-<li>在由后向前过程中球员相互之间的位置选择：<ul>
-<li>4名球员在纵向和横向的位置选择上不重叠</li>
-<li>如要求球员减少在中立球员面前的深度中路区域接球，因为这样会减少第一出球者的传球角度</li>
-<li>2-1-1阵型增加对手的防守难度，并创造进攻的深度传球选择</li>
-</ul>
-</li>
-<li>球员相互之间的位置轮换：<ul>
-<li>在确保基本阵型是2-1-1的情况下保持无球换位跑动</li>
-<li>当（右后方的）球员B前提创造深度时，（中间的）C球员需要回撤保持持球者的两侧接球点</li>
-<li>同时（前方的）D球员需要向中路区域移动创造空间</li>
-</ul>
-</li>
-<li>在选择传球路线时，渗透传球为第一选择：<ul>
-<li>在可以向前寻找得分接球点的情况下，遵循足球向前得分的规则，避免第二深度选择</li>
-<li>在接球者可以转身的情况下，不要轻易回传</li>
-<li>强调球员接球时如何在小范围区域里侧身观察，接球前如何无球移动拉开与防守队员的距离</li>
-</ul>
-</li>
-<li>可以通过增加中立球员数量、控制训练范围以及规定球员触球次数来调整难易程度。</li>
-</ul>
-</li>
-</ul>
-<h4 id="4-3-4-由后向前7-1v6"><a href="#4-3-4-由后向前7-1v6" class="headerlink" title="4.3.4 由后向前7+1v6"></a>4.3.4 由后向前7+1v6</h4><p>最贴近比赛的场景：用7+1v6来强调由门将开始的由后向前战术。</p>
-<p>假设对手的起始逼抢阵型是4-4-2体系，这里用局部的（蓝队）4+2来显示防守方的前场以及中场；而相对应的本方由后向前起始阵型为3-3-3-1体系，这里在略去前场三叉戟之后形成（红队）1+3+4的阵型体系。</p>
-<ul>
-<li><strong>区域</strong>：<ul>
-<li>半场全宽，可以在30米区域画一条分割线，来控制球员的移动</li>
-<li>通过增加区域线分隔区域一和区域二，来帮助球员理解战术以及控制难易度<ul>
-<li>如果防守方边前卫进场压到前场30米区域，会让蓝队阵型变成不均衡的4-3-3体系</li>
-<li>但周末比赛的对手使用的是4-4-2阵型体系</li>
-<li>这时白色区域就可以限制防守球员，更好地让（进攻方）后腰6号回撤到两个中后卫中间，在区域一形成外场球员3v2的局面</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>规则</strong>：<ul>
-<li>球员在7+1v6的情况下，通过后场的组织，渗透到中场并尝试将球射入3个小球门</li>
-<li>可以在训练开始时限制蓝队移动区域，如规定只有前锋两人可以进入区域进行防守</li>
-<li>蓝队获得球权后，可以直接向红队球门发起攻击；或者在球出界时，教练把球随机交给蓝队球员进行反击</li>
-<li>以此在由后向前进攻主题的训练课中，加强由攻转守时段的训练，培强训练和比赛的契合程度</li>
-</ul>
-</li>
-<li><strong>要点：</strong><ul>
-<li>各位置球员在由后向前时的起始站位选择，形成3-3-3-1的阵型<ul>
-<li>对应本书“由后向前起始站位”</li>
-</ul>
-</li>
-<li>在由后向前双前锋拿球时，拖后中场如何回撤形成外场球员3v2，在区域一时刻保持人数优势以及足够的出球选择<ul>
-<li>对应本书“由后向前3-3-3-1起始阵型 vs 4-4-2阵型：寻找拖后中场”</li>
-</ul>
-</li>
-<li>在对手双前锋距离较为紧密时，如何利用强侧到弱侧的转移形成局部的人数优势<ul>
-<li>对应本书“由后向前3-3-3-1起始阵型 vs 4-4-2阵型：强弱侧转移”</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>比起此前练习，这里更注重对球员个体选择以及技术动作的要求，虽然也要重视最后的单位对抗，但首要目的还是在整体和局部战术的要求上。</p>
-<h4 id="4-3-5-由后向前11v11"><a href="#4-3-5-由后向前11v11" class="headerlink" title="4.3.5 由后向前11v11"></a>4.3.5 由后向前11v11</h4><p>几周的训练强化了后场7人的战术逻辑以及路线后，可以将这一部分发展成11v11的2/3场区训练。</p>
-<p>战术周期性的作用：先熟悉局部重点战术单位的主要出球路线及战术安排，然后再纳入更多的整体部分。</p>
-<p>以上内容是一堂关于由后向前在中路区域渗透的训练课——假设这一堂训练课同样是由后向前的主题，但是却注重边路进攻时：</p>
-<ul>
-<li>传球练习就可以设计为边前卫回撤参与进攻的路线</li>
-<li>同时，可以在4v4+2的练习中将中间人放在两边</li>
-<li>多人对抗的区域划分也可以用纵向线路隔离边路区域</li>
-</ul>
-<p>训练的逻辑性和指向性非常关键。球场下的工作量非常庞大，因为每个足球教练都知道，是训练决定了比赛。</p>
-<blockquote>
-<p>世界上本没有最好的战术，只有最适合让11个人的团队在同一时间做同一件事的战术。</p>
-<p>重要的是需从千变万化的战术图片中寻找出足球原则。</p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-        <tag>足球</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>柯匹、科恩《逻辑学导论》摘要</title>
-    <url>/logic/</url>
-    <content><![CDATA[<p>版本：欧文·M·柯匹，卡尔·科恩：《逻辑学导论：第11版》，张建军等译，北京：中国人民大学出版社，2007。</p>
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-logic" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+
+<h1 class="article-title" itemprop="name">
+  柯匹、科恩《逻辑学导论》摘要
+</h1>
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/logic/" class="article-date">
+  <time datetime="2021-07-24T16:00:00.000Z" itemprop="datePublished">2021-07-25</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+      <p>版本：欧文·M·柯匹，卡尔·科恩：《逻辑学导论：第11版》，张建军等译，北京：中国人民大学出版社，2007。</p>
 <a id="more"></a>
 <h2 id="第一部分：逻辑与语言"><a href="#第一部分：逻辑与语言" class="headerlink" title="第一部分：逻辑与语言"></a>第一部分：逻辑与语言</h2><h3 id="第1章：逻辑学的基本概念"><a href="#第1章：逻辑学的基本概念" class="headerlink" title="第1章：逻辑学的基本概念"></a>第1章：逻辑学的基本概念</h3><h4 id="1-1-什么是逻辑学"><a href="#1-1-什么是逻辑学" class="headerlink" title="1.1 什么是逻辑学"></a>1.1 什么是逻辑学</h4><p>逻辑学是研究用于区分正确推理与不正确推理的方法和原理的学问。</p>
 <p>逻辑学家并不关心推理的思想过程，而只关心这种过程的结果，即<strong>论证</strong>。就每一个论证都可提出如下问题：论证所得出的结论是从论证所使用的前提或假定推出的吗？论证的前提能够为接受其结论<strong>提供良好</strong>的<strong>理由</strong>吗？</p>
@@ -3125,10 +1618,186 @@ p \stackrel{T}{\equiv}(p \cdot p)</script><p>对任何有效的真值函项论�
 <p>如果复杂事件是一个共同发生的事件，两个或更多的单元事件均发生的概率可用乘法定理得到，14.3节给出说明。乘法定理断定，如果单元事件是独立的，它们共同发生的概率等于它们各自的概率的积。但如果单元事件是不独立的，可以运用通用乘法定理：（a且b）的概率等于a的概率乘以在a发生的条件下b的概率。</p>
 <p>如果复杂事件是替代性发生的（两个或更多事件中至少一个发生的概率），可应用加法定理，在14.4节得到说明。加法定理断定，如果单元事件是相互排斥的，它们的概率之和给出了替代性发生的概率。但如果单元事件不是相互排斥的，它们替代性发生的概率可以这样计算：（1）通过将所需要的场合分解成相互独立的事件，然后将他们的概率相加；或者（2）确定至少替代性发生事件将不发生的概率，然后用1减去这个数。</p>
 <p>为了计算一项投资或赌博的预期值（14.5节的内容），我们既要考虑可能后果的概率，又要考虑每个可能事件下获得的收益。先将每个后果预期回报与该回报发生的概率相乘，然后将这些乘积相加便得到投资的预期值。</p>
-]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-        <tag>逻辑学</tag>
-      </tags>
-  </entry>
-</search>
+
+      
+    </div>
+    <footer class="article-footer">
+      <!--
+      <a data-url="https://pku-zyf.github.io/logic/" data-id="ckrsznp0t000mdcvrhgpn0voc" class="article-share-link">
+        分享
+      </a>
+      注释掉的是分享按钮。
+      -->
+      
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E5%AD%A6/" rel="tag">逻辑学</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  <a href="/sartori/" class="article-nav-link">
+    <strong class="article-nav-caption">前一篇</strong>
+    <div class="article-nav-title">
+      
+      萨托利《政党与政党体制》摘要
+      
+    </div>
+  </a>
+  
+  
+  <a href="/space_characters/" class="article-nav-link">
+    <strong class="article-nav-caption">后一篇</strong>
+    <div class="article-nav-title">Unicode13.0中的17种空白字符</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+  
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  
+</section>
+
+    <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>明 &copy; 2021</li>
+      
+        <li></li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/quill.svg" alt="明"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/copybtn.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>
