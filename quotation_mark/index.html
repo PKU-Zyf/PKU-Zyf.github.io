@@ -80,7 +80,7 @@
 <p>然而，中文和西文的<strong>双引号</strong>对应的却是<strong>同样的一对Unicode字符</strong>（<code>U+201c</code>和<code>U+201d</code>），其形态上的区别则交由<strong>字体</strong>去渲染。单引号也是类似的情形（<code>U+2018</code>和<code>U+2019</code>）。</p>
 <p>这就导致了一个问题：Typora在渲染文本时会<strong>优先使用</strong>西文字体（在本例中为Times系列字体）——而非中文字体（在本例中为宋体）渲染引号，其显示效果不能令人满意：</p>
 <p><img src="image-20210806214358100.png" alt="image-20210806214358100"></p>
-<p><strong>删去</strong>配置文件中的西文字体，或将西文字体<strong>移至中文字体之后</strong>，<strong>并不能</strong>解决问题。原因在于，一般的中文字体中都会为西文字符设计字形，但设计得又普遍效果不佳。如果删去西文字体，西文文本（包括阿拉伯数字）的显示效果将大受影响；如果将西文字体移至中文字体之后，则由于中文字体已经为西文字符设计了字形，所以<strong>根本不会触发</strong>排在后面的西文字体。</p>
+<p><strong>删去</strong>配置文件中的西文字体，或将西文字体<strong>移至中文字体之后</strong>，<strong>并不能</strong>解决问题。原因在于，一般的中文字体中都会为西文字符设计字形，但设计得又普遍效果不佳。如果删去西文字体，西文文本（包括阿拉伯数字）的<strong>显示效果将大受影响</strong>；如果将西文字体移至中文字体之后，则由于中文字体已经为西文字符设计了字形，所以<strong>根本不会触发</strong>排在后面的西文字体。</p>
 <p>如何在保持中文和西文均有良好渲染效果的基础上，改善中文引号的显示呢？</p>
 <h2 id="问题的解决：使用“unicode-range”选项"><a href="#问题的解决：使用“unicode-range”选项" class="headerlink" title="问题的解决：使用“unicode-range”选项"></a>问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
 <p>关于字体族设置，参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”。</p>
@@ -108,13 +108,13 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>重启typora，选择该主题，即可<strong>完美渲染中文引号</strong>：</p>
 <p><img src="image-20210806215008606.png" alt="image-20210806215008606"></p>
-<p>唯一的问题是，使用该主题时，西文引号也会被渲染为中文的样式。此问题不容易解决。原因在于，既然Unicode为中文引号和西文引号指定了同样的代码，那么要想自动为中文和西文显示不同的引号样式，逻辑上来说就必须要识别上下文的语言才行。这似乎并不是几行简单的代码就能完成的任务。</p>
+<p>唯一的问题是，使用该主题时，<strong>西文引号也会被渲染为中文的样式</strong>。此问题不容易解决。原因在于，既然<strong>Unicode已经不尽如人意地为中文和西文引号指定了同样的代码</strong>，那么要想自动为中文和西文显示不同的引号样式，逻辑上就必须要识别上下文使用的语言。这似乎并不是几行简单的代码就能完成的任务。</p>
 
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/quotation_mark/" data-id="cks0fggwz00013wvr4a2b0o9g" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/quotation_mark/" data-id="cks0ftudx0001gkvr6byvaktd" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
