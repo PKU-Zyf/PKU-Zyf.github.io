@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    启航 |
+    Hexo渲染代码块：Prism插件的配置 |
     
     明</title>
   
@@ -33,7 +33,7 @@
 <body class="line-numbers">
   <main class="content">
     <section class="outer">
-  <article id="post-start" class="article article-type-post" itemscope
+  <article id="post-code_block" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -42,7 +42,7 @@
       
 
 <h1 class="article-title" itemprop="name">
-  启航
+  Hexo渲染代码块：Prism插件的配置
 </h1>
 
 
@@ -52,8 +52,8 @@
 
     
     <div class="article-meta">
-      <a href="/start/" class="article-date">
-  <time datetime="2021-01-30T16:00:00.000Z" itemprop="datePublished">2021-01-31</time>
+      <a href="/code_block/" class="article-date">
+  <time datetime="2021-08-07T16:00:00.000Z" itemprop="datePublished">2021-08-08</time>
 </a>
       
     </div>
@@ -61,26 +61,56 @@
 
     
     
+<div class="tocbot"></div>
+
     
 
     <div class="article-entry" itemprop="articleBody">
       
       
       
-      <p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+      <p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
+<a id="more"></a>
+<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a target="_blank" rel="noopener" href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
+<ol>
+<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
+<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
+<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
+</ol>
+<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
+<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
+<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
+<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
+<pre><code class="lang-ejs">&lt;head&gt;
+  ...
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
+<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
+  ...
+  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
+&lt;/footer&gt;
+</code></pre>
+<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
+<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
+<pre><code class="lang-yaml">highlight:
+  enable: false
+prismjs:
+  enable: false
+</code></pre>
 
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/start/" data-id="cks2ubqon0009h8vr76zrd7mw" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/code_block/" data-id="cks2ubqo80000h8vrg3ou6kjr" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
       -->
       
-<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li></ul>
 
     </footer>
 
@@ -90,15 +120,11 @@
   
 <nav class="article-nav">
   
-  <a href="/space_characters/" class="article-nav-link">
-    <strong class="article-nav-caption">前一篇</strong>
-    <div class="article-nav-title">
-      
-      Unicode13.0中的17种空白字符
-      
-    </div>
-  </a>
   
+  <a href="/history_of_chinese_political_thought_1/" class="article-nav-link">
+    <strong class="article-nav-caption">后一篇</strong>
+    <div class="article-nav-title">萧公权《中国政治思想史》摘要（一）</div>
+  </a>
   
 </nav>
 
