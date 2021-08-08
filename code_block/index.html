@@ -94,7 +94,7 @@
 </code></pre>
 <p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
 <p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
-<pre><code class="lang-yaml">highlight:
+<pre><code class="lang-yml">highlight:
   enable: false
 prismjs:
   enable: false
@@ -106,12 +106,18 @@ prismjs:
   ...
 &lt;/body&gt;
 </code></pre>
+<p>本站使用的是Prism的Tomorrow Night主题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Prism. <a target="_blank" rel="noopener" href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
+<li>使用Prism.js高亮代码. <a target="_blank" rel="noopener" href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
+<li>魔改hexo博客. <a target="_blank" rel="noopener" href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/code_block/" data-id="cks2vhnbj0000t8vr4ou523yk" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/code_block/" data-id="cks2vyvn10000x0vr5m38djgu" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
@@ -278,7 +284,6 @@ prismjs:
 
 <script src="/js/ocean.js"></script>
 
-  <script src="/js/prism/prism.js"></script>
 </body>
 
 </html>
