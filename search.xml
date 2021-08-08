@@ -30,8 +30,10 @@
 <p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
 <pre><code class="lang-yml">highlight:
   enable: false
+  ...
 prismjs:
   enable: false
+  ...
 </code></pre>
 <h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
 <p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
