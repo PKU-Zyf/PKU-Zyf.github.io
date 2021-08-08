@@ -33,7 +33,14 @@
 prismjs:
   enable: false
 </code></pre>
-<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2>]]></content>
+<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
+<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
+<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
+<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
+  ...
+&lt;/body&gt;
+</code></pre>
+]]></content>
       <tags>
         <tag>Hexo</tag>
       </tags>
