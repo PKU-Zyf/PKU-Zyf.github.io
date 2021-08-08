@@ -25,6 +25,7 @@
   
 <script src="/js/pace.min.js"></script>
 
+  <link rel="stylesheet" href="/css/styles/vs2015.css">
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 <!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.3.0"></head>
@@ -72,9 +73,14 @@
 <p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
 <p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
 <p>找到开头的：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;Vollkorn&quot;</span>, Palatino, Times;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Vollkorn&quot;, Palatino, Times;
+    ...
+&#125;
+</code></pre>
 <p>将<code>font-family</code>改为：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">font-family</span>: Times, 宋体;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">font-family: Times, 宋体;
+</code></pre>
 <p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
 <p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
 <p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
@@ -88,23 +94,42 @@
 <p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
 <p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
 <p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@font-face</span>&#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;My Font Family&quot;</span>;</span><br><span class="line">	<span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: normal;</span><br><span class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZSSK.TTF</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;My Font Family&quot;</span>;</span><br><span class="line">    <span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZHT_Document.TTF</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">@font-face&#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZSSK.TTF);
+&#125;
+
+@font-face &#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+&#125;
+</code></pre>
 <p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
 <p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">font-family</span>: Times, <span class="string">&quot;My Font Family&quot;</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+</code></pre>
 <p>即可在Typora主界面实现效果：</p>
 <p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
 <p><strong>再导出PDF，也可正常显示粗体：</strong></p>
 <p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
 <p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> print &#123;</span><br><span class="line">	<span class="selector-tag">html</span> &#123;</span><br><span class="line">		<span class="attribute">font-size</span>: <span class="number">13px</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">@media print &#123;
+    html &#123;
+        font-size: 13px;
+    &#125;
+&#125;
+</code></pre>
 <p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
 
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/typora/" data-id="cks2mjtu30005i4vr7qgsce6c" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/typora/" data-id="cks2myspe000500vrbeg1hksu" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
@@ -274,6 +299,8 @@
     fixedSidebarOffset: 'auto',
   });
 </script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
 

@@ -8,35 +8,79 @@
 <p>原因在于，<strong>渲染数学公式需要使用MathJax</strong>（一种模块化的JavaScript框架）；而Hexo的默认渲染器是hexo-renderer-marked引擎，它并不支持MathJax。</p>
 <h2 id="1-更换渲染引擎"><a href="#1-更换渲染引擎" class="headerlink" title="1. 更换渲染引擎"></a>1. 更换渲染引擎</h2><p>Hexo-renderer-kramed引擎在hexo-renderer-marked渲染引擎的基础上修改了一些bug（“kram”这个名字目测是把“mark”倒过来拼写得到的），支持了MathJax。因此，<strong>将渲染引擎改为Hexo-renderer-kramed可以解决数学公式渲染的问题</strong>。</p>
 <p>使用Git Bash打开自己的博客文件夹，输入下面的代码即可卸载marked、安装kramed：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-bash">npm uninstall hexo-renderer-marked --save
+npm install hexo-renderer-kramed --save
+</code></pre>
 <p>中国用户还可使用<code>cnpm</code>命令代替<code>npm</code>，获得更好体验。<code>cnpm</code>命令的安装可自行搜索，这里不再赘述。</p>
 <p>更换渲染引擎之后，还需要相应地更改一些其他配置。</p>
 <h2 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2. 修改配置文件"></a>2. 修改配置文件</h2><p>诸多网文混淆了<strong>站点配置文件</strong>和<strong>主题配置文件</strong>。二者的文件名都是<code>_config.yml</code>，但文件的位置不同。站点配置文件位于博客的根目录，即<code>.\_config.yml</code>，管理的是整个博客的全局设置；而主题配置文件则位于对应的主题文件夹之下，例如Ocean主题的配置文件路径为<code>.\themes\ocean\_config.yml</code>，管理的是与该主题的相关的具体设置。</p>
 <p>更换kramed引擎之后，需要在<strong>主题配置文件</strong>中增加这样几行：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">cdn:</span> <span class="string">https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-AMS-MML_HTMLorMML</span></span><br></pre></td></tr></table></figure>
+<pre><code class="lang-yaml">mathjax:
+  enable: true
+  cdn: https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+</code></pre>
 <p>还要在<strong>站点配置文件</strong>中增加：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">math:</span></span><br><span class="line">  <span class="attr">engine:</span> <span class="string">&#x27;mathjax&#x27;</span></span><br><span class="line">  <span class="attr">mathjax:</span></span><br><span class="line">    <span class="attr">src:</span> <span class="string">custom_mathjax_source</span></span><br></pre></td></tr></table></figure>
+<pre><code class="lang-yaml">math:
+  engine: &#39;mathjax&#39;
+  mathjax:
+    src: custom_mathjax_source
+</code></pre>
 <h2 id="3-添加JavaScript脚本"><a href="#3-添加JavaScript脚本" class="headerlink" title="3. 添加JavaScript脚本"></a>3. 添加JavaScript脚本</h2><p>根据一些网文的说法，如果博客使用的是<strong>Next主题</strong>，那么至此已经可以实现行间公式的渲染。不过，对于有些<strong>并未引入MathJax功能的主题</strong>，还需要自行增加JavaScript脚本文件。</p>
 <p>以<strong>Ocean主题</strong>为例。首先打开<code>.\themes\ocean\layout</code>文件夹，如果该目录下没有<code>mathjax.ejs</code>文件，则<strong>新建</strong> <code>mathjax.ejs</code>文件。可以先新建一个txt文本文档，将后缀更改为<code>.ejs</code>即可。</p>
 <p>在<code>mathjax.ejs</code>中写入如下内容：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;% if (theme.mathjax.enable)&#123; %&gt;</span><br><span class="line">    &lt;script type&#x3D;&quot;text&#x2F;x-mathjax-config&quot;&gt;</span><br><span class="line">      MathJax.Hub.Config(&#123;</span><br><span class="line">        tex2jax: &#123;</span><br><span class="line">          inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ],</span><br><span class="line">          processEscapes: true,</span><br><span class="line">          skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      MathJax.Hub.Queue(function() &#123;</span><br><span class="line">        var all &#x3D; MathJax.Hub.getAllJax(), i;</span><br><span class="line">        for(i&#x3D;0; i &lt; all.length; i +&#x3D; 1) &#123;</span><br><span class="line">            all[i].SourceElement().parentNode.className +&#x3D; &#39; has-jax&#39;;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">    &lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;&lt;%- theme.mathjax.cdn %&gt;&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">    &lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-ejs">&lt;% if (theme.mathjax.enable)&#123; %&gt;
+    &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+      MathJax.Hub.Config(&#123;
+        tex2jax: &#123;
+          inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ],
+          processEscapes: true,
+          skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
+        &#125;
+      &#125;);
+      MathJax.Hub.Queue(function() &#123;
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i &lt; all.length; i += 1) &#123;
+            all[i].SourceElement().parentNode.className += &#39; has-jax&#39;;
+        &#125;
+      &#125;);
+    &lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;&lt;%- theme.mathjax.cdn %&gt;&quot;&gt;&lt;/script&gt;
+    &lt;% &#125; %&gt;
+</code></pre>
 <p>此外，还要在<code>.\themes\ocean\layout\post.ejs</code>中追加如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;% if (theme.mathjax)&#123; %&gt;</span><br><span class="line">  &lt;%- partial(&#39;mathjax&#39;) %&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-ejs">&lt;% if (theme.mathjax)&#123; %&gt;
+  &lt;%- partial(&#39;mathjax&#39;) %&gt;
+&lt;% &#125; %&gt;
+</code></pre>
 <h2 id="4-打开MathJax开关"><a href="#4-打开MathJax开关" class="headerlink" title="4. 打开MathJax开关"></a>4. 打开MathJax开关</h2><p>如果仍未能正确渲染数学公式，那么可能还需在Markdown文档的顶部配置里打开MathJax开关，即<code>mathjax: true</code>：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 文章标题</span><br><span class="line">date: 2021-01-01 00:00:00</span><br><span class="line">mathjax: true</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">e ^ &#123;i\pi&#125; + 1 = 0</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-markdown">---
+title: 文章标题
+date: 2021-01-01 00:00:00
+mathjax: true
+---
+
+$$
+e ^ &#123;i\pi&#125; + 1 = 0
+$$
+</code></pre>
 <p>即可显示：</p>
 <script type="math/tex; mode=display">
 e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用到数学公式的文章中<strong>手动添加</strong>。不添加这行设置，文章就不会加载MathJax，以提高页面渲染的速度。</p>
 <h2 id="5-调整行内渲染设置"><a href="#5-调整行内渲染设置" class="headerlink" title="5. 调整行内渲染设置"></a>5. 调整行内渲染设置</h2><p>Markdown的公式分为<strong>行间公式</strong>和<strong>行内公式</strong>。经过上述配置之后，行间公式已经可以正确渲染。但行内公式仍有可能渲染错误。</p>
 <p>原因在于<strong>Markdown语法和$\LaTeX$数学公式语法有一定冲突</strong>。例如，用两个下划线<code>_</code>或两个星号<code>*</code>包围的文字，在Markdown语法中都被识别为<strong>斜体</strong>；但在$\LaTeX$​​数学公式中，下划线<code>_</code>用于表示<strong>下标</strong>。因此，当同一个行内公式中出现两个下标时，下划线<code>_</code>会被转化为<code>&lt;em&gt;</code>标签，二者之间的部分就会被渲染为斜体。这就造成了混乱。此外，<strong>反斜杠</strong> <code>\</code>和<strong>花括号</strong> <code>&#123;&#125;</code>也有可能造成渲染错误。</p>
 <p>为此，<strong>需要更改与行内渲染相关的JavaScript脚本</strong>。回到博客根目录，打开<code>.\node_modules\kramed\lib\rules\inline.js</code>（注意打开<code>node_modules</code>文件夹之后选择的是<code>kramed</code>文件夹，而不是<code>hexo-renderer-kramed</code>文件夹），找到<code>escape</code>变量，注释掉原来的值，并更新：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/,</span></span><br><span class="line">  <span class="attr">escape</span>: <span class="regexp">/^\\([`*\[\]()#$+\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-js">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/,
+  escape: /^\\([`*\[\]()#$+\-.!_&gt;])/,
+</code></pre>
 <p>这样就<strong>取消了对反斜杠和花括号的转义（escape）</strong>。 </p>
 <p>再找到<code>em</code>变量，注释掉原来的值，并更新：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,</span></span><br><span class="line">  <span class="attr">em</span>: <span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-js">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+  em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+</code></pre>
 <p>这样就<strong>停用了以下划线标注斜体/强调（em）的语法</strong>。</p>
 <p>此时，形如</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">$N = P<span class="emphasis">_1 ^ &#123;\alpha _</span>1&#125; P<span class="emphasis">_2 ^ &#123;\alpha _</span>2&#125; \cdots P<span class="emphasis">_n ^ &#123;\alpha _</span>n&#125;$，其中$P<span class="emphasis">_1 &lt; P_</span>2 &lt; \cdots &lt; P<span class="emphasis">_n$，$P_</span>1 , P<span class="emphasis">_2 , \cdots , P_</span>n$为质数。</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-markdown">$N = P_1 ^ &#123;\alpha _1&#125; P_2 ^ &#123;\alpha _2&#125; \cdots P_n ^ &#123;\alpha _n&#125;$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。
+</code></pre>
 <p>这样的复杂行内公式，就可以正确渲染了：$N = P_1 ^ {\alpha _1} P_2 ^ {\alpha _2} \cdots P_n ^ {\alpha _n}$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。</p>
 <p>当然，调整行内渲染设置之后，在Markdown文档中就要<strong>用星号<code>*</code>标注斜体文字</strong>，因为用下划线<code>_</code>标注斜体的语法已经被停用了。</p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
@@ -55,7 +99,11 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
     <content><![CDATA[<p>中文引号的显示问题的解决！以Whitey主题为例。</p>
 <a id="more"></a>
 <h2 id="问题的由来"><a href="#问题的由来" class="headerlink" title="问题的由来"></a>问题的由来</h2><p>使用普通的主题时，Typora可以正常显示中文，默认字体为微软雅黑。可以通过修改css主题配置文件获得更优雅的中英文显示：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: Times, 宋体;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">body &#123;
+    font-family: Times, 宋体;
+    ...
+&#125;
+</code></pre>
 <p>详情可参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”一文。</p>
 <p>中文和西文的句号、逗号、感叹号、问号等标点符号，都对应着<strong>各不相同的Unicode字符</strong>，如中文句号为<code>U+3002</code>，而西文句号为<code>U+002e</code>。</p>
 <p>然而，中文和西文的<strong>双引号</strong>对应的却是<strong>同样的一对Unicode字符</strong>（<code>U+201c</code>和<code>U+201d</code>），其形态上的区别则交由<strong>字体</strong>去渲染。单引号也是类似的情形（<code>U+2018</code>和<code>U+2019</code>）。</p>
@@ -66,10 +114,29 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <h2 id="问题的解决：使用“unicode-range”选项"><a href="#问题的解决：使用“unicode-range”选项" class="headerlink" title="问题的解决：使用“unicode-range”选项"></a>问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
 <p>关于字体族设置，参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”。</p>
 <p>继续以该文改编的<code>whitey_cjk.css</code>主题为例。为引号设计专属字体族：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;Quotation Mark&quot;</span>;</span><br><span class="line">	<span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: normal;</span><br><span class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZKTK.TTF</span>);</span><br><span class="line">	unicode-range: U+<span class="number">2018</span>, U+<span class="number">2019</span>, U+<span class="number">201</span>c, U+<span class="number">201</span>d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;Quotation Mark&quot;</span>;</span><br><span class="line">	<span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZHT_Document.TTF</span>);</span><br><span class="line">	unicode-range: U+<span class="number">2018</span>, U+<span class="number">2019</span>, U+<span class="number">201</span>c, U+<span class="number">201</span>d;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">@font-face &#123;
+    font-family: &quot;Quotation Mark&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZKTK.TTF);
+    unicode-range: U+2018, U+2019, U+201c, U+201d;
+&#125;
+
+@font-face &#123;
+    font-family: &quot;Quotation Mark&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+    unicode-range: U+2018, U+2019, U+201c, U+201d;
+&#125;
+</code></pre>
 <p>使用<code>unicode-range</code>选项，指定该字体族<strong>仅用于渲染指定的Unicode字符</strong>。</p>
 <p>同时<strong>优先</strong>启用该字体族：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;Quotation Mark&quot;</span>, Times, <span class="string">&quot;My Font Family&quot;</span>;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Quotation Mark&quot;, Times, &quot;My Font Family&quot;;
+    ...
+&#125;
+</code></pre>
 <p>重启typora，选择该主题，即可<strong>完美渲染中文引号</strong>：</p>
 <p><img src="image-20210806215008606.png" alt="image-20210806215008606"></p>
 <p>唯一的问题是，使用该主题时，<strong>西文引号也会被渲染为中文的样式</strong>。此问题不容易解决。原因在于，既然<strong>Unicode已经不尽如人意地为中文和西文引号指定了同样的代码</strong>，那么要想自动为中文和西文显示不同的引号样式，逻辑上就必须要识别上下文使用的语言。这似乎并不是几行简单的代码就能完成的任务。</p>
@@ -203,9 +270,14 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
 <p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
 <p>找到开头的：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;Vollkorn&quot;</span>, Palatino, Times;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Vollkorn&quot;, Palatino, Times;
+    ...
+&#125;
+</code></pre>
 <p>将<code>font-family</code>改为：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">font-family</span>: Times, 宋体;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">font-family: Times, 宋体;
+</code></pre>
 <p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
 <p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
 <p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
@@ -219,16 +291,35 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
 <p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
 <p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@font-face</span>&#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;My Font Family&quot;</span>;</span><br><span class="line">	<span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: normal;</span><br><span class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZSSK.TTF</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;My Font Family&quot;</span>;</span><br><span class="line">    <span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZHT_Document.TTF</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">@font-face&#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZSSK.TTF);
+&#125;
+
+@font-face &#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+&#125;
+</code></pre>
 <p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
 <p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">font-family</span>: Times, <span class="string">&quot;My Font Family&quot;</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+</code></pre>
 <p>即可在Typora主界面实现效果：</p>
 <p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
 <p><strong>再导出PDF，也可正常显示粗体：</strong></p>
 <p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
 <p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@media</span> print &#123;</span><br><span class="line">	<span class="selector-tag">html</span> &#123;</span><br><span class="line">		<span class="attribute">font-size</span>: <span class="number">13px</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-css">@media print &#123;
+    html &#123;
+        font-size: 13px;
+    &#125;
+&#125;
+</code></pre>
 <p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
 ]]></content>
       <tags>
