@@ -71,10 +71,7 @@
       <p>中文引号的显示问题的解决！以Whitey主题为例。</p>
 <a id="more"></a>
 <h2 id="问题的由来"><a href="#问题的由来" class="headerlink" title="问题的由来"></a>问题的由来</h2><p>使用普通的主题时，Typora可以正常显示中文，默认字体为微软雅黑。可以通过修改css主题配置文件获得更优雅的中英文显示：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">body</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">font-family</span><span class="token punctuation">:</span> Times<span class="token punctuation">,</span> 宋体<span class="token punctuation">;</span>
-    ...
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: Times, 宋体;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>详情可参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”一文。</p>
 <p>中文和西文的句号、逗号、感叹号、问号等标点符号，都对应着<strong>各不相同的Unicode字符</strong>，如中文句号为<code>U+3002</code>，而西文句号为<code>U+002e</code>。</p>
 <p>然而，中文和西文的<strong>双引号</strong>对应的却是<strong>同样的一对Unicode字符</strong>（<code>U+201c</code>和<code>U+201d</code>），其形态上的区别则交由<strong>字体</strong>去渲染。单引号也是类似的情形（<code>U+2018</code>和<code>U+2019</code>）。</p>
@@ -85,27 +82,10 @@
 <h2 id="问题的解决：使用“unicode-range”选项"><a href="#问题的解决：使用“unicode-range”选项" class="headerlink" title="问题的解决：使用“unicode-range”选项"></a>问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
 <p>关于字体族设置，参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”。</p>
 <p>继续以该文改编的<code>whitey_cjk.css</code>主题为例。为引号设计专属字体族：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@font-face</span></span> <span class="token punctuation">&#123;</span>
-	<span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"Quotation Mark"</span><span class="token punctuation">;</span>
-	<span class="token property">font-style</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
-    <span class="token property">font-weight</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
-	<span class="token property">src</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>whitey_cjk/FZKTK.TTF<span class="token punctuation">)</span></span><span class="token punctuation">;</span>
-	<span class="token property">unicode-range</span><span class="token punctuation">:</span> U+2018<span class="token punctuation">,</span> U+2019<span class="token punctuation">,</span> U+201c<span class="token punctuation">,</span> U+201d<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token atrule"><span class="token rule">@font-face</span></span> <span class="token punctuation">&#123;</span>
-	<span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"Quotation Mark"</span><span class="token punctuation">;</span>
-	<span class="token property">font-style</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
-    <span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span>
-	<span class="token property">src</span><span class="token punctuation">:</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>whitey_cjk/FZHT_Document.TTF<span class="token punctuation">)</span></span><span class="token punctuation">;</span>
-	<span class="token property">unicode-range</span><span class="token punctuation">:</span> U+2018<span class="token punctuation">,</span> U+2019<span class="token punctuation">,</span> U+201c<span class="token punctuation">,</span> U+201d<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;Quotation Mark&quot;</span>;</span><br><span class="line">	<span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: normal;</span><br><span class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZKTK.TTF</span>);</span><br><span class="line">	unicode-range: U+<span class="number">2018</span>, U+<span class="number">2019</span>, U+<span class="number">201</span>c, U+<span class="number">201</span>d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;Quotation Mark&quot;</span>;</span><br><span class="line">	<span class="attribute">font-style</span>: normal;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">whitey_cjk/FZHT_Document.TTF</span>);</span><br><span class="line">	unicode-range: U+<span class="number">2018</span>, U+<span class="number">2019</span>, U+<span class="number">201</span>c, U+<span class="number">201</span>d;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>使用<code>unicode-range</code>选项，指定该字体族<strong>仅用于渲染指定的Unicode字符</strong>。</p>
 <p>同时<strong>优先</strong>启用该字体族：</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">body</span> <span class="token punctuation">&#123;</span>
-	<span class="token property">font-family</span><span class="token punctuation">:</span> <span class="token string">"Quotation Mark"</span><span class="token punctuation">,</span> Times<span class="token punctuation">,</span> <span class="token string">"My Font Family"</span><span class="token punctuation">;</span>
-	...
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">	<span class="attribute">font-family</span>: <span class="string">&quot;Quotation Mark&quot;</span>, Times, <span class="string">&quot;My Font Family&quot;</span>;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>重启typora，选择该主题，即可<strong>完美渲染中文引号</strong>：</p>
 <p><img src="image-20210806215008606.png" alt="image-20210806215008606"></p>
 <p>唯一的问题是，使用该主题时，<strong>西文引号也会被渲染为中文的样式</strong>。此问题不容易解决。原因在于，既然<strong>Unicode已经不尽如人意地为中文和西文引号指定了同样的代码</strong>，那么要想自动为中文和西文显示不同的引号样式，逻辑上就必须要识别上下文使用的语言。这似乎并不是几行简单的代码就能完成的任务。</p>
@@ -114,7 +94,7 @@
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/quotation_mark/" data-id="cks2m675z0001pkvrau8jgmc6" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/quotation_mark/" data-id="cks2mjttx0001i4vrcivjdsi4" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
