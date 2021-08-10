@@ -305,6 +305,16 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
     <url>/typora/</url>
     <content><![CDATA[<p>以Whitey主题为例。</p>
@@ -368,16 +378,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       <tags>
         <tag>Typora</tag>
         <tag>css</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
