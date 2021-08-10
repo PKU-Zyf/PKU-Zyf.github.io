@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Typora：如何优雅地显示中文引号？ |
+    Typora / Hexo：如何优雅地显示中文引号？ |
     
     明</title>
   
@@ -42,7 +42,7 @@
       
 
 <h1 class="article-title" itemprop="name">
-  Typora：如何优雅地显示中文引号？
+  Typora / Hexo：如何优雅地显示中文引号？
 </h1>
 
 
@@ -69,9 +69,9 @@
       
       
       
-      <p>中文引号的显示问题的解决！以Whitey主题为例。</p>
+      <p>中文引号的显示问题的解决！以Typora的Whitey主题和Hexo的Ocean主题为例。</p>
 <a id="more"></a>
-<h2 id="问题的由来"><a href="#问题的由来" class="headerlink" title="问题的由来"></a>问题的由来</h2><p>使用普通的主题时，Typora可以正常显示中文，默认字体为微软雅黑。可以通过修改css主题配置文件获得更优雅的中英文显示：</p>
+<h2 id="1-问题的由来"><a href="#1-问题的由来" class="headerlink" title="1. 问题的由来"></a>1. 问题的由来</h2><p>使用普通的主题时，Typora可以正常显示中文，默认字体为微软雅黑。可以通过修改css主题配置文件获得更优雅的中英文显示：</p>
 <pre><code class="lang-css">body &#123;
     font-family: Times, 宋体;
     ...
@@ -84,7 +84,7 @@
 <p><img src="image-20210806214358100.png" alt="image-20210806214358100"></p>
 <p><strong>删去</strong>配置文件中的西文字体，或将西文字体<strong>移至中文字体之后</strong>，<strong>并不能</strong>解决问题。原因在于，一般的中文字体中都会为西文字符设计字形，但设计得又普遍效果不佳。如果删去西文字体，西文文本（包括阿拉伯数字）的<strong>显示效果将大受影响</strong>；如果将西文字体移至中文字体之后，则由于中文字体已经为西文字符设计了字形，所以<strong>根本不会触发</strong>排在后面的西文字体。</p>
 <p>如何在保持中文和西文均有良好渲染效果的基础上，改善中文引号的显示呢？</p>
-<h2 id="问题的解决：使用“unicode-range”选项"><a href="#问题的解决：使用“unicode-range”选项" class="headerlink" title="问题的解决：使用“unicode-range”选项"></a>问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
+<h2 id="2-问题的解决：使用“unicode-range”选项"><a href="#2-问题的解决：使用“unicode-range”选项" class="headerlink" title="2. 问题的解决：使用“unicode-range”选项"></a>2. 问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
 <p>关于字体族设置，参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”。</p>
 <p>继续以该文改编的<code>whitey_cjk.css</code>主题为例。为引号设计专属字体族：</p>
 <pre><code class="lang-css">@font-face &#123;
@@ -113,18 +113,53 @@
 <p>重启typora，选择该主题，即可<strong>完美渲染中文引号</strong>：</p>
 <p><img src="image-20210806215008606.png" alt="image-20210806215008606"></p>
 <p>唯一的问题是，使用该主题时，<strong>西文引号也会被渲染为中文的样式</strong>。此问题不容易解决。原因在于，既然<strong>Unicode已经不尽如人意地为中文和西文引号指定了同样的代码</strong>，那么要想自动为中文和西文显示不同的引号样式，逻辑上就必须要识别上下文使用的语言。这似乎并不是几行简单的代码就能完成的任务。</p>
+<h2 id="3-在Hexo上实现“unicode-range”"><a href="#3-在Hexo上实现“unicode-range”" class="headerlink" title="3. 在Hexo上实现“unicode-range”"></a>3. 在Hexo上实现“unicode-range”</h2><p>类似地，在<strong>使用Hexo部署博客</strong>时也可以实现“unicode-range”功能。</p>
+<p>以Ocean主题为例。首先准备好想要的字体文件（这里以“方正书宋_GBK”为例）。</p>
+<p>woff格式为“网页开放字体格式”，更适合网页加载。可以使用网上的在线转换工具，把ttf格式转为woff。更严格地来说，最好再多准备几种字体格式，如woff2、otf、svg等。</p>
+<p>把字体文件放到想要的目录。这里以<code>.\themes\ocean\source\fonts\FZSSK</code>为例。</p>
+<p>在<code>.\themes\ocean\source\css</code>文件夹下新建一个<code>FZSSK.css</code>，内容为：</p>
+<pre><code class="lang-css">@charset &quot;UTF-8&quot;;
+
+@font-face &#123;
+  font-family: &quot;FZSSK&quot;;
+  src: url(&quot;../fonts/FZSSK/FZSSK.woff&quot;) format(&quot;woff&quot;),
+       url(&quot;../fonts/FZSSK/FZSSK.TTF&quot;) format(&quot;truetype&quot;);
+  font-weight: normal;
+  font-style: normal;
+&#125;
+</code></pre>
+<p>类似地，再建一个<code>FZSSK_Quotation.css</code>，内容为：</p>
+<pre><code class="lang-css">@charset &quot;UTF-8&quot;;
+
+@font-face &#123;
+  font-family: &quot;FZSSK_Quotation&quot;;
+  src: url(&quot;../fonts/FZSSK/FZSSK.woff&quot;) format(&quot;woff&quot;),
+       url(&quot;../fonts/FZSSK/FZSSK.TTF&quot;) format(&quot;truetype&quot;);
+  font-weight: normal;
+  font-style: normal;
+  unicode-range: U+2018, U+2019, U+201c, U+201d;
+&#125;
+</code></pre>
+<p>随后在<code>style.styl</code>中引用这两个css：</p>
+<pre><code class="lang-stylus">@import &quot;FZSSK.css&quot;
+@import &quot;FZSSK_Quotation.css&quot;
+</code></pre>
+<p>最后打开<code>_variables.styl</code>，修改字体设置：</p>
+<pre><code class="lang-stylus">font-family-base = FZSSK_Quotation, Times, FZSSK
+</code></pre>
+<p>最终效果即如本站的各篇文章所示。西文字符和数字会使用Times系列字体，但引号会使用中文字体渲染，以达到相对美观的效果。</p>
 
       
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/quotation_mark/" data-id="cks5qnqef0003o4vr2eloehh0" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/quotation_mark/" data-id="cks5txg760003u0vr0x361k65" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
       -->
       
-<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Typora/" rel="tag">Typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unicode/" rel="tag">Unicode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Typora/" rel="tag">Typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unicode/" rel="tag">Unicode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li></ul>
 
     </footer>
 
