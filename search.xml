@@ -1,99 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo渲染数学公式：配置方法与原理浅释</title>
-    <url>/formula/</url>
-    <content><![CDATA[<p>在Markdown文档编写中，我们可以使用$\LaTeX$的语法输入数学公式。常见的Markdown编辑器如Typora都可以方便地渲染数学公式。然而，Hexo在默认设置下部署博客时，并不能渲染数学公式。</p>
-<a id="more"></a>
-<p>原因在于，<strong>渲染数学公式需要使用MathJax</strong>（一种模块化的JavaScript框架）；而Hexo的默认渲染器是hexo-renderer-marked引擎，它并不支持MathJax。</p>
-<h2 id="1-更换渲染引擎"><a href="#1-更换渲染引擎" class="headerlink" title="1. 更换渲染引擎"></a>1. 更换渲染引擎</h2><p>Hexo-renderer-kramed引擎在hexo-renderer-marked渲染引擎的基础上修改了一些bug（“kram”这个名字目测是把“mark”倒过来拼写得到的），支持了MathJax。因此，<strong>将渲染引擎改为Hexo-renderer-kramed可以解决数学公式渲染的问题</strong>。</p>
-<p>使用Git Bash打开自己的博客文件夹，输入下面的代码即可卸载marked、安装kramed：</p>
-<pre><code class="lang-bash">npm uninstall hexo-renderer-marked --save
-npm install hexo-renderer-kramed --save
-</code></pre>
-<p>中国用户还可使用<code>cnpm</code>命令代替<code>npm</code>，获得更好体验。<code>cnpm</code>命令的安装可自行搜索，这里不再赘述。</p>
-<p>更换渲染引擎之后，还需要相应地更改一些其他配置。</p>
-<h2 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2. 修改配置文件"></a>2. 修改配置文件</h2><p>诸多网文混淆了<strong>站点配置文件</strong>和<strong>主题配置文件</strong>。二者的文件名都是<code>_config.yml</code>，但文件的位置不同。站点配置文件位于博客的根目录，即<code>.\_config.yml</code>，管理的是整个博客的全局设置；而主题配置文件则位于对应的主题文件夹之下，例如Ocean主题的配置文件路径为<code>.\themes\ocean\_config.yml</code>，管理的是与该主题的相关的具体设置。</p>
-<p>更换kramed引擎之后，需要在<strong>主题配置文件</strong>中增加这样几行：</p>
-<pre><code class="lang-yaml">mathjax:
-  enable: true
-  cdn: https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-</code></pre>
-<p>还要在<strong>站点配置文件</strong>中增加：</p>
-<pre><code class="lang-yaml">math:
-  engine: &#39;mathjax&#39;
-  mathjax:
-    src: custom_mathjax_source
-</code></pre>
-<h2 id="3-添加JavaScript脚本"><a href="#3-添加JavaScript脚本" class="headerlink" title="3. 添加JavaScript脚本"></a>3. 添加JavaScript脚本</h2><p>根据一些网文的说法，如果博客使用的是<strong>Next主题</strong>，那么至此已经可以实现行间公式的渲染。不过，对于有些<strong>并未引入MathJax功能的主题</strong>，还需要自行增加JavaScript脚本文件。</p>
-<p>以<strong>Ocean主题</strong>为例。首先打开<code>.\themes\ocean\layout</code>文件夹，如果该目录下没有<code>mathjax.ejs</code>文件，则<strong>新建</strong> <code>mathjax.ejs</code>文件。可以先新建一个txt文本文档，将后缀更改为<code>.ejs</code>即可。</p>
-<p>在<code>mathjax.ejs</code>中写入如下内容：</p>
-<pre><code class="lang-ejs">&lt;% if (theme.mathjax.enable)&#123; %&gt;
-    &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-      MathJax.Hub.Config(&#123;
-        tex2jax: &#123;
-          inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ],
-          processEscapes: true,
-          skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
-        &#125;
-      &#125;);
-      MathJax.Hub.Queue(function() &#123;
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i &lt; all.length; i += 1) &#123;
-            all[i].SourceElement().parentNode.className += &#39; has-jax&#39;;
-        &#125;
-      &#125;);
-    &lt;/script&gt;
-    &lt;script type=&quot;text/javascript&quot; src=&quot;&lt;%- theme.mathjax.cdn %&gt;&quot;&gt;&lt;/script&gt;
-    &lt;% &#125; %&gt;
-</code></pre>
-<p>此外，还要在<code>.\themes\ocean\layout\post.ejs</code>中追加如下代码：</p>
-<pre><code class="lang-ejs">&lt;% if (theme.mathjax)&#123; %&gt;
-  &lt;%- partial(&#39;mathjax&#39;) %&gt;
-&lt;% &#125; %&gt;
-</code></pre>
-<h2 id="4-打开MathJax开关"><a href="#4-打开MathJax开关" class="headerlink" title="4. 打开MathJax开关"></a>4. 打开MathJax开关</h2><p>如果仍未能正确渲染数学公式，那么可能还需在Markdown文档的顶部配置里打开MathJax开关，即<code>mathjax: true</code>：</p>
-<pre><code class="lang-markdown">---
-title: 文章标题
-date: 2021-01-01 00:00:00
-mathjax: true
----
-
-$$
-e ^ &#123;i\pi&#125; + 1 = 0
-$$
-</code></pre>
-<p>即可显示：</p>
-<script type="math/tex; mode=display">
-e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用到数学公式的文章中<strong>手动添加</strong>。不添加这行设置，文章就不会加载MathJax，以提高页面渲染的速度。</p>
-<h2 id="5-调整行内渲染设置"><a href="#5-调整行内渲染设置" class="headerlink" title="5. 调整行内渲染设置"></a>5. 调整行内渲染设置</h2><p>Markdown的公式分为<strong>行间公式</strong>和<strong>行内公式</strong>。经过上述配置之后，行间公式已经可以正确渲染。但行内公式仍有可能渲染错误。</p>
-<p>原因在于<strong>Markdown语法和$\LaTeX$数学公式语法有一定冲突</strong>。例如，用两个下划线<code>_</code>或两个星号<code>*</code>包围的文字，在Markdown语法中都被识别为<strong>斜体</strong>；但在$\LaTeX$​​数学公式中，下划线<code>_</code>用于表示<strong>下标</strong>。因此，当同一个行内公式中出现两个下标时，下划线<code>_</code>会被转化为<code>&lt;em&gt;</code>标签，二者之间的部分就会被渲染为斜体。这就造成了混乱。此外，<strong>反斜杠</strong> <code>\</code>和<strong>花括号</strong> <code>&#123;&#125;</code>也有可能造成渲染错误。</p>
-<p>为此，<strong>需要更改与行内渲染相关的JavaScript脚本</strong>。回到博客根目录，打开<code>.\node_modules\kramed\lib\rules\inline.js</code>（注意打开<code>node_modules</code>文件夹之后选择的是<code>kramed</code>文件夹，而不是<code>hexo-renderer-kramed</code>文件夹），找到<code>escape</code>变量，注释掉原来的值，并更新：</p>
-<pre><code class="lang-js">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/,
-  escape: /^\\([`*\[\]()#$+\-.!_&gt;])/,
-</code></pre>
-<p>这样就<strong>取消了对反斜杠和花括号的转义（escape）</strong>。 </p>
-<p>再找到<code>em</code>变量，注释掉原来的值，并更新：</p>
-<pre><code class="lang-js">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
-  em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
-</code></pre>
-<p>这样就<strong>停用了以下划线标注斜体/强调（em）的语法</strong>。</p>
-<p>此时，形如</p>
-<pre><code class="lang-markdown">$N = P_1 ^ &#123;\alpha _1&#125; P_2 ^ &#123;\alpha _2&#125; \cdots P_n ^ &#123;\alpha _n&#125;$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。
-</code></pre>
-<p>这样的复杂行内公式，就可以正确渲染了：$N = P_1 ^ {\alpha _1} P_2 ^ {\alpha _2} \cdots P_n ^ {\alpha _n}$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。</p>
-<p>当然，调整行内渲染设置之后，在Markdown文档中就要<strong>用星号<code>*</code>标注斜体文字</strong>，因为用下划线<code>_</code>标注斜体的语法已经被停用了。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Hexo博客支持数学公式. <a href="https://blog.csdn.net/qq_38496329/article/details/104065659">https://blog.csdn.net/qq_38496329/article/details/104065659</a></li>
-<li>在Hexo中渲染MathJax数学公式. <a href="https://www.jianshu.com/p/7ab21c7f0674">https://www.jianshu.com/p/7ab21c7f0674</a></li>
-<li>让 Hexo 支持 LaTeX 公式. <a href="https://blog.xiangfa.org/2020/09/let-hexo-support-latex-formulas/">https://blog.xiangfa.org/2020/09/let-hexo-support-latex-formulas/</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo渲染代码块：Prism插件的配置</title>
     <url>/code_block/</url>
     <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
@@ -237,69 +144,96 @@ prismjs:
       </tags>
   </entry>
   <entry>
-    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
-    <url>/typora/</url>
-    <content><![CDATA[<p>以Whitey主题为例。</p>
+    <title>Hexo渲染数学公式：配置方法与原理浅释</title>
+    <url>/formula/</url>
+    <content><![CDATA[<p>在Markdown文档编写中，我们可以使用$\LaTeX$的语法输入数学公式。常见的Markdown编辑器如Typora都可以方便地渲染数学公式。然而，Hexo在默认设置下部署博客时，并不能渲染数学公式。</p>
 <a id="more"></a>
-<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
-<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
-<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
-<p>找到开头的：</p>
-<pre><code class="lang-css">body &#123;
-    font-family: &quot;Vollkorn&quot;, Palatino, Times;
-    ...
-&#125;
+<p>原因在于，<strong>渲染数学公式需要使用MathJax</strong>（一种模块化的JavaScript框架）；而Hexo的默认渲染器是hexo-renderer-marked引擎，它并不支持MathJax。</p>
+<h2 id="1-更换渲染引擎"><a href="#1-更换渲染引擎" class="headerlink" title="1. 更换渲染引擎"></a>1. 更换渲染引擎</h2><p>Hexo-renderer-kramed引擎在hexo-renderer-marked渲染引擎的基础上修改了一些bug（“kram”这个名字目测是把“mark”倒过来拼写得到的），支持了MathJax。因此，<strong>将渲染引擎改为Hexo-renderer-kramed可以解决数学公式渲染的问题</strong>。</p>
+<p>使用Git Bash打开自己的博客文件夹，输入下面的代码即可卸载marked、安装kramed：</p>
+<pre><code class="lang-bash">npm uninstall hexo-renderer-marked --save
+npm install hexo-renderer-kramed --save
 </code></pre>
-<p>将<code>font-family</code>改为：</p>
-<pre><code class="lang-css">font-family: Times, 宋体;
+<p>中国用户还可使用<code>cnpm</code>命令代替<code>npm</code>，获得更好体验。<code>cnpm</code>命令的安装可自行搜索，这里不再赘述。</p>
+<p>更换渲染引擎之后，还需要相应地更改一些其他配置。</p>
+<h2 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2. 修改配置文件"></a>2. 修改配置文件</h2><p>诸多网文混淆了<strong>站点配置文件</strong>和<strong>主题配置文件</strong>。二者的文件名都是<code>_config.yml</code>，但文件的位置不同。站点配置文件位于博客的根目录，即<code>.\_config.yml</code>，管理的是整个博客的全局设置；而主题配置文件则位于对应的主题文件夹之下，例如Ocean主题的配置文件路径为<code>.\themes\ocean\_config.yml</code>，管理的是与该主题的相关的具体设置。</p>
+<p>更换kramed引擎之后，需要在<strong>主题配置文件</strong>中增加这样几行：</p>
+<pre><code class="lang-yaml">mathjax:
+  enable: true
+  cdn: https://cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 </code></pre>
-<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
-<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
-<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
-<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
-<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
-<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
-<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
-<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
-<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
-<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
-<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
-<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
-<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<pre><code class="lang-css">@font-face&#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: normal;
-    src: url(whitey_cjk/FZSSK.TTF);
-&#125;
+<p>还要在<strong>站点配置文件</strong>中增加：</p>
+<pre><code class="lang-yaml">math:
+  engine: &#39;mathjax&#39;
+  mathjax:
+    src: custom_mathjax_source
+</code></pre>
+<h2 id="3-添加JavaScript脚本"><a href="#3-添加JavaScript脚本" class="headerlink" title="3. 添加JavaScript脚本"></a>3. 添加JavaScript脚本</h2><p>根据一些网文的说法，如果博客使用的是<strong>Next主题</strong>，那么至此已经可以实现行间公式的渲染。不过，对于有些<strong>并未引入MathJax功能的主题</strong>，还需要自行增加JavaScript脚本文件。</p>
+<p>以<strong>Ocean主题</strong>为例。首先打开<code>.\themes\ocean\layout</code>文件夹，如果该目录下没有<code>mathjax.ejs</code>文件，则<strong>新建</strong> <code>mathjax.ejs</code>文件。可以先新建一个txt文本文档，将后缀更改为<code>.ejs</code>即可。</p>
+<p>在<code>mathjax.ejs</code>中写入如下内容：</p>
+<pre><code class="lang-ejs">&lt;% if (theme.mathjax.enable)&#123; %&gt;
+    &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+      MathJax.Hub.Config(&#123;
+        tex2jax: &#123;
+          inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ],
+          processEscapes: true,
+          skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
+        &#125;
+      &#125;);
+      MathJax.Hub.Queue(function() &#123;
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i &lt; all.length; i += 1) &#123;
+            all[i].SourceElement().parentNode.className += &#39; has-jax&#39;;
+        &#125;
+      &#125;);
+    &lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;&lt;%- theme.mathjax.cdn %&gt;&quot;&gt;&lt;/script&gt;
+    &lt;% &#125; %&gt;
+</code></pre>
+<p>此外，还要在<code>.\themes\ocean\layout\post.ejs</code>中追加如下代码：</p>
+<pre><code class="lang-ejs">&lt;% if (theme.mathjax)&#123; %&gt;
+  &lt;%- partial(&#39;mathjax&#39;) %&gt;
+&lt;% &#125; %&gt;
+</code></pre>
+<h2 id="4-打开MathJax开关"><a href="#4-打开MathJax开关" class="headerlink" title="4. 打开MathJax开关"></a>4. 打开MathJax开关</h2><p>如果仍未能正确渲染数学公式，那么可能还需在Markdown文档的顶部配置里打开MathJax开关，即<code>mathjax: true</code>：</p>
+<pre><code class="lang-markdown">---
+title: 文章标题
+date: 2021-01-01 00:00:00
+mathjax: true
+---
 
-@font-face &#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: bold;
-    src: url(whitey_cjk/FZHT_Document.TTF);
-&#125;
+$$
+e ^ &#123;i\pi&#125; + 1 = 0
+$$
 </code></pre>
-<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
-<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+<p>即可显示：</p>
+<script type="math/tex; mode=display">
+e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用到数学公式的文章中<strong>手动添加</strong>。不添加这行设置，文章就不会加载MathJax，以提高页面渲染的速度。</p>
+<h2 id="5-调整行内渲染设置"><a href="#5-调整行内渲染设置" class="headerlink" title="5. 调整行内渲染设置"></a>5. 调整行内渲染设置</h2><p>Markdown的公式分为<strong>行间公式</strong>和<strong>行内公式</strong>。经过上述配置之后，行间公式已经可以正确渲染。但行内公式仍有可能渲染错误。</p>
+<p>原因在于<strong>Markdown语法和$\LaTeX$数学公式语法有一定冲突</strong>。例如，用两个下划线<code>_</code>或两个星号<code>*</code>包围的文字，在Markdown语法中都被识别为<strong>斜体</strong>；但在$\LaTeX$​​数学公式中，下划线<code>_</code>用于表示<strong>下标</strong>。因此，当同一个行内公式中出现两个下标时，下划线<code>_</code>会被转化为<code>&lt;em&gt;</code>标签，二者之间的部分就会被渲染为斜体。这就造成了混乱。此外，<strong>反斜杠</strong> <code>\</code>和<strong>花括号</strong> <code>&#123;&#125;</code>也有可能造成渲染错误。</p>
+<p>为此，<strong>需要更改与行内渲染相关的JavaScript脚本</strong>。回到博客根目录，打开<code>.\node_modules\kramed\lib\rules\inline.js</code>（注意打开<code>node_modules</code>文件夹之后选择的是<code>kramed</code>文件夹，而不是<code>hexo-renderer-kramed</code>文件夹），找到<code>escape</code>变量，注释掉原来的值，并更新：</p>
+<pre><code class="lang-js">// escape: /^\\([\\`*&#123;&#125;\[\]()#$+\-.!_&gt;])/,
+  escape: /^\\([`*\[\]()#$+\-.!_&gt;])/,
 </code></pre>
-<p>即可在Typora主界面实现效果：</p>
-<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
-<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
-<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
-<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<pre><code class="lang-css">@media print &#123;
-    html &#123;
-        font-size: 13px;
-    &#125;
-&#125;
+<p>这样就<strong>取消了对反斜杠和花括号的转义（escape）</strong>。 </p>
+<p>再找到<code>em</code>变量，注释掉原来的值，并更新：</p>
+<pre><code class="lang-js">// em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+  em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
 </code></pre>
-<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
+<p>这样就<strong>停用了以下划线标注斜体/强调（em）的语法</strong>。</p>
+<p>此时，形如</p>
+<pre><code class="lang-markdown">$N = P_1 ^ &#123;\alpha _1&#125; P_2 ^ &#123;\alpha _2&#125; \cdots P_n ^ &#123;\alpha _n&#125;$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。
+</code></pre>
+<p>这样的复杂行内公式，就可以正确渲染了：$N = P_1 ^ {\alpha _1} P_2 ^ {\alpha _2} \cdots P_n ^ {\alpha _n}$，其中$P_1 &lt; P_2 &lt; \cdots &lt; P_n$，$P_1 , P_2 , \cdots , P_n$为质数。</p>
+<p>当然，调整行内渲染设置之后，在Markdown文档中就要<strong>用星号<code>*</code>标注斜体文字</strong>，因为用下划线<code>_</code>标注斜体的语法已经被停用了。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Hexo博客支持数学公式. <a href="https://blog.csdn.net/qq_38496329/article/details/104065659">https://blog.csdn.net/qq_38496329/article/details/104065659</a></li>
+<li>在Hexo中渲染MathJax数学公式. <a href="https://www.jianshu.com/p/7ab21c7f0674">https://www.jianshu.com/p/7ab21c7f0674</a></li>
+<li>让 Hexo 支持 LaTeX 公式. <a href="https://blog.xiangfa.org/2020/09/let-hexo-support-latex-formulas/">https://blog.xiangfa.org/2020/09/let-hexo-support-latex-formulas/</a></li>
+</ul>
 ]]></content>
       <tags>
-        <tag>Typora</tag>
-        <tag>css</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -414,6 +348,72 @@ prismjs:
 ]]></content>
       <tags>
         <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
+    <url>/typora/</url>
+    <content><![CDATA[<p>以Whitey主题为例。</p>
+<a id="more"></a>
+<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
+<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
+<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
+<p>找到开头的：</p>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Vollkorn&quot;, Palatino, Times;
+    ...
+&#125;
+</code></pre>
+<p>将<code>font-family</code>改为：</p>
+<pre><code class="lang-css">font-family: Times, 宋体;
+</code></pre>
+<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
+<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
+<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
+<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
+<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
+<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
+<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
+<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
+<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
+<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
+<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
+<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
+<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
+<pre><code class="lang-css">@font-face&#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZSSK.TTF);
+&#125;
+
+@font-face &#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+&#125;
+</code></pre>
+<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
+<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
+<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+</code></pre>
+<p>即可在Typora主界面实现效果：</p>
+<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
+<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
+<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
+<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
+<pre><code class="lang-css">@media print &#123;
+    html &#123;
+        font-size: 13px;
+    &#125;
+&#125;
+</code></pre>
+<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
+]]></content>
+      <tags>
+        <tag>Typora</tag>
+        <tag>css</tag>
       </tags>
   </entry>
   <entry>
@@ -1732,8 +1732,16 @@ prismjs:
   <entry>
     <title>萧公权《中国政治思想史》摘要（一）</title>
     <url>/history_of_chinese_political_thought_1/</url>
-    <content><![CDATA[<p>萧公权：《中国政治思想史》，“绪论”；“第一编：封建天下之政治思想——创造时期”，北京：商务印书馆，2018。</p>
+    <content><![CDATA[<p>萧公权：《中国政治思想史》，“凡例”；“绪论”；“第一编：封建天下之政治思想——创造时期”，北京：商务印书馆，2018。</p>
 <a id="more"></a>
+<p>后续：<a href="#">Post not found: history_of_chinese_political_thought_2 萧公权《中国政治思想史》摘要（二）</a></p>
+<h2 id="凡例"><a href="#凡例" class="headerlink" title="凡例"></a>凡例</h2><ol>
+<li>本书采政治学之观点，用历史之方法，略叙晚周以来二千五百年间政治思想之大概，以供各大学政治系学生参考之用；其西周以前之一段，因文献寡征，暂援孔子阙疑之例，不立专编叙述，只于孔孟诸章中随时附件。</li>
+<li>本书体例以时代为经，以思想派别为纬，其取材以前人著作之具有理论价值者为主。影响较大之政论亦酌量述及，专对一时一地实际问题之政论则一概从略。</li>
+<li>本书叙述各家思想，力守客观之态度。偶有论评，亦意在辨明其历史上之地位，非敢任意抑扬，臆断得失。</li>
+<li>本书第五编，原稿沦陷，仍存其目，以明原委。</li>
+<li>撰者学殖荒落，而本书属稿值抗战期中，参考图书又颇不便。匪特见闻未广，尤恐纰缪滋多。事先不及就教高明，尚希不吝随时赐正。</li>
+</ol>
 <h2 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h2><h3 id="一、中国政治思想史之起点"><a href="#一、中国政治思想史之起点" class="headerlink" title="一、中国政治思想史之起点"></a>一、中国政治思想史之起点</h3><p>研究政治思想史自晚周为始。</p>
 <p>夏商之世，学术思思方见萌芽，未能具体，况文献不足。故吾人今日欲取中国政治思想作较有统系之研究，至早只能以周代为起点。</p>
 <p>周代学术之大兴，不在西周盛世，而在东迁以后之春秋末叶与战国时代。政治思想兴于晚周之主因有二：社会组织之迅速变迁；伟大思想家之适生其会。</p>
