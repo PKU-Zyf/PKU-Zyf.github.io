@@ -1,122 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>如何在Markdown中渲染字母顺序的列表？</title>
-    <url>/alpha_list/</url>
-    <content><![CDATA[<p>Markdown默认的有序列表是数字列表。如何将其改为字母顺序的列表？</p>
-<a id="more"></a>
-<p>直接使用HTML语法！</p>
-<p>在正文里插入如下代码（不要使用代码块包裹）：</p>
-<pre><code class="lang-html">&lt;ol type=&quot;a&quot;&gt;
-    &lt;li&gt;第一条&lt;/li&gt;
-    &lt;li&gt;第二条&lt;/li&gt;
-    &lt;li&gt;第三条&lt;/li&gt;
-&lt;/ol&gt;
-</code></pre>
-<p>即可渲染：</p>
-<ol type="a">
-    <li>第一条</li>
-    <li>第二条</li>
-    <li>第三条</li>
-</ol>
-
-<p>其中，<code>ol</code>标签的<code>type</code>属性共有5种取值，对应不同种类的有序列表：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>取值</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>默认。十进制数字：1, 2, 3, 4, …</td>
-</tr>
-<tr>
-<td>a</td>
-<td>小写英文字母顺序的有序列表：a, b, c, d, …</td>
-</tr>
-<tr>
-<td>A</td>
-<td>大写英文字母顺序的有序列表：A, B, C, D, …</td>
-</tr>
-<tr>
-<td>i</td>
-<td>小写罗马数字：i, ii, iii, iv, …</td>
-</tr>
-<tr>
-<td>I</td>
-<td>大写罗马数字：I, II, III, IV, …</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>How do you make lettered lists using markdown? <a href="https://stackoverflow.com/questions/13366820/how-do-you-make-lettered-lists-using-markdown">https://stackoverflow.com/questions/13366820/how-do-you-make-lettered-lists-using-markdown</a></li>
-<li>HTML 5 &lt;ol&gt; type 属性. <a href="https://www.w3school.com.cn/html5/att_ol_type.asp">https://www.w3school.com.cn/html5/att_ol_type.asp</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Markdown</tag>
-        <tag>HTML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hexo渲染代码块：Prism插件的配置</title>
-    <url>/code_block/</url>
-    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
-<a id="more"></a>
-<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
-<ol>
-<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
-<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
-<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
-</ol>
-<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
-<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
-<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
-<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
-<pre><code class="lang-ejs">&lt;head&gt;
-  ...
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
-&lt;/head&gt;
-</code></pre>
-<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
-<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
-  ...
-  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
-&lt;/footer&gt;
-</code></pre>
-<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
-<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
-<pre><code class="lang-yml">highlight:
-  enable: false
-  ...
-prismjs:
-  enable: false
-  ...
-</code></pre>
-<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
-<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
-<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
-<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
-  ...
-&lt;/body&gt;
-</code></pre>
-<p>本站使用的是Prism的Tomorrow Night主题。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
-<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
-<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Humphreys：如何述评？</title>
     <url>/critique/</url>
     <content><![CDATA[<p>译自：Humphreys, M. (n.d.). <em>How to critique</em>. Macartan Humphreys. <a href="http://macartan.nyc/teaching/how-to-critique/">http://macartan.nyc/teaching/how-to-critique/</a></p>
@@ -141,7 +25,9 @@ prismjs:
 <li>The second part discusses <strong>3 – 6 major features</strong> of the paper; the checklist below lists features that could be useful to think through when selecting themes. Try to organize by theme (measurement, explanation etc.).</li>
 <li><p>The third part is for “<strong>smaller issues</strong>” where you can bullet point things from ambiguities, to estimation issues, to pointers to other work.</p>
 </li>
-<li><p>第一部分可以是一个单独的段落——它<strong>总结</strong>了你所看到的论文的主要贡献，给出总体评价，并指出关键的议题、关切或优点。<strong>不要忘记（介绍文章的）优点</strong>。试着简明扼要地阐述你现在知道、而你在读这篇文章之前并不知道的东西。通常情况下，快速的总结可以让你注意到你（之前）没有意识到的显著特征，或者让你意识到你（之前）印象深刻的东西其实并不是那么令人印象深刻。</p>
+<li><ul>
+<li>第一部分可以是一个单独的段落——它<strong>总结</strong>了你所看到的论文的主要贡献，给出总体评价，并指出关键的议题、关切或优点。<strong>不要忘记（介绍文章的）优点</strong>。试着简明扼要地阐述你现在知道、而你在读这篇文章之前并不知道的东西。通常情况下，快速的总结可以让你注意到你（之前）没有意识到的显著特征，或者让你意识到你（之前）印象深刻的东西其实并不是那么令人印象深刻。</li>
+</ul>
 </li>
 <li>第二部分讨论论文的<strong>3-6个主要特点</strong>；下面的备忘清单列出了在选择主题时可供思考的特点。尽量按主题组织（比如测量、解释等）。</li>
 <li>第三部分是「<strong>小问题</strong>」，你可以分点列出一些东西，例如模糊性、估计问题，以及对其他研究的提示。</li>
@@ -228,6 +114,122 @@ prismjs:
 ]]></content>
       <tags>
         <tag>读书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo渲染代码块：Prism插件的配置</title>
+    <url>/code_block/</url>
+    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
+<a id="more"></a>
+<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
+<ol>
+<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
+<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
+<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
+</ol>
+<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
+<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
+<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
+<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
+<pre><code class="lang-ejs">&lt;head&gt;
+  ...
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
+<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
+  ...
+  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
+&lt;/footer&gt;
+</code></pre>
+<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
+<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
+<pre><code class="lang-yml">highlight:
+  enable: false
+  ...
+prismjs:
+  enable: false
+  ...
+</code></pre>
+<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
+<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
+<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
+<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
+  ...
+&lt;/body&gt;
+</code></pre>
+<p>本站使用的是Prism的Tomorrow Night主题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
+<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
+<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何在Markdown中渲染字母顺序的列表？</title>
+    <url>/alpha_list/</url>
+    <content><![CDATA[<p>Markdown默认的有序列表是数字列表。如何将其改为字母顺序的列表？</p>
+<a id="more"></a>
+<p>直接使用HTML语法！</p>
+<p>在正文里插入如下代码（不要使用代码块包裹）：</p>
+<pre><code class="lang-html">&lt;ol type=&quot;a&quot;&gt;
+    &lt;li&gt;第一条&lt;/li&gt;
+    &lt;li&gt;第二条&lt;/li&gt;
+    &lt;li&gt;第三条&lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+<p>即可渲染：</p>
+<ol type="a">
+    <li>第一条</li>
+    <li>第二条</li>
+    <li>第三条</li>
+</ol>
+
+<p>其中，<code>ol</code>标签的<code>type</code>属性共有5种取值，对应不同种类的有序列表：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>取值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>默认。十进制数字：1, 2, 3, 4, …</td>
+</tr>
+<tr>
+<td>a</td>
+<td>小写英文字母顺序的有序列表：a, b, c, d, …</td>
+</tr>
+<tr>
+<td>A</td>
+<td>大写英文字母顺序的有序列表：A, B, C, D, …</td>
+</tr>
+<tr>
+<td>i</td>
+<td>小写罗马数字：i, ii, iii, iv, …</td>
+</tr>
+<tr>
+<td>I</td>
+<td>大写罗马数字：I, II, III, IV, …</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>How do you make lettered lists using markdown? <a href="https://stackoverflow.com/questions/13366820/how-do-you-make-lettered-lists-using-markdown">https://stackoverflow.com/questions/13366820/how-do-you-make-lettered-lists-using-markdown</a></li>
+<li>HTML 5 &lt;ol&gt; type 属性. <a href="https://www.w3school.com.cn/html5/att_ol_type.asp">https://www.w3school.com.cn/html5/att_ol_type.asp</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Markdown</tag>
+        <tag>HTML</tag>
       </tags>
   </entry>
   <entry>
@@ -528,6 +530,103 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
+    <url>/swiss_constitution/</url>
+    <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
+<a id="more"></a>
+<p>目前中文互联网上的《瑞士联邦宪法》译本多已过时（如“百度百科”上的“瑞士联邦宪法”词条），本文试译最新版本（1999年4月18日全民公决通过，2021年3月7日修订的版本）的第五部分（“联邦机构”）第三章（“联邦委员会和联邦行政机关”）。这一章集中体现了瑞士“联邦委员会”制度的设计思路和现行规定。</p>
+<p>转译自官方英文版，英语并非瑞士联邦的官方语言，故英文版无法律效力，仅供研究参考。</p>
+<h2 id="Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关"><a href="#Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关" class="headerlink" title="Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关"></a>Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关</h2><h3 id="Section-1-Organisation-and-Procedure-第一节：组织与程序"><a href="#Section-1-Organisation-and-Procedure-第一节：组织与程序" class="headerlink" title="Section 1 Organisation and Procedure 第一节：组织与程序"></a>Section 1 Organisation and Procedure 第一节：组织与程序</h3><h4 id="Art-174-Federal-Council-第174条：联邦委员会"><a href="#Art-174-Federal-Council-第174条：联邦委员会" class="headerlink" title="Art. 174 Federal Council 第174条：联邦委员会"></a>Art. 174 Federal Council 第174条：联邦委员会</h4><p>The Federal Council is the supreme governing and executive authority of the Confederation.</p>
+<p>联邦委员会是联邦的最高管理机关和执行机关。</p>
+<h4 id="Art-175-Composition-and-election-第175条：构成与选举"><a href="#Art-175-Composition-and-election-第175条：构成与选举" class="headerlink" title="Art. 175 Composition and election 第175条：构成与选举"></a>Art. 175 Composition and election 第175条：构成与选举</h4><p>$^1$ The Federal Council has seven members.</p>
+<p>$^2$ The members of the Federal Council are elected by the Federal Assembly following each general election to the National Council.</p>
+<p>$^3$ They are elected for a term of office of four years. Any Swiss citizen eligible for election to the National Council may be elected to the Federal Council.</p>
+<p>$^4$ In electing the Federal Council, care must be taken to ensure that the various geographical and language regions of the country are appropriately represented.</p>
+<p>$^1$ 联邦委员会有七名成员。</p>
+<p>$^2$ 联邦委员会的成员由联邦议会在每次国民院大选后选出。</p>
+<p>$^3$ 联邦委员会成员当选后的任期为四年。任何有资格被选入国民院的瑞士公民都可以被选入联邦委员会。</p>
+<p>$^4$ 在选举联邦委员会时，必须注意确保国家的各个地理和语言区域都有适当的代表。</p>
+<h4 id="Art-176-Presidency-第176条：最高职位"><a href="#Art-176-Presidency-第176条：最高职位" class="headerlink" title="Art. 176 Presidency 第176条：最高职位"></a>Art. 176 Presidency 第176条：最高职位</h4><p>$^1$ The President of the Confederation chairs the Federal Council.</p>
+<p>$^2$ The President and the Vice-President of the Federal Council are elected by the Federal Assembly from the members of the Federal Council for a term of office of one year.</p>
+<p>$^3$ Re-election for the following year is not permitted. The President may not be elected Vice-President for the following year.</p>
+<p>$^1$ 联邦主席主持联邦委员会的工作。</p>
+<p>$^2$ 联邦委员会主席和副主席由联邦议会从联邦委员会成员中选出，任期为一年。</p>
+<p>$^3$ 联邦委员会主席和副主席下一年度不允许连任。主席不得当选下一年度的副主席。</p>
+<h4 id="Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配"><a href="#Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配" class="headerlink" title="Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配"></a>Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配</h4><p>$^1$ The Federal Council reaches its decisions as a collegial body.</p>
+<p>$^2$ For the purposes of preparation and implementation, the business of the Federal Council is allocated to its individual members according to department.</p>
+<p>$^3$ Business may be delegated to and directly dealt with by departments or their subordinate administrative units; in such cases, the right to legal recourse is guaranteed.</p>
+<p>$^1$ 联邦委员会作为一个共同掌权的机构作出决定。</p>
+<p>$^2$ 为了工作的准备和实施，联邦委员会的事务按部门分配给其各个成员。</p>
+<p>$^3$ 联邦事务可以委托给各部门或其下属的行政单位并由其直接处理；在这种情况下，应保障法律追索权。</p>
+<h4 id="Art-178-Federal-Administration-第178条：联邦行政机关"><a href="#Art-178-Federal-Administration-第178条：联邦行政机关" class="headerlink" title="Art. 178 Federal Administration 第178条：联邦行政机关"></a>Art. 178 Federal Administration 第178条：联邦行政机关</h4><p>$^1$ 联邦委员会负责管理联邦行政机构。它确保联邦行政机构被适当地组织起来，并有效地履行其职责。</p>
+<p>$^2$ 联邦行政机构分为几个部门，每个部门由联邦委员会的一名成员领导。</p>
+<p>$^3$ 行政任务可以依法委托给不属于联邦行政机构的公共或私人组织、实体或个人。</p>
+<h4 id="Art-179-Federal-Chancellery-第179条：联邦总理府"><a href="#Art-179-Federal-Chancellery-第179条：联邦总理府" class="headerlink" title="Art. 179 Federal Chancellery 第179条：联邦总理府"></a>Art. 179 Federal Chancellery 第179条：联邦总理府</h4><p>The Federal Chancellery is the general administrative office of the Federal Council. It is headed by a Federal Chancellor.</p>
+<p>联邦总理府是联邦委员会的一般行政办公室。它由一名联邦总理领导。</p>
+<h3 id="Section-2-Powers-第二节：权力"><a href="#Section-2-Powers-第二节：权力" class="headerlink" title="Section 2 Powers 第二节：权力"></a>Section 2 Powers 第二节：权力</h3><h4 id="Art-180-Government-policy-第180条：政府政策"><a href="#Art-180-Government-policy-第180条：政府政策" class="headerlink" title="Art. 180 Government policy 第180条：政府政策"></a>Art. 180 Government policy 第180条：政府政策</h4><p>$^1$ The Federal Council decides on the objectives of federal government policy and the means by which they should be achieved. It plans and coordinates state activities.</p>
+<p>$^2$ It informs the general public fully and in good time about its activities, unless overriding public or private interests prevent this.</p>
+<p>$^1$ 联邦委员会决定联邦政府政策的目标和实现这些目标的手段。它计划并协调国家活动。</p>
+<p>$^2$ 联邦委员会向公众充分及时地通报其活动，除非这与最重要的公共利益或私人利益冲突。</p>
+<h4 id="Art-181-Right-to-initiate-legislation-第181条：发起立法的权利"><a href="#Art-181-Right-to-initiate-legislation-第181条：发起立法的权利" class="headerlink" title="Art. 181 Right to initiate legislation 第181条：发起立法的权利"></a>Art. 181 Right to initiate legislation 第181条：发起立法的权利</h4><p>The Federal Council submits drafts of Federal Assembly legislation to the Federal Assembly.</p>
+<p>联邦委员会将联邦议会的立法草案提交给联邦议会。</p>
+<h4 id="Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行"><a href="#Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行" class="headerlink" title="Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行"></a>Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行</h4><p>$^1$ The Federal Council enacts legislative provisions in the form of ordinances, provided it has the authority to do so under the Constitution or the law.</p>
+<p>$^2$ It ensures the implementation of legislation, the resolutions of the Federal Assembly and the judgments of federal judicial authorities.</p>
+<p>$^1$ 联邦委员会以法令的形式颁布立法条款，只要它根据宪法或法律有权这样做。</p>
+<p>$^2$ 联邦委员会确保立法、联邦议会的决议和联邦司法机关的判决的实施。</p>
+<h4 id="Art-183-Finances-第183条：财政"><a href="#Art-183-Finances-第183条：财政" class="headerlink" title="Art. 183 Finances 第183条：财政"></a>Art. 183 Finances 第183条：财政</h4><p>$^1$ The Federal Council draws up the financial plan and the draft budget and prepare the federal accounts.</p>
+<p>$^2$ It ensures orderly financial management.</p>
+<p>$^1$ 联邦委员会制定财政计划和预算草案，并编制联邦账目。</p>
+<p>$^2$ 联邦委员会确保有序的财政管理。</p>
+<h4 id="Art-184-Foreign-relations-外交关系"><a href="#Art-184-Foreign-relations-外交关系" class="headerlink" title="Art. 184 Foreign relations 外交关系"></a>Art. 184 Foreign relations 外交关系</h4><p>$^1$ The Federal Council is responsible for foreign relations, subject to the right of participation of the Federal Assembly; it represents Switzerland abroad.</p>
+<p>$^2$ It signs and ratifies international treaties. It submits them to the Federal Assembly for approval.</p>
+<p>$^3$ Where safeguarding the interests of the country so requires, the Federal Council may issue ordinances and rulings. Ordinances must be of limited duration.</p>
+<p>$^1$ 联邦委员会负责外交关系，但须服从联邦议会的参与权；联邦委员会在国外代表瑞士。</p>
+<p>$^2$ 联邦委员会签署和批准国际条约。联邦委员会将这些条约提交给联邦议会审批通过。</p>
+<p>$^3$ 在维护国家利益的需要下，联邦委员会可以发布法令和裁定。法令必须是有期限的。</p>
+<h4 id="Art-185-External-and-internal-security-外部与国内安全"><a href="#Art-185-External-and-internal-security-外部与国内安全" class="headerlink" title="Art. 185 External and internal security 外部与国内安全"></a>Art. 185 External and internal security 外部与国内安全</h4><p>$^1$ The Federal Council takes measures to safeguard external security, independence and neutrality of Switzerland.</p>
+<p>$^2$ It takes measures to safeguard internal security.</p>
+<p>$^3$ It may in direct application of this Article issue ordinances and rulings in order to counter existing or imminent threats of serious disruption to public order or internal or external security. Such ordinances must be limited in duration.</p>
+<p>$^4$ In cases of emergency, it may mobilise the armed forces. Where it mobilises more than 4,000 members of the armed forces for active service or where the deployment of such troops is expected to last for more than three weeks, the Federal Assembly must be convened without delay.</p>
+<p>$^1$ 联邦委员会采取措施，保障瑞士的外部安全、独立和中立。</p>
+<p>$^2$ 联邦委员会采取措施保障国内安全。</p>
+<p>$^3$ 联邦委员会可以直接适用本条规定，发布法令和裁定，以应对现有或即将发生的严重破坏公共秩序、国内安全或外部安全的威胁。这种法令必须有一定的期限。</p>
+<p>$^4$ 在紧急情况下，联邦委员会可以调动武装部队。如果联邦委员会调动4000名以上的武装部队成员服现役，或者武装部队的部署预计将持续三周以上，则必须立即召开联邦议会。</p>
+<h4 id="Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系"><a href="#Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系" class="headerlink" title="Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系"></a>Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系</h4><p>$^1$ The Federal Council is responsible for maintaining relations between the Confederation and the Cantons and collaborates with the latter.</p>
+<p>$^2$ It may approve cantonal legislation when required to do so by federal law.</p>
+<p>$^3$ It may object to treaties between Cantons or between Cantons and foreign countries.</p>
+<p>$^4$ It ensures compliance with federal law, as well as the cantonal constitutions and cantonal treaties and takes the measures required to fulfil this duty.</p>
+<p>$^1$ 联邦委员会负责维护联邦与各州之间的关系，并与各州进行合作。</p>
+<p>$^2$ 在联邦法律要求下，联邦委员会可以批准各州的立法。</p>
+<p>$^3$ 联邦委员会可以反对各州之间或各州与外国之间的条约。</p>
+<p>$^4$ 联邦委员会确保联邦法律以及各州的宪法和各州的条约得到遵守，并采取必要的措施履行这一职责。</p>
+<h4 id="Art-187-Further-duties-and-powers-第187条：进一步的职责和权力"><a href="#Art-187-Further-duties-and-powers-第187条：进一步的职责和权力" class="headerlink" title="Art. 187 Further duties and powers 第187条：进一步的职责和权力"></a>Art. 187 Further duties and powers 第187条：进一步的职责和权力</h4><p>$^1$ The Federal Council also has the following duties and powers:</p>
+<ol type="a">
+    <li>Supervising the Federal Administration and the other bodies entrusted with federal duties.</li>
+    <li>Reporting regularly to the Federal Assembly on the conduct of its business as well as on the situation in Switzerland.</li>
+    <li>Making appointments that do not fall within the remit of other authorities.</li>
+    <li>Dealing with appeals, where the law so provides.</li>
+</ol>
+
+<p>$^2$ Other duties and powers may be delegated by law to the Federal Council.</p>
+<p>$^1$ 联邦委员会还拥有以下职责和权力：</p>
+<ol type="a">
+    <li>监督联邦行政机关和其他受委托承担联邦职责的机构。</li>
+    <li>定期向联邦议会报告其事务实施情况以及瑞士的情况。</li>
+    <li>做出不属于其他机构职责范围的任命。</li>
+    <li>在法律规定的情况下，处理上诉案件。</li>
+</ol>
+
+<p>$^2$ 其他职责和权力可由法律授权给联邦委员会。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Federal Constitution of the Swiss Confederation, (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>读书</tag>
+        <tag>政治科学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python：经典数独的求解</title>
     <url>/sudoku/</url>
     <content><![CDATA[<p>一个求解经典9×9数独的Python程序。</p>
@@ -807,103 +906,6 @@ if __name__ == &quot;__main__&quot;:
 ]]></content>
       <tags>
         <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
-    <url>/swiss_constitution/</url>
-    <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
-<a id="more"></a>
-<p>目前中文互联网上的《瑞士联邦宪法》译本多已过时（如“百度百科”上的“瑞士联邦宪法”词条），本文试译最新版本（1999年4月18日全民公决通过，2021年3月7日修订的版本）的第五部分（“联邦机构”）第三章（“联邦委员会和联邦行政机关”）。这一章集中体现了瑞士“联邦委员会”制度的设计思路和现行规定。</p>
-<p>转译自官方英文版，英语并非瑞士联邦的官方语言，故英文版无法律效力，仅供研究参考。</p>
-<h2 id="Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关"><a href="#Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关" class="headerlink" title="Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关"></a>Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关</h2><h3 id="Section-1-Organisation-and-Procedure-第一节：组织与程序"><a href="#Section-1-Organisation-and-Procedure-第一节：组织与程序" class="headerlink" title="Section 1 Organisation and Procedure 第一节：组织与程序"></a>Section 1 Organisation and Procedure 第一节：组织与程序</h3><h4 id="Art-174-Federal-Council-第174条：联邦委员会"><a href="#Art-174-Federal-Council-第174条：联邦委员会" class="headerlink" title="Art. 174 Federal Council 第174条：联邦委员会"></a>Art. 174 Federal Council 第174条：联邦委员会</h4><p>The Federal Council is the supreme governing and executive authority of the Confederation.</p>
-<p>联邦委员会是联邦的最高管理机关和执行机关。</p>
-<h4 id="Art-175-Composition-and-election-第175条：构成与选举"><a href="#Art-175-Composition-and-election-第175条：构成与选举" class="headerlink" title="Art. 175 Composition and election 第175条：构成与选举"></a>Art. 175 Composition and election 第175条：构成与选举</h4><p>$^1$ The Federal Council has seven members.</p>
-<p>$^2$ The members of the Federal Council are elected by the Federal Assembly following each general election to the National Council.</p>
-<p>$^3$ They are elected for a term of office of four years. Any Swiss citizen eligible for election to the National Council may be elected to the Federal Council.</p>
-<p>$^4$ In electing the Federal Council, care must be taken to ensure that the various geographical and language regions of the country are appropriately represented.</p>
-<p>$^1$ 联邦委员会有七名成员。</p>
-<p>$^2$ 联邦委员会的成员由联邦议会在每次国民院大选后选出。</p>
-<p>$^3$ 联邦委员会成员当选后的任期为四年。任何有资格被选入国民院的瑞士公民都可以被选入联邦委员会。</p>
-<p>$^4$ 在选举联邦委员会时，必须注意确保国家的各个地理和语言区域都有适当的代表。</p>
-<h4 id="Art-176-Presidency-第176条：最高职位"><a href="#Art-176-Presidency-第176条：最高职位" class="headerlink" title="Art. 176 Presidency 第176条：最高职位"></a>Art. 176 Presidency 第176条：最高职位</h4><p>$^1$ The President of the Confederation chairs the Federal Council.</p>
-<p>$^2$ The President and the Vice-President of the Federal Council are elected by the Federal Assembly from the members of the Federal Council for a term of office of one year.</p>
-<p>$^3$ Re-election for the following year is not permitted. The President may not be elected Vice-President for the following year.</p>
-<p>$^1$ 联邦主席主持联邦委员会的工作。</p>
-<p>$^2$ 联邦委员会主席和副主席由联邦议会从联邦委员会成员中选出，任期为一年。</p>
-<p>$^3$ 联邦委员会主席和副主席下一年度不允许连任。主席不得当选下一年度的副主席。</p>
-<h4 id="Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配"><a href="#Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配" class="headerlink" title="Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配"></a>Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配</h4><p>$^1$ The Federal Council reaches its decisions as a collegial body.</p>
-<p>$^2$ For the purposes of preparation and implementation, the business of the Federal Council is allocated to its individual members according to department.</p>
-<p>$^3$ Business may be delegated to and directly dealt with by departments or their subordinate administrative units; in such cases, the right to legal recourse is guaranteed.</p>
-<p>$^1$ 联邦委员会作为一个共同掌权的机构作出决定。</p>
-<p>$^2$ 为了工作的准备和实施，联邦委员会的事务按部门分配给其各个成员。</p>
-<p>$^3$ 联邦事务可以委托给各部门或其下属的行政单位并由其直接处理；在这种情况下，应保障法律追索权。</p>
-<h4 id="Art-178-Federal-Administration-第178条：联邦行政机关"><a href="#Art-178-Federal-Administration-第178条：联邦行政机关" class="headerlink" title="Art. 178 Federal Administration 第178条：联邦行政机关"></a>Art. 178 Federal Administration 第178条：联邦行政机关</h4><p>$^1$ 联邦委员会负责管理联邦行政机构。它确保联邦行政机构被适当地组织起来，并有效地履行其职责。</p>
-<p>$^2$ 联邦行政机构分为几个部门，每个部门由联邦委员会的一名成员领导。</p>
-<p>$^3$ 行政任务可以依法委托给不属于联邦行政机构的公共或私人组织、实体或个人。</p>
-<h4 id="Art-179-Federal-Chancellery-第179条：联邦总理府"><a href="#Art-179-Federal-Chancellery-第179条：联邦总理府" class="headerlink" title="Art. 179 Federal Chancellery 第179条：联邦总理府"></a>Art. 179 Federal Chancellery 第179条：联邦总理府</h4><p>The Federal Chancellery is the general administrative office of the Federal Council. It is headed by a Federal Chancellor.</p>
-<p>联邦总理府是联邦委员会的一般行政办公室。它由一名联邦总理领导。</p>
-<h3 id="Section-2-Powers-第二节：权力"><a href="#Section-2-Powers-第二节：权力" class="headerlink" title="Section 2 Powers 第二节：权力"></a>Section 2 Powers 第二节：权力</h3><h4 id="Art-180-Government-policy-第180条：政府政策"><a href="#Art-180-Government-policy-第180条：政府政策" class="headerlink" title="Art. 180 Government policy 第180条：政府政策"></a>Art. 180 Government policy 第180条：政府政策</h4><p>$^1$ The Federal Council decides on the objectives of federal government policy and the means by which they should be achieved. It plans and coordinates state activities.</p>
-<p>$^2$ It informs the general public fully and in good time about its activities, unless overriding public or private interests prevent this.</p>
-<p>$^1$ 联邦委员会决定联邦政府政策的目标和实现这些目标的手段。它计划并协调国家活动。</p>
-<p>$^2$ 联邦委员会向公众充分及时地通报其活动，除非这与最重要的公共利益或私人利益冲突。</p>
-<h4 id="Art-181-Right-to-initiate-legislation-第181条：发起立法的权利"><a href="#Art-181-Right-to-initiate-legislation-第181条：发起立法的权利" class="headerlink" title="Art. 181 Right to initiate legislation 第181条：发起立法的权利"></a>Art. 181 Right to initiate legislation 第181条：发起立法的权利</h4><p>The Federal Council submits drafts of Federal Assembly legislation to the Federal Assembly.</p>
-<p>联邦委员会将联邦议会的立法草案提交给联邦议会。</p>
-<h4 id="Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行"><a href="#Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行" class="headerlink" title="Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行"></a>Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行</h4><p>$^1$ The Federal Council enacts legislative provisions in the form of ordinances, provided it has the authority to do so under the Constitution or the law.</p>
-<p>$^2$ It ensures the implementation of legislation, the resolutions of the Federal Assembly and the judgments of federal judicial authorities.</p>
-<p>$^1$ 联邦委员会以法令的形式颁布立法条款，只要它根据宪法或法律有权这样做。</p>
-<p>$^2$ 联邦委员会确保立法、联邦议会的决议和联邦司法机关的判决的实施。</p>
-<h4 id="Art-183-Finances-第183条：财政"><a href="#Art-183-Finances-第183条：财政" class="headerlink" title="Art. 183 Finances 第183条：财政"></a>Art. 183 Finances 第183条：财政</h4><p>$^1$ The Federal Council draws up the financial plan and the draft budget and prepare the federal accounts.</p>
-<p>$^2$ It ensures orderly financial management.</p>
-<p>$^1$ 联邦委员会制定财政计划和预算草案，并编制联邦账目。</p>
-<p>$^2$ 联邦委员会确保有序的财政管理。</p>
-<h4 id="Art-184-Foreign-relations-外交关系"><a href="#Art-184-Foreign-relations-外交关系" class="headerlink" title="Art. 184 Foreign relations 外交关系"></a>Art. 184 Foreign relations 外交关系</h4><p>$^1$ The Federal Council is responsible for foreign relations, subject to the right of participation of the Federal Assembly; it represents Switzerland abroad.</p>
-<p>$^2$ It signs and ratifies international treaties. It submits them to the Federal Assembly for approval.</p>
-<p>$^3$ Where safeguarding the interests of the country so requires, the Federal Council may issue ordinances and rulings. Ordinances must be of limited duration.</p>
-<p>$^1$ 联邦委员会负责外交关系，但须服从联邦议会的参与权；联邦委员会在国外代表瑞士。</p>
-<p>$^2$ 联邦委员会签署和批准国际条约。联邦委员会将这些条约提交给联邦议会审批通过。</p>
-<p>$^3$ 在维护国家利益的需要下，联邦委员会可以发布法令和裁定。法令必须是有期限的。</p>
-<h4 id="Art-185-External-and-internal-security-外部与国内安全"><a href="#Art-185-External-and-internal-security-外部与国内安全" class="headerlink" title="Art. 185 External and internal security 外部与国内安全"></a>Art. 185 External and internal security 外部与国内安全</h4><p>$^1$ The Federal Council takes measures to safeguard external security, independence and neutrality of Switzerland.</p>
-<p>$^2$ It takes measures to safeguard internal security.</p>
-<p>$^3$ It may in direct application of this Article issue ordinances and rulings in order to counter existing or imminent threats of serious disruption to public order or internal or external security. Such ordinances must be limited in duration.</p>
-<p>$^4$ In cases of emergency, it may mobilise the armed forces. Where it mobilises more than 4,000 members of the armed forces for active service or where the deployment of such troops is expected to last for more than three weeks, the Federal Assembly must be convened without delay.</p>
-<p>$^1$ 联邦委员会采取措施，保障瑞士的外部安全、独立和中立。</p>
-<p>$^2$ 联邦委员会采取措施保障国内安全。</p>
-<p>$^3$ 联邦委员会可以直接适用本条规定，发布法令和裁定，以应对现有或即将发生的严重破坏公共秩序、国内安全或外部安全的威胁。这种法令必须有一定的期限。</p>
-<p>$^4$ 在紧急情况下，联邦委员会可以调动武装部队。如果联邦委员会调动4000名以上的武装部队成员服现役，或者武装部队的部署预计将持续三周以上，则必须立即召开联邦议会。</p>
-<h4 id="Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系"><a href="#Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系" class="headerlink" title="Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系"></a>Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系</h4><p>$^1$ The Federal Council is responsible for maintaining relations between the Confederation and the Cantons and collaborates with the latter.</p>
-<p>$^2$ It may approve cantonal legislation when required to do so by federal law.</p>
-<p>$^3$ It may object to treaties between Cantons or between Cantons and foreign countries.</p>
-<p>$^4$ It ensures compliance with federal law, as well as the cantonal constitutions and cantonal treaties and takes the measures required to fulfil this duty.</p>
-<p>$^1$ 联邦委员会负责维护联邦与各州之间的关系，并与各州进行合作。</p>
-<p>$^2$ 在联邦法律要求下，联邦委员会可以批准各州的立法。</p>
-<p>$^3$ 联邦委员会可以反对各州之间或各州与外国之间的条约。</p>
-<p>$^4$ 联邦委员会确保联邦法律以及各州的宪法和各州的条约得到遵守，并采取必要的措施履行这一职责。</p>
-<h4 id="Art-187-Further-duties-and-powers-第187条：进一步的职责和权力"><a href="#Art-187-Further-duties-and-powers-第187条：进一步的职责和权力" class="headerlink" title="Art. 187 Further duties and powers 第187条：进一步的职责和权力"></a>Art. 187 Further duties and powers 第187条：进一步的职责和权力</h4><p>$^1$ The Federal Council also has the following duties and powers:</p>
-<ol type="a">
-    <li>Supervising the Federal Administration and the other bodies entrusted with federal duties.</li>
-    <li>Reporting regularly to the Federal Assembly on the conduct of its business as well as on the situation in Switzerland.</li>
-    <li>Making appointments that do not fall within the remit of other authorities.</li>
-    <li>Dealing with appeals, where the law so provides.</li>
-</ol>
-
-<p>$^2$ Other duties and powers may be delegated by law to the Federal Council.</p>
-<p>$^1$ 联邦委员会还拥有以下职责和权力：</p>
-<ol type="a">
-    <li>监督联邦行政机关和其他受委托承担联邦职责的机构。</li>
-    <li>定期向联邦议会报告其事务实施情况以及瑞士的情况。</li>
-    <li>做出不属于其他机构职责范围的任命。</li>
-    <li>在法律规定的情况下，处理上诉案件。</li>
-</ol>
-
-<p>$^2$ 其他职责和权力可由法律授权给联邦委员会。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Federal Constitution of the Swiss Confederation, (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>读书</tag>
-        <tag>政治科学</tag>
       </tags>
   </entry>
   <entry>
