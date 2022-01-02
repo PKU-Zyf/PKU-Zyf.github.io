@@ -16,7 +16,7 @@
        url("../fonts/FZSSK/FZSSK.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
-  unicode-range: U+2018, U+2019, U+201c, U+201d;
+  unicode-range: U+2018, U+2019, U+201c, U+201d, U+2014, U+2026, U+00B7;    /* 对双引号、单引号、破折号、圆点等特殊处理 */
 }
 
 @charset "utf-8";
