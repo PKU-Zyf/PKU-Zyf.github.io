@@ -1,59 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo渲染代码块：Prism插件的配置</title>
-    <url>/code_block/</url>
-    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
-<a id="more"></a>
-<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
-<ol>
-<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
-<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
-<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
-</ol>
-<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
-<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
-<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
-<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
-<pre><code class="lang-ejs">&lt;head&gt;
-  ...
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
-&lt;/head&gt;
-</code></pre>
-<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
-<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
-  ...
-  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
-&lt;/footer&gt;
-</code></pre>
-<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
-<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
-<pre><code class="lang-yml">highlight:
-  enable: false
-  ...
-prismjs:
-  enable: false
-  ...
-</code></pre>
-<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
-<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
-<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
-<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
-  ...
-&lt;/body&gt;
-</code></pre>
-<p>本站使用的是Prism的Tomorrow Night主题。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
-<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
-<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>如何在Markdown中渲染字母顺序的列表？</title>
     <url>/alpha_list/</url>
     <content><![CDATA[<p>Markdown默认的有序列表是数字列表。如何将其改为字母顺序的列表？</p>
@@ -134,6 +81,59 @@ prismjs:
 ]]></content>
       <tags>
         <tag>读书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo渲染代码块：Prism插件的配置</title>
+    <url>/code_block/</url>
+    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
+<a id="more"></a>
+<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
+<ol>
+<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
+<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
+<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
+</ol>
+<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
+<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
+<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
+<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
+<pre><code class="lang-ejs">&lt;head&gt;
+  ...
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
+<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
+  ...
+  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
+&lt;/footer&gt;
+</code></pre>
+<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
+<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
+<pre><code class="lang-yml">highlight:
+  enable: false
+  ...
+prismjs:
+  enable: false
+  ...
+</code></pre>
+<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
+<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
+<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
+<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
+  ...
+&lt;/body&gt;
+</code></pre>
+<p>本站使用的是Prism的Tomorrow Night主题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
+<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
+<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -547,16 +547,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”并不简单。混用的空白字符（space characters）是许多网页和文档出现乱码的原因。</p>
@@ -658,6 +648,16 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>Unicode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>读书</tag>
       </tags>
   </entry>
   <entry>
@@ -2628,13 +2628,13 @@ if __name__ == &quot;__main__&quot;:
 <p>从这些方面看，《新教伦理》从根本上试图把正在进行的争论转变到探究一种“理性的”经济伦理或资本主义精神的起源上来。韦伯认为排除这个因素就使主要的解释无力说明现代资本主义的兴起，所有这些解释都专注于现代资本主义主要是一种“经济形式”，他为此深感愧惜。通过力主必须承认现代经济伦理在现代资本主义早期发展中是一种社会学意义上的重要因果力最，以及必须探究它的起源这两点，韦伯力求①把价值和观念明确无误地带入这场争论；②赋予研究它们的因果性起源以合法性。</p>
 <p>韦伯竭力说服他的读者，文化的各种价值不能被放置在人的关系整体之外。对他来说，不管研究价值的源泉和评估价值的影响会如何复杂，都不应当将价值理解为通常要从属于社会结构、权力、阶级、进化和进步、经济的和政治的利益的消极力量。韦伯坚信资本主义精神具有非常重要的非经济的和非政治的根源。</p>
 <h3 id="经验研究，转向宗教以及《新教伦理》的目标"><a href="#经验研究，转向宗教以及《新教伦理》的目标" class="headerlink" title="经验研究，转向宗教以及《新教伦理》的目标"></a>经验研究，转向宗教以及《新教伦理》的目标</h3><p>在探寻资本主义精神的起源时，韦伯从不采用试错法。毋宁说，他所持的看法在他那时代的德国并不罕见，即从一开始韦伯就认为，宗教信仰会影响工作习惯和对商业的态度，就像它对整个生活的影响一样。因此，探究新教徒和天主教徒之间的差别对他及他的研究来说就是顺理成章的和相当自然的取向了。确实，从十几岁起韦伯就曾阅读了许多神学书籍，包括美国上帝一位论者威廉·爱立瑞·钱宁（William Ellery Channing）和西奥多·帕克（Theodore Parker）的著作。</p>
-<p>在19世纪90年代的德国以及更早的年代，杂志的编辑们以及有教养的公众是认可下述关系的：一方面是职业地位与教育成就，另一方面是天主教与新教；但却很少有社会科学研究对这一论题做出论述。当19世纪90年代中期韦伯思考英国和美国的清教主义时，他阅读了经济史家埃伯哈德·戈泰因的大部头研究著作《黑森林经济史》（<em>Wirtschaftsgeschichte des Schwarzwalds</em>, 1892）。该书引导韦伯关注加尔文宗在传播资本主义中的强大作用。他赞扬了戈泰因，但却受到格奥尔格·耶利内克的《人权和公民权宣言》（<em>Die Erklarung der Menschen-Yund Burgerrechte</em>, 1901）一书的更大触动，它“刺激了［我］要再次研究清”。耶利内克的文献资料提供了17世纪英格兰虔诚的不从国教者怎样形成基要派的政治权利和自由观念的中心，这些内容给韦伯留下了深刻的印象并激发了他的求知欲。</p>
+<p>在19世纪90年代的德国以及更早的年代，杂志的编辑们以及有教养的公众是认可下述关系的：一方面是职业地位与教育成就，另一方面是天主教与新教；但却很少有社会科学研究对这一论题做出论述。当19世纪90年代中期韦伯思考英国和美国的清教主义时，他阅读了经济史家埃伯哈德·戈泰因的大部头研究著作《黑森林经济史》（<em>Wirtschaftsgeschichte des Schwarzwalds</em>, 1892）。该书引导韦伯关注加尔文宗在传播资本主义中的强大作用。他赞扬了戈泰因，但却受到格奥尔格·耶利内克的《人权和公民权宣言》（<em>Die Erklarung der Menschen-Yund Burgerrechte</em>, 1901）一书的更大触动，它“刺激了［我］要再次研究清教”。耶利内克的文献资料提供了17世纪英格兰虔诚的不从国教者怎样形成基要派的政治权利和自由观念的中心，这些内容给韦伯留下了深刻的印象并激发了他的求知欲。</p>
 <blockquote>
 <p>［耶利内克］有关宗教在人权产生中留下足迹的证据……深深刺激了我……要研究宗教在那些可能初次看不到的方面所带来的冲击。</p>
 </blockquote>
 <p>19世纪90年末期，韦伯鼓励他的学生马丁·奥芬巴赫去德国西南部的巴登考察宗教对社会分层的影响。奥芬巴赫的统计涸查结论认为，新教徒与天主教徒在职业选择和教育水平方面存在明显差别：新教徒在工业企业所有者方面居支配地位，而天主教徒则更多是农场主和利用技能劳动的商业所有者。新教徒通常较高的受教育水平可以解释他们高比例从事国家公务员之类的高等职位，以及即使他们位于工人阶级之列也拥有不同寻常的高工资的现象。韦伯使用了他学生的“事实和数据”以便勾勒出他的研究轮廓和核心问题（参见第一章）。</p>
 <p>尽管韦伯患有严重精神疾病，但他还是于这19世纪这90年代底完成了论述贵格会的经济伦理的研究叭这1902年桑巴特的两卷本《现代资本主义》这（<em>Der moderne Kapitalismus</em>）的问世似乎促使韦伯加快了自己的研究。桑巴特在其论述资本主义精神起源的章节里，没有理会新教，尤其是加尔文宗和贵格会的作用，认为它们“太众所周知以致不需要更多解释”。然而，他却把高度崇拜拥有金钱视为资本主义起源的“经验证据”，而欧洲中世纪时代确实出现过对这“闪亮发光黄金”（<em>auri sacre fames</em>）的嗜好。对桑巴特来说，“新教不是现代资本主义思想的原因，而是它的结果”。他引导读者去发现“与<strong>具体历史脉络</strong>相反的经验证据”。</p>
-<p>韦伯接受了这个挑战，于这=1903年完成了关于《新教伦理》的研究。他对桑巴特的回应是强有力的。韦伯坚持认为，即使那些典型的宗教教派都具有极端严格的外部社会结构，也不能认为它们就会导致同质类型的行动。那么资本主义应该怎样做呢？他注明是这19世纪这90年代的一些研究指出了一个完全不同的方向。在那里，韦伯提到了一位来自巴登虔信派家庭的年轻女人的非常有条不紊的和凭良心做事的工作习惯。那里这样写道：</p>
+<p>韦伯接受了这个挑战，于1903年完成了关于《新教伦理》的研究。他对桑巴特的回应是强有力的。韦伯坚持认为，即使那些典型的宗教教派都具有极端严格的外部社会结构，也不能认为它们就会导致同质类型的行动。那么资本主义应该怎样做呢？他注明是这19世纪这90年代的一些研究指出了一个完全不同的方向。在那里，韦伯提到了一位来自巴登虔信派家庭的年轻女人的非常有条不紊的和凭良心做事的工作习惯。那里这样写道：</p>
 <blockquote>
 <p>从［20世纪早期］资本主义推导出来的这一分析已经再次为我们指明，确实值得去问，在人们对［现代］资本主义的适应能力与他们的宗教信仰之间的关联如何能在［现代］资本主义的青年时期被构想出来。</p>
 </blockquote>
@@ -2739,7 +2739,7 @@ if __name__ == &quot;__main__&quot;:
 <h2 id="《新教伦理》作为韦伯社会学的一个典范"><a href="#《新教伦理》作为韦伯社会学的一个典范" class="headerlink" title="《新教伦理》作为韦伯社会学的一个典范"></a>《新教伦理》作为韦伯社会学的一个典范</h2><p>当韦伯写作《新教伦理》时，社会学这门学科还处在幼年时期。韦伯受到的是经济学和法律史学的学术训练，他只是在教1911年前后才开始称自己的研究为社会学研究。<strong>社会学</strong>这个术语从未在《新教伦理》中使用。在其他著作中，他认为这本书是“文化史论文”或者仅仅是论述宗教信仰与行为之间关系的“概要”。尽管如此，韦伯社会学进路的核心方面，即他所指称的诠释性的理解（<em>Verstehen</em>），相当清晰地体现在《新教伦理》中。实际上，在韦伯的许多著作中，《新教伦理》或许是表现了他怎样将其主要的方法论工具即理想类型与其构思的把握主观意义的诠释性理解的方法论结合起来的最好和最鲜明的范例。他的整个社会学是由下述期望推动的，即理解社会行动——观察者常常将其视为非理性的、荒谬的和陌生的，而一旦它的主观意义得到领悟，它也就变得貌似有理和完全“合理的”。</p>
 <p>简短地讨论韦伯在《新教伦理》中阐明他从事社会学研究的一般模式的程序，将有助于更清楚地理解这一经典著作以及他的诠释性理解的社会学。</p>
 <h3 id="思想框架"><a href="#思想框架" class="headerlink" title="思想框架"></a>思想框架</h3><p>在整部《新教伦理》中，也在其作为一个整体的社会学中，韦伯是从对其研究旨趣有利的观点来界定“思想框架”的。因为思想框架与经济活动相关，所以他讨论了冒险资本家的、中世纪企业主的（雅各·福格）、封建贵族的、清教徒雇主与工人们的、沉浸于经济传统主义的工人与雇主的，以及17世纪贵族资本家的各种思想框架。天主教、路德宗、加尔文宗、虔信派、循道宗、浸礼会、贵格会以及门诺派的信徒的思想框架获得了他的主要关注。</p>
-<p><img src="kalberg/image-20220217225755536.png" alt="image-20220217225755536"></p>
+<p><img src="《新教伦理与资本主义精神》导读【斯蒂芬·卡尔伯格】（苏国勋译）/image-20220217225755536.png" alt="image-20220217225755536"></p>
 <p>韦伯清晰地阐述了每个群体的主观意义的主要组成部分；比如，加尔文宗信徒严肃地看待讲究方法的工作与他们按此看法规定全部生活的方向是怎样发生的。他关心的是理解系统的工作对这个群体的人具有的意义，而不是评价或判断这种意义；他试图通过调查这些信徒们这种严格工作模式的动因以达到这一理解。然而，韦伯力图通过分析加尔文宗的理想类型——或者非常寻常的代表人物——比如巴克斯的信仰及其特殊行为所包含的心理报偿，而不是像弗洛伊德的追随者那样去诉诸无意识，来试图把握工作是如何变得有意义的。</p>
 <p>由于这一原因，韦伯研究了加尔文宗信徒信仰形成的历史文化脉络：他们聆听的布道，所阅读的圣经章节和教义阐述，以及他们所属宗教共同体的特征。实际上，在力求向他的读者传达这些信徒们的思想框架的过程中，通过这一诠释性理解的方法，韦伯避开了心理学固有的领地。他同样拒斥将民族性格、基因构造、天赋特质（贪得无厌）以及历史发展规律等作为解释性概念。按照韦伯的看法，经济的和政治的利益必须加以考虑，但它们不能独自充当对加尔文宗信徒行为和思想框架的充分解释。在他的全部社会学中，韦伯致力于确立一个特殊的思想框架的作用范围，它一方面要使人根除自然状态，另一方面又要免除纯粹现世取向的功利主义计算，然后围绕伦理价值去组织生活。</p>
 <p>由于将关注点集中在大量特定的群体及其成员的动机心理上，所以这种研究程序就避免了参照有机整体论理论中使用的整体（global）性概念社会、共同体、传统、现代性、特殊主义、普遍主义、进化或进步），韦伯发现所有这些概念都过于漫无边际。他的方法论也有力地拒绝把注意力放在个人魅力型人物上。相反，他选择了介于整体性概念与关于历史变迁的“伟人”理论之间的“中间”分析层次：借助理想类型来把握、通过诠释性理解来探究各种人群中的个人的主观意义。</p>
