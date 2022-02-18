@@ -84,6 +84,59 @@
       </tags>
   </entry>
   <entry>
+    <title>Hexo渲染代码块：Prism插件的配置</title>
+    <url>/code_block/</url>
+    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
+<a id="more"></a>
+<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
+<ol>
+<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
+<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
+<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
+</ol>
+<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
+<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
+<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
+<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
+<pre><code class="lang-ejs">&lt;head&gt;
+  ...
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
+<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
+  ...
+  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
+&lt;/footer&gt;
+</code></pre>
+<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
+<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
+<pre><code class="lang-yml">highlight:
+  enable: false
+  ...
+prismjs:
+  enable: false
+  ...
+</code></pre>
+<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
+<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
+<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
+<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
+  ...
+&lt;/body&gt;
+</code></pre>
+<p>本站使用的是Prism的Tomorrow Night主题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
+<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
+<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Humphreys：如何述评？</title>
     <url>/critique/</url>
     <content><![CDATA[<p>译自：Humphreys, M. (n.d.). <em>How to critique</em>. Macartan Humphreys. <a href="http://macartan.nyc/teaching/how-to-critique/">http://macartan.nyc/teaching/how-to-critique/</a></p>
@@ -181,59 +234,6 @@
 ]]></content>
       <tags>
         <tag>读书</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hexo渲染代码块：Prism插件的配置</title>
-    <url>/code_block/</url>
-    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
-<a id="more"></a>
-<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
-<ol>
-<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
-<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
-<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
-</ol>
-<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
-<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
-<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
-<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
-<pre><code class="lang-ejs">&lt;head&gt;
-  ...
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
-&lt;/head&gt;
-</code></pre>
-<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
-<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
-  ...
-  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
-&lt;/footer&gt;
-</code></pre>
-<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
-<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
-<pre><code class="lang-yml">highlight:
-  enable: false
-  ...
-prismjs:
-  enable: false
-  ...
-</code></pre>
-<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
-<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
-<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
-<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
-  ...
-&lt;/body&gt;
-</code></pre>
-<p>本站使用的是Prism的Tomorrow Night主题。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
-<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
-<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -943,6 +943,72 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
+    <url>/typora/</url>
+    <content><![CDATA[<p>以Whitey主题为例。</p>
+<a id="more"></a>
+<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
+<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
+<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
+<p>找到开头的：</p>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Vollkorn&quot;, Palatino, Times;
+    ...
+&#125;
+</code></pre>
+<p>将<code>font-family</code>改为：</p>
+<pre><code class="lang-css">font-family: Times, 宋体;
+</code></pre>
+<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
+<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
+<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
+<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
+<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
+<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
+<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
+<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
+<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
+<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
+<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
+<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
+<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
+<pre><code class="lang-css">@font-face&#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZSSK.TTF);
+&#125;
+
+@font-face &#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+&#125;
+</code></pre>
+<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
+<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
+<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+</code></pre>
+<p>即可在Typora主界面实现效果：</p>
+<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
+<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
+<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
+<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
+<pre><code class="lang-css">@media print &#123;
+    html &#123;
+        font-size: 13px;
+    &#125;
+&#125;
+</code></pre>
+<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
+]]></content>
+      <tags>
+        <tag>Typora</tag>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
     <url>/swiss_constitution/</url>
     <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
@@ -1037,72 +1103,6 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>读书</tag>
         <tag>政治科学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
-    <url>/typora/</url>
-    <content><![CDATA[<p>以Whitey主题为例。</p>
-<a id="more"></a>
-<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
-<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
-<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
-<p>找到开头的：</p>
-<pre><code class="lang-css">body &#123;
-    font-family: &quot;Vollkorn&quot;, Palatino, Times;
-    ...
-&#125;
-</code></pre>
-<p>将<code>font-family</code>改为：</p>
-<pre><code class="lang-css">font-family: Times, 宋体;
-</code></pre>
-<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
-<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
-<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
-<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
-<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
-<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
-<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
-<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
-<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
-<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
-<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
-<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
-<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<pre><code class="lang-css">@font-face&#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: normal;
-    src: url(whitey_cjk/FZSSK.TTF);
-&#125;
-
-@font-face &#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: bold;
-    src: url(whitey_cjk/FZHT_Document.TTF);
-&#125;
-</code></pre>
-<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
-<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
-</code></pre>
-<p>即可在Typora主界面实现效果：</p>
-<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
-<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
-<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
-<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<pre><code class="lang-css">@media print &#123;
-    html &#123;
-        font-size: 13px;
-    &#125;
-&#125;
-</code></pre>
-<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
-]]></content>
-      <tags>
-        <tag>Typora</tag>
-        <tag>css</tag>
       </tags>
   </entry>
   <entry>

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: "Special";
+  font-family: "my_fonts";
   src: local(宋体), local("PingFang SC"), local(微软雅黑);
   font-weight: normal;
   font-style: normal;
@@ -911,7 +911,7 @@ html {
 body {
   position: relative;
   background-color: #fff;
-  font-family: Special, Times, "宋体", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "微软雅黑", serif, sans-serif;
+  font-family: my_fonts, Times, "宋体", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "微软雅黑", serif, sans-serif;
   font-size: 1.75rem;
   line-height: 1.7;
   color: #1e3e3f;

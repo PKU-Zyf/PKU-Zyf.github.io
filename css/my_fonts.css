@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: "Special";
+  font-family: "my_fonts";
   src: local(宋体), local("PingFang SC"), local(微软雅黑);
   font-weight: normal;
   font-style: normal;
