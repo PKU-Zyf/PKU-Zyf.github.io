@@ -330,6 +330,96 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>Typora / Hexo：如何优雅地显示中文引号？</title>
+    <url>/quotation_mark/</url>
+    <content><![CDATA[<p>中文引号的显示问题的解决！以Typora的Whitey主题和Hexo的Ocean主题为例。</p>
+<a id="more"></a>
+<h2 id="1-问题的由来"><a href="#1-问题的由来" class="headerlink" title="1. 问题的由来"></a>1. 问题的由来</h2><p>使用普通的主题时，Typora可以正常显示中文，默认字体为微软雅黑。可以通过修改css主题配置文件获得更优雅的中英文显示：</p>
+<pre><code class="lang-css">body &#123;
+    font-family: Times, 宋体;
+    ...
+&#125;
+</code></pre>
+<p>详情可参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”一文。</p>
+<p>中文和西文的句号、逗号、感叹号、问号等标点符号，都对应着<strong>各不相同的Unicode字符</strong>，如中文句号为<code>U+3002</code>，而西文句号为<code>U+002e</code>。</p>
+<p>然而，中文和西文的<strong>双引号</strong>对应的却是<strong>同样的一对Unicode字符</strong>（<code>U+201c</code>和<code>U+201d</code>），其形态上的区别则交由<strong>字体</strong>去渲染。单引号也是类似的情形（<code>U+2018</code>和<code>U+2019</code>）。</p>
+<p>这就导致了一个问题：Typora在渲染文本时会<strong>优先使用</strong>西文字体（在本例中为Times系列字体）——而非中文字体（在本例中为宋体）渲染引号，其显示效果不能令人满意：</p>
+<p><img src="image-20210806214358100.png" alt="image-20210806214358100"></p>
+<p><strong>删去</strong>配置文件中的西文字体，或将西文字体<strong>移至中文字体之后</strong>，<strong>并不能</strong>解决问题。原因在于，一般的中文字体中都会为西文字符设计字形，但设计得又普遍效果不佳。如果删去西文字体，西文文本（包括阿拉伯数字）的<strong>显示效果将大受影响</strong>；如果将西文字体移至中文字体之后，则由于中文字体已经为西文字符设计了字形，所以<strong>根本不会触发</strong>排在后面的西文字体。</p>
+<p>如何在保持中文和西文均有良好渲染效果的基础上，改善中文引号的显示呢？</p>
+<h2 id="2-问题的解决：使用“unicode-range”选项"><a href="#2-问题的解决：使用“unicode-range”选项" class="headerlink" title="2. 问题的解决：使用“unicode-range”选项"></a>2. 问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
+<p>关于字体族设置，参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”。</p>
+<p>继续以该文改编的<code>whitey_cjk.css</code>主题为例。为引号设计专属字体族：</p>
+<pre><code class="lang-css">@font-face &#123;
+    font-family: &quot;Quotation Mark&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZKTK.TTF);
+    unicode-range: U+2018, U+2019, U+201c, U+201d;
+&#125;
+
+@font-face &#123;
+    font-family: &quot;Quotation Mark&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+    unicode-range: U+2018, U+2019, U+201c, U+201d;
+&#125;
+</code></pre>
+<p>使用<code>unicode-range</code>选项，指定该字体族<strong>仅用于渲染指定的Unicode字符</strong>。</p>
+<p>同时<strong>优先</strong>启用该字体族：</p>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Quotation Mark&quot;, Times, &quot;My Font Family&quot;;
+    ...
+&#125;
+</code></pre>
+<p>重启typora，选择该主题，即可<strong>完美渲染中文引号</strong>：</p>
+<p><img src="image-20210806215008606.png" alt="image-20210806215008606"></p>
+<p>唯一的问题是，使用该主题时，<strong>西文引号也会被渲染为中文的样式</strong>。此问题不容易解决。原因在于，既然<strong>Unicode已经不尽如人意地为中文和西文引号指定了同样的代码</strong>，那么要想自动为中文和西文显示不同的引号样式，逻辑上就必须要识别上下文使用的语言。这似乎并不是几行简单的代码就能完成的任务。</p>
+<h2 id="3-在Hexo上实现“unicode-range”"><a href="#3-在Hexo上实现“unicode-range”" class="headerlink" title="3. 在Hexo上实现“unicode-range”"></a>3. 在Hexo上实现“unicode-range”</h2><p>类似地，在<strong>使用Hexo部署博客</strong>时也可以实现“unicode-range”功能。</p>
+<p>以Ocean主题为例。首先准备好想要的字体文件（这里以“方正书宋_GBK”为例）。</p>
+<p>woff格式为“网页开放字体格式”，更适合网页加载。可以使用网上的在线转换工具，把ttf格式转为woff。更严格地来说，最好再多准备几种字体格式，如woff2、otf、svg等。</p>
+<p>把字体文件放到想要的目录。这里以<code>.\themes\ocean\source\fonts\FZSSK</code>为例。</p>
+<p>在<code>.\themes\ocean\source\css</code>文件夹下新建一个<code>FZSSK.css</code>，内容为：</p>
+<pre><code class="lang-css">@charset &quot;UTF-8&quot;;
+
+@font-face &#123;
+  font-family: &quot;FZSSK&quot;;
+  src: url(&quot;../fonts/FZSSK/FZSSK.woff&quot;) format(&quot;woff&quot;),
+       url(&quot;../fonts/FZSSK/FZSSK.TTF&quot;) format(&quot;truetype&quot;);
+  font-weight: normal;
+  font-style: normal;
+&#125;
+</code></pre>
+<p>类似地，再建一个<code>FZSSK_Quotation.css</code>，内容为：</p>
+<pre><code class="lang-css">@charset &quot;UTF-8&quot;;
+
+@font-face &#123;
+  font-family: &quot;FZSSK_Quotation&quot;;
+  src: url(&quot;../fonts/FZSSK/FZSSK.woff&quot;) format(&quot;woff&quot;),
+       url(&quot;../fonts/FZSSK/FZSSK.TTF&quot;) format(&quot;truetype&quot;);
+  font-weight: normal;
+  font-style: normal;
+  unicode-range: U+2018, U+2019, U+201c, U+201d;
+&#125;
+</code></pre>
+<p>随后在<code>style.styl</code>中引用这两个css：</p>
+<pre><code class="lang-stylus">@import &quot;FZSSK.css&quot;
+@import &quot;FZSSK_Quotation.css&quot;
+</code></pre>
+<p>最后打开<code>_variables.styl</code>，修改字体设置：</p>
+<pre><code class="lang-stylus">font-family-base = FZSSK_Quotation, Times, FZSSK
+</code></pre>
+<p>最终效果即如本站的各篇文章所示。西文字符和数字会使用Times系列字体，但引号会使用中文字体渲染，以达到相对美观的效果。</p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Typora</tag>
+        <tag>css</tag>
+        <tag>Unicode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>木心《琼美卡随想录》《素履之往》《即兴判断》《鱼丽之宴》摘录</title>
     <url>/mu_xin/</url>
     <content><![CDATA[<p>木心：《琼美卡随想录》，《素履之往》，《即兴判断》，《鱼丽之宴》，桂林：广西师范大学出版社，2018。</p>
@@ -457,96 +547,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
-    <title>Typora / Hexo：如何优雅地显示中文引号？</title>
-    <url>/quotation_mark/</url>
-    <content><![CDATA[<p>中文引号的显示问题的解决！以Typora的Whitey主题和Hexo的Ocean主题为例。</p>
-<a id="more"></a>
-<h2 id="1-问题的由来"><a href="#1-问题的由来" class="headerlink" title="1. 问题的由来"></a>1. 问题的由来</h2><p>使用普通的主题时，Typora可以正常显示中文，默认字体为微软雅黑。可以通过修改css主题配置文件获得更优雅的中英文显示：</p>
-<pre><code class="lang-css">body &#123;
-    font-family: Times, 宋体;
-    ...
-&#125;
-</code></pre>
-<p>详情可参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”一文。</p>
-<p>中文和西文的句号、逗号、感叹号、问号等标点符号，都对应着<strong>各不相同的Unicode字符</strong>，如中文句号为<code>U+3002</code>，而西文句号为<code>U+002e</code>。</p>
-<p>然而，中文和西文的<strong>双引号</strong>对应的却是<strong>同样的一对Unicode字符</strong>（<code>U+201c</code>和<code>U+201d</code>），其形态上的区别则交由<strong>字体</strong>去渲染。单引号也是类似的情形（<code>U+2018</code>和<code>U+2019</code>）。</p>
-<p>这就导致了一个问题：Typora在渲染文本时会<strong>优先使用</strong>西文字体（在本例中为Times系列字体）——而非中文字体（在本例中为宋体）渲染引号，其显示效果不能令人满意：</p>
-<p><img src="image-20210806214358100.png" alt="image-20210806214358100"></p>
-<p><strong>删去</strong>配置文件中的西文字体，或将西文字体<strong>移至中文字体之后</strong>，<strong>并不能</strong>解决问题。原因在于，一般的中文字体中都会为西文字符设计字形，但设计得又普遍效果不佳。如果删去西文字体，西文文本（包括阿拉伯数字）的<strong>显示效果将大受影响</strong>；如果将西文字体移至中文字体之后，则由于中文字体已经为西文字符设计了字形，所以<strong>根本不会触发</strong>排在后面的西文字体。</p>
-<p>如何在保持中文和西文均有良好渲染效果的基础上，改善中文引号的显示呢？</p>
-<h2 id="2-问题的解决：使用“unicode-range”选项"><a href="#2-问题的解决：使用“unicode-range”选项" class="headerlink" title="2. 问题的解决：使用“unicode-range”选项"></a>2. 问题的解决：使用“unicode-range”选项</h2><p>解决该问题的基本思路是：<strong>为引号设计一个专属的字体族</strong>。</p>
-<p>关于字体族设置，参见“<a href="/typora/" title="Typora：自定义中文字体与导出PDF无法加粗问题的解决">Typora：自定义中文字体与导出PDF无法加粗问题的解决</a>”。</p>
-<p>继续以该文改编的<code>whitey_cjk.css</code>主题为例。为引号设计专属字体族：</p>
-<pre><code class="lang-css">@font-face &#123;
-    font-family: &quot;Quotation Mark&quot;;
-    font-style: normal;
-    font-weight: normal;
-    src: url(whitey_cjk/FZKTK.TTF);
-    unicode-range: U+2018, U+2019, U+201c, U+201d;
-&#125;
-
-@font-face &#123;
-    font-family: &quot;Quotation Mark&quot;;
-    font-style: normal;
-    font-weight: bold;
-    src: url(whitey_cjk/FZHT_Document.TTF);
-    unicode-range: U+2018, U+2019, U+201c, U+201d;
-&#125;
-</code></pre>
-<p>使用<code>unicode-range</code>选项，指定该字体族<strong>仅用于渲染指定的Unicode字符</strong>。</p>
-<p>同时<strong>优先</strong>启用该字体族：</p>
-<pre><code class="lang-css">body &#123;
-    font-family: &quot;Quotation Mark&quot;, Times, &quot;My Font Family&quot;;
-    ...
-&#125;
-</code></pre>
-<p>重启typora，选择该主题，即可<strong>完美渲染中文引号</strong>：</p>
-<p><img src="image-20210806215008606.png" alt="image-20210806215008606"></p>
-<p>唯一的问题是，使用该主题时，<strong>西文引号也会被渲染为中文的样式</strong>。此问题不容易解决。原因在于，既然<strong>Unicode已经不尽如人意地为中文和西文引号指定了同样的代码</strong>，那么要想自动为中文和西文显示不同的引号样式，逻辑上就必须要识别上下文使用的语言。这似乎并不是几行简单的代码就能完成的任务。</p>
-<h2 id="3-在Hexo上实现“unicode-range”"><a href="#3-在Hexo上实现“unicode-range”" class="headerlink" title="3. 在Hexo上实现“unicode-range”"></a>3. 在Hexo上实现“unicode-range”</h2><p>类似地，在<strong>使用Hexo部署博客</strong>时也可以实现“unicode-range”功能。</p>
-<p>以Ocean主题为例。首先准备好想要的字体文件（这里以“方正书宋_GBK”为例）。</p>
-<p>woff格式为“网页开放字体格式”，更适合网页加载。可以使用网上的在线转换工具，把ttf格式转为woff。更严格地来说，最好再多准备几种字体格式，如woff2、otf、svg等。</p>
-<p>把字体文件放到想要的目录。这里以<code>.\themes\ocean\source\fonts\FZSSK</code>为例。</p>
-<p>在<code>.\themes\ocean\source\css</code>文件夹下新建一个<code>FZSSK.css</code>，内容为：</p>
-<pre><code class="lang-css">@charset &quot;UTF-8&quot;;
-
-@font-face &#123;
-  font-family: &quot;FZSSK&quot;;
-  src: url(&quot;../fonts/FZSSK/FZSSK.woff&quot;) format(&quot;woff&quot;),
-       url(&quot;../fonts/FZSSK/FZSSK.TTF&quot;) format(&quot;truetype&quot;);
-  font-weight: normal;
-  font-style: normal;
-&#125;
-</code></pre>
-<p>类似地，再建一个<code>FZSSK_Quotation.css</code>，内容为：</p>
-<pre><code class="lang-css">@charset &quot;UTF-8&quot;;
-
-@font-face &#123;
-  font-family: &quot;FZSSK_Quotation&quot;;
-  src: url(&quot;../fonts/FZSSK/FZSSK.woff&quot;) format(&quot;woff&quot;),
-       url(&quot;../fonts/FZSSK/FZSSK.TTF&quot;) format(&quot;truetype&quot;);
-  font-weight: normal;
-  font-style: normal;
-  unicode-range: U+2018, U+2019, U+201c, U+201d;
-&#125;
-</code></pre>
-<p>随后在<code>style.styl</code>中引用这两个css：</p>
-<pre><code class="lang-stylus">@import &quot;FZSSK.css&quot;
-@import &quot;FZSSK_Quotation.css&quot;
-</code></pre>
-<p>最后打开<code>_variables.styl</code>，修改字体设置：</p>
-<pre><code class="lang-stylus">font-family-base = FZSSK_Quotation, Times, FZSSK
-</code></pre>
-<p>最终效果即如本站的各篇文章所示。西文字符和数字会使用Times系列字体，但引号会使用中文字体渲染，以达到相对美观的效果。</p>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Typora</tag>
-        <tag>css</tag>
-        <tag>Unicode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”并不简单。混用的空白字符（space characters）是许多网页和文档出现乱码的原因。</p>
@@ -658,103 +658,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>读书</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
-    <url>/swiss_constitution/</url>
-    <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
-<a id="more"></a>
-<p>目前中文互联网上的《瑞士联邦宪法》译本多已过时（如“百度百科”上的“瑞士联邦宪法”词条），本文试译最新版本（1999年4月18日全民公决通过，2021年3月7日修订的版本）的第五部分（“联邦机构”）第三章（“联邦委员会和联邦行政机关”）。这一章集中体现了瑞士“联邦委员会”制度的设计思路和现行规定。</p>
-<p>转译自官方英文版，英语并非瑞士联邦的官方语言，故英文版无法律效力，仅供研究参考。</p>
-<h2 id="Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关"><a href="#Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关" class="headerlink" title="Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关"></a>Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关</h2><h3 id="Section-1-Organisation-and-Procedure-第一节：组织与程序"><a href="#Section-1-Organisation-and-Procedure-第一节：组织与程序" class="headerlink" title="Section 1 Organisation and Procedure 第一节：组织与程序"></a>Section 1 Organisation and Procedure 第一节：组织与程序</h3><h4 id="Art-174-Federal-Council-第174条：联邦委员会"><a href="#Art-174-Federal-Council-第174条：联邦委员会" class="headerlink" title="Art. 174 Federal Council 第174条：联邦委员会"></a>Art. 174 Federal Council 第174条：联邦委员会</h4><p>The Federal Council is the supreme governing and executive authority of the Confederation.</p>
-<p>联邦委员会是联邦的最高管理机关和执行机关。</p>
-<h4 id="Art-175-Composition-and-election-第175条：构成与选举"><a href="#Art-175-Composition-and-election-第175条：构成与选举" class="headerlink" title="Art. 175 Composition and election 第175条：构成与选举"></a>Art. 175 Composition and election 第175条：构成与选举</h4><p>$^1$ The Federal Council has seven members.</p>
-<p>$^2$ The members of the Federal Council are elected by the Federal Assembly following each general election to the National Council.</p>
-<p>$^3$ They are elected for a term of office of four years. Any Swiss citizen eligible for election to the National Council may be elected to the Federal Council.</p>
-<p>$^4$ In electing the Federal Council, care must be taken to ensure that the various geographical and language regions of the country are appropriately represented.</p>
-<p>$^1$ 联邦委员会有七名成员。</p>
-<p>$^2$ 联邦委员会的成员由联邦议会在每次国民院大选后选出。</p>
-<p>$^3$ 联邦委员会成员当选后的任期为四年。任何有资格被选入国民院的瑞士公民都可以被选入联邦委员会。</p>
-<p>$^4$ 在选举联邦委员会时，必须注意确保国家的各个地理和语言区域都有适当的代表。</p>
-<h4 id="Art-176-Presidency-第176条：最高职位"><a href="#Art-176-Presidency-第176条：最高职位" class="headerlink" title="Art. 176 Presidency 第176条：最高职位"></a>Art. 176 Presidency 第176条：最高职位</h4><p>$^1$ The President of the Confederation chairs the Federal Council.</p>
-<p>$^2$ The President and the Vice-President of the Federal Council are elected by the Federal Assembly from the members of the Federal Council for a term of office of one year.</p>
-<p>$^3$ Re-election for the following year is not permitted. The President may not be elected Vice-President for the following year.</p>
-<p>$^1$ 联邦主席主持联邦委员会的工作。</p>
-<p>$^2$ 联邦委员会主席和副主席由联邦议会从联邦委员会成员中选出，任期为一年。</p>
-<p>$^3$ 联邦委员会主席和副主席下一年度不允许连任。主席不得当选下一年度的副主席。</p>
-<h4 id="Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配"><a href="#Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配" class="headerlink" title="Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配"></a>Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配</h4><p>$^1$ The Federal Council reaches its decisions as a collegial body.</p>
-<p>$^2$ For the purposes of preparation and implementation, the business of the Federal Council is allocated to its individual members according to department.</p>
-<p>$^3$ Business may be delegated to and directly dealt with by departments or their subordinate administrative units; in such cases, the right to legal recourse is guaranteed.</p>
-<p>$^1$ 联邦委员会作为一个共同掌权的机构作出决定。</p>
-<p>$^2$ 为了工作的准备和实施，联邦委员会的事务按部门分配给其各个成员。</p>
-<p>$^3$ 联邦事务可以委托给各部门或其下属的行政单位并由其直接处理；在这种情况下，应保障法律追索权。</p>
-<h4 id="Art-178-Federal-Administration-第178条：联邦行政机关"><a href="#Art-178-Federal-Administration-第178条：联邦行政机关" class="headerlink" title="Art. 178 Federal Administration 第178条：联邦行政机关"></a>Art. 178 Federal Administration 第178条：联邦行政机关</h4><p>$^1$ 联邦委员会负责管理联邦行政机构。它确保联邦行政机构被适当地组织起来，并有效地履行其职责。</p>
-<p>$^2$ 联邦行政机构分为几个部门，每个部门由联邦委员会的一名成员领导。</p>
-<p>$^3$ 行政任务可以依法委托给不属于联邦行政机构的公共或私人组织、实体或个人。</p>
-<h4 id="Art-179-Federal-Chancellery-第179条：联邦总理府"><a href="#Art-179-Federal-Chancellery-第179条：联邦总理府" class="headerlink" title="Art. 179 Federal Chancellery 第179条：联邦总理府"></a>Art. 179 Federal Chancellery 第179条：联邦总理府</h4><p>The Federal Chancellery is the general administrative office of the Federal Council. It is headed by a Federal Chancellor.</p>
-<p>联邦总理府是联邦委员会的一般行政办公室。它由一名联邦总理领导。</p>
-<h3 id="Section-2-Powers-第二节：权力"><a href="#Section-2-Powers-第二节：权力" class="headerlink" title="Section 2 Powers 第二节：权力"></a>Section 2 Powers 第二节：权力</h3><h4 id="Art-180-Government-policy-第180条：政府政策"><a href="#Art-180-Government-policy-第180条：政府政策" class="headerlink" title="Art. 180 Government policy 第180条：政府政策"></a>Art. 180 Government policy 第180条：政府政策</h4><p>$^1$ The Federal Council decides on the objectives of federal government policy and the means by which they should be achieved. It plans and coordinates state activities.</p>
-<p>$^2$ It informs the general public fully and in good time about its activities, unless overriding public or private interests prevent this.</p>
-<p>$^1$ 联邦委员会决定联邦政府政策的目标和实现这些目标的手段。它计划并协调国家活动。</p>
-<p>$^2$ 联邦委员会向公众充分及时地通报其活动，除非这与最重要的公共利益或私人利益冲突。</p>
-<h4 id="Art-181-Right-to-initiate-legislation-第181条：发起立法的权利"><a href="#Art-181-Right-to-initiate-legislation-第181条：发起立法的权利" class="headerlink" title="Art. 181 Right to initiate legislation 第181条：发起立法的权利"></a>Art. 181 Right to initiate legislation 第181条：发起立法的权利</h4><p>The Federal Council submits drafts of Federal Assembly legislation to the Federal Assembly.</p>
-<p>联邦委员会将联邦议会的立法草案提交给联邦议会。</p>
-<h4 id="Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行"><a href="#Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行" class="headerlink" title="Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行"></a>Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行</h4><p>$^1$ The Federal Council enacts legislative provisions in the form of ordinances, provided it has the authority to do so under the Constitution or the law.</p>
-<p>$^2$ It ensures the implementation of legislation, the resolutions of the Federal Assembly and the judgments of federal judicial authorities.</p>
-<p>$^1$ 联邦委员会以法令的形式颁布立法条款，只要它根据宪法或法律有权这样做。</p>
-<p>$^2$ 联邦委员会确保立法、联邦议会的决议和联邦司法机关的判决的实施。</p>
-<h4 id="Art-183-Finances-第183条：财政"><a href="#Art-183-Finances-第183条：财政" class="headerlink" title="Art. 183 Finances 第183条：财政"></a>Art. 183 Finances 第183条：财政</h4><p>$^1$ The Federal Council draws up the financial plan and the draft budget and prepare the federal accounts.</p>
-<p>$^2$ It ensures orderly financial management.</p>
-<p>$^1$ 联邦委员会制定财政计划和预算草案，并编制联邦账目。</p>
-<p>$^2$ 联邦委员会确保有序的财政管理。</p>
-<h4 id="Art-184-Foreign-relations-外交关系"><a href="#Art-184-Foreign-relations-外交关系" class="headerlink" title="Art. 184 Foreign relations 外交关系"></a>Art. 184 Foreign relations 外交关系</h4><p>$^1$ The Federal Council is responsible for foreign relations, subject to the right of participation of the Federal Assembly; it represents Switzerland abroad.</p>
-<p>$^2$ It signs and ratifies international treaties. It submits them to the Federal Assembly for approval.</p>
-<p>$^3$ Where safeguarding the interests of the country so requires, the Federal Council may issue ordinances and rulings. Ordinances must be of limited duration.</p>
-<p>$^1$ 联邦委员会负责外交关系，但须服从联邦议会的参与权；联邦委员会在国外代表瑞士。</p>
-<p>$^2$ 联邦委员会签署和批准国际条约。联邦委员会将这些条约提交给联邦议会审批通过。</p>
-<p>$^3$ 在维护国家利益的需要下，联邦委员会可以发布法令和裁定。法令必须是有期限的。</p>
-<h4 id="Art-185-External-and-internal-security-外部与国内安全"><a href="#Art-185-External-and-internal-security-外部与国内安全" class="headerlink" title="Art. 185 External and internal security 外部与国内安全"></a>Art. 185 External and internal security 外部与国内安全</h4><p>$^1$ The Federal Council takes measures to safeguard external security, independence and neutrality of Switzerland.</p>
-<p>$^2$ It takes measures to safeguard internal security.</p>
-<p>$^3$ It may in direct application of this Article issue ordinances and rulings in order to counter existing or imminent threats of serious disruption to public order or internal or external security. Such ordinances must be limited in duration.</p>
-<p>$^4$ In cases of emergency, it may mobilise the armed forces. Where it mobilises more than 4,000 members of the armed forces for active service or where the deployment of such troops is expected to last for more than three weeks, the Federal Assembly must be convened without delay.</p>
-<p>$^1$ 联邦委员会采取措施，保障瑞士的外部安全、独立和中立。</p>
-<p>$^2$ 联邦委员会采取措施保障国内安全。</p>
-<p>$^3$ 联邦委员会可以直接适用本条规定，发布法令和裁定，以应对现有或即将发生的严重破坏公共秩序、国内安全或外部安全的威胁。这种法令必须有一定的期限。</p>
-<p>$^4$ 在紧急情况下，联邦委员会可以调动武装部队。如果联邦委员会调动4000名以上的武装部队成员服现役，或者武装部队的部署预计将持续三周以上，则必须立即召开联邦议会。</p>
-<h4 id="Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系"><a href="#Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系" class="headerlink" title="Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系"></a>Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系</h4><p>$^1$ The Federal Council is responsible for maintaining relations between the Confederation and the Cantons and collaborates with the latter.</p>
-<p>$^2$ It may approve cantonal legislation when required to do so by federal law.</p>
-<p>$^3$ It may object to treaties between Cantons or between Cantons and foreign countries.</p>
-<p>$^4$ It ensures compliance with federal law, as well as the cantonal constitutions and cantonal treaties and takes the measures required to fulfil this duty.</p>
-<p>$^1$ 联邦委员会负责维护联邦与各州之间的关系，并与各州进行合作。</p>
-<p>$^2$ 在联邦法律要求下，联邦委员会可以批准各州的立法。</p>
-<p>$^3$ 联邦委员会可以反对各州之间或各州与外国之间的条约。</p>
-<p>$^4$ 联邦委员会确保联邦法律以及各州的宪法和各州的条约得到遵守，并采取必要的措施履行这一职责。</p>
-<h4 id="Art-187-Further-duties-and-powers-第187条：进一步的职责和权力"><a href="#Art-187-Further-duties-and-powers-第187条：进一步的职责和权力" class="headerlink" title="Art. 187 Further duties and powers 第187条：进一步的职责和权力"></a>Art. 187 Further duties and powers 第187条：进一步的职责和权力</h4><p>$^1$ The Federal Council also has the following duties and powers:</p>
-<ol type="a">
-    <li>Supervising the Federal Administration and the other bodies entrusted with federal duties.</li>
-    <li>Reporting regularly to the Federal Assembly on the conduct of its business as well as on the situation in Switzerland.</li>
-    <li>Making appointments that do not fall within the remit of other authorities.</li>
-    <li>Dealing with appeals, where the law so provides.</li>
-</ol>
-
-<p>$^2$ Other duties and powers may be delegated by law to the Federal Council.</p>
-<p>$^1$ 联邦委员会还拥有以下职责和权力：</p>
-<ol type="a">
-    <li>监督联邦行政机关和其他受委托承担联邦职责的机构。</li>
-    <li>定期向联邦议会报告其事务实施情况以及瑞士的情况。</li>
-    <li>做出不属于其他机构职责范围的任命。</li>
-    <li>在法律规定的情况下，处理上诉案件。</li>
-</ol>
-
-<p>$^2$ 其他职责和权力可由法律授权给联邦委员会。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Federal Constitution of the Swiss Confederation, (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>读书</tag>
-        <tag>政治科学</tag>
       </tags>
   </entry>
   <entry>
@@ -1037,6 +940,103 @@ if __name__ == &quot;__main__&quot;:
 ]]></content>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
+    <url>/swiss_constitution/</url>
+    <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
+<a id="more"></a>
+<p>目前中文互联网上的《瑞士联邦宪法》译本多已过时（如“百度百科”上的“瑞士联邦宪法”词条），本文试译最新版本（1999年4月18日全民公决通过，2021年3月7日修订的版本）的第五部分（“联邦机构”）第三章（“联邦委员会和联邦行政机关”）。这一章集中体现了瑞士“联邦委员会”制度的设计思路和现行规定。</p>
+<p>转译自官方英文版，英语并非瑞士联邦的官方语言，故英文版无法律效力，仅供研究参考。</p>
+<h2 id="Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关"><a href="#Title-5-Federal-Authorities-第五部分：联邦机构-Chapter-3-Federal-Council-and-Federal-Administration-第三章：联邦委员会和联邦行政机关" class="headerlink" title="Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关"></a>Title 5 Federal Authorities 第五部分：联邦机构 Chapter 3 Federal Council and Federal Administration 第三章：联邦委员会和联邦行政机关</h2><h3 id="Section-1-Organisation-and-Procedure-第一节：组织与程序"><a href="#Section-1-Organisation-and-Procedure-第一节：组织与程序" class="headerlink" title="Section 1 Organisation and Procedure 第一节：组织与程序"></a>Section 1 Organisation and Procedure 第一节：组织与程序</h3><h4 id="Art-174-Federal-Council-第174条：联邦委员会"><a href="#Art-174-Federal-Council-第174条：联邦委员会" class="headerlink" title="Art. 174 Federal Council 第174条：联邦委员会"></a>Art. 174 Federal Council 第174条：联邦委员会</h4><p>The Federal Council is the supreme governing and executive authority of the Confederation.</p>
+<p>联邦委员会是联邦的最高管理机关和执行机关。</p>
+<h4 id="Art-175-Composition-and-election-第175条：构成与选举"><a href="#Art-175-Composition-and-election-第175条：构成与选举" class="headerlink" title="Art. 175 Composition and election 第175条：构成与选举"></a>Art. 175 Composition and election 第175条：构成与选举</h4><p>$^1$ The Federal Council has seven members.</p>
+<p>$^2$ The members of the Federal Council are elected by the Federal Assembly following each general election to the National Council.</p>
+<p>$^3$ They are elected for a term of office of four years. Any Swiss citizen eligible for election to the National Council may be elected to the Federal Council.</p>
+<p>$^4$ In electing the Federal Council, care must be taken to ensure that the various geographical and language regions of the country are appropriately represented.</p>
+<p>$^1$ 联邦委员会有七名成员。</p>
+<p>$^2$ 联邦委员会的成员由联邦议会在每次国民院大选后选出。</p>
+<p>$^3$ 联邦委员会成员当选后的任期为四年。任何有资格被选入国民院的瑞士公民都可以被选入联邦委员会。</p>
+<p>$^4$ 在选举联邦委员会时，必须注意确保国家的各个地理和语言区域都有适当的代表。</p>
+<h4 id="Art-176-Presidency-第176条：最高职位"><a href="#Art-176-Presidency-第176条：最高职位" class="headerlink" title="Art. 176 Presidency 第176条：最高职位"></a>Art. 176 Presidency 第176条：最高职位</h4><p>$^1$ The President of the Confederation chairs the Federal Council.</p>
+<p>$^2$ The President and the Vice-President of the Federal Council are elected by the Federal Assembly from the members of the Federal Council for a term of office of one year.</p>
+<p>$^3$ Re-election for the following year is not permitted. The President may not be elected Vice-President for the following year.</p>
+<p>$^1$ 联邦主席主持联邦委员会的工作。</p>
+<p>$^2$ 联邦委员会主席和副主席由联邦议会从联邦委员会成员中选出，任期为一年。</p>
+<p>$^3$ 联邦委员会主席和副主席下一年度不允许连任。主席不得当选下一年度的副主席。</p>
+<h4 id="Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配"><a href="#Art-177-Principle-of-collegiality-and-allocation-to-departments-第177条：共同掌权原则与部门分配" class="headerlink" title="Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配"></a>Art. 177 Principle of collegiality and allocation to departments 第177条：共同掌权原则与部门分配</h4><p>$^1$ The Federal Council reaches its decisions as a collegial body.</p>
+<p>$^2$ For the purposes of preparation and implementation, the business of the Federal Council is allocated to its individual members according to department.</p>
+<p>$^3$ Business may be delegated to and directly dealt with by departments or their subordinate administrative units; in such cases, the right to legal recourse is guaranteed.</p>
+<p>$^1$ 联邦委员会作为一个共同掌权的机构作出决定。</p>
+<p>$^2$ 为了工作的准备和实施，联邦委员会的事务按部门分配给其各个成员。</p>
+<p>$^3$ 联邦事务可以委托给各部门或其下属的行政单位并由其直接处理；在这种情况下，应保障法律追索权。</p>
+<h4 id="Art-178-Federal-Administration-第178条：联邦行政机关"><a href="#Art-178-Federal-Administration-第178条：联邦行政机关" class="headerlink" title="Art. 178 Federal Administration 第178条：联邦行政机关"></a>Art. 178 Federal Administration 第178条：联邦行政机关</h4><p>$^1$ 联邦委员会负责管理联邦行政机构。它确保联邦行政机构被适当地组织起来，并有效地履行其职责。</p>
+<p>$^2$ 联邦行政机构分为几个部门，每个部门由联邦委员会的一名成员领导。</p>
+<p>$^3$ 行政任务可以依法委托给不属于联邦行政机构的公共或私人组织、实体或个人。</p>
+<h4 id="Art-179-Federal-Chancellery-第179条：联邦总理府"><a href="#Art-179-Federal-Chancellery-第179条：联邦总理府" class="headerlink" title="Art. 179 Federal Chancellery 第179条：联邦总理府"></a>Art. 179 Federal Chancellery 第179条：联邦总理府</h4><p>The Federal Chancellery is the general administrative office of the Federal Council. It is headed by a Federal Chancellor.</p>
+<p>联邦总理府是联邦委员会的一般行政办公室。它由一名联邦总理领导。</p>
+<h3 id="Section-2-Powers-第二节：权力"><a href="#Section-2-Powers-第二节：权力" class="headerlink" title="Section 2 Powers 第二节：权力"></a>Section 2 Powers 第二节：权力</h3><h4 id="Art-180-Government-policy-第180条：政府政策"><a href="#Art-180-Government-policy-第180条：政府政策" class="headerlink" title="Art. 180 Government policy 第180条：政府政策"></a>Art. 180 Government policy 第180条：政府政策</h4><p>$^1$ The Federal Council decides on the objectives of federal government policy and the means by which they should be achieved. It plans and coordinates state activities.</p>
+<p>$^2$ It informs the general public fully and in good time about its activities, unless overriding public or private interests prevent this.</p>
+<p>$^1$ 联邦委员会决定联邦政府政策的目标和实现这些目标的手段。它计划并协调国家活动。</p>
+<p>$^2$ 联邦委员会向公众充分及时地通报其活动，除非这与最重要的公共利益或私人利益冲突。</p>
+<h4 id="Art-181-Right-to-initiate-legislation-第181条：发起立法的权利"><a href="#Art-181-Right-to-initiate-legislation-第181条：发起立法的权利" class="headerlink" title="Art. 181 Right to initiate legislation 第181条：发起立法的权利"></a>Art. 181 Right to initiate legislation 第181条：发起立法的权利</h4><p>The Federal Council submits drafts of Federal Assembly legislation to the Federal Assembly.</p>
+<p>联邦委员会将联邦议会的立法草案提交给联邦议会。</p>
+<h4 id="Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行"><a href="#Art-182-Law-making-and-implementation-of-legislation-第182条：法律的制定和执行" class="headerlink" title="Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行"></a>Art. 182 Law-making and implementation of legislation 第182条：法律的制定和执行</h4><p>$^1$ The Federal Council enacts legislative provisions in the form of ordinances, provided it has the authority to do so under the Constitution or the law.</p>
+<p>$^2$ It ensures the implementation of legislation, the resolutions of the Federal Assembly and the judgments of federal judicial authorities.</p>
+<p>$^1$ 联邦委员会以法令的形式颁布立法条款，只要它根据宪法或法律有权这样做。</p>
+<p>$^2$ 联邦委员会确保立法、联邦议会的决议和联邦司法机关的判决的实施。</p>
+<h4 id="Art-183-Finances-第183条：财政"><a href="#Art-183-Finances-第183条：财政" class="headerlink" title="Art. 183 Finances 第183条：财政"></a>Art. 183 Finances 第183条：财政</h4><p>$^1$ The Federal Council draws up the financial plan and the draft budget and prepare the federal accounts.</p>
+<p>$^2$ It ensures orderly financial management.</p>
+<p>$^1$ 联邦委员会制定财政计划和预算草案，并编制联邦账目。</p>
+<p>$^2$ 联邦委员会确保有序的财政管理。</p>
+<h4 id="Art-184-Foreign-relations-外交关系"><a href="#Art-184-Foreign-relations-外交关系" class="headerlink" title="Art. 184 Foreign relations 外交关系"></a>Art. 184 Foreign relations 外交关系</h4><p>$^1$ The Federal Council is responsible for foreign relations, subject to the right of participation of the Federal Assembly; it represents Switzerland abroad.</p>
+<p>$^2$ It signs and ratifies international treaties. It submits them to the Federal Assembly for approval.</p>
+<p>$^3$ Where safeguarding the interests of the country so requires, the Federal Council may issue ordinances and rulings. Ordinances must be of limited duration.</p>
+<p>$^1$ 联邦委员会负责外交关系，但须服从联邦议会的参与权；联邦委员会在国外代表瑞士。</p>
+<p>$^2$ 联邦委员会签署和批准国际条约。联邦委员会将这些条约提交给联邦议会审批通过。</p>
+<p>$^3$ 在维护国家利益的需要下，联邦委员会可以发布法令和裁定。法令必须是有期限的。</p>
+<h4 id="Art-185-External-and-internal-security-外部与国内安全"><a href="#Art-185-External-and-internal-security-外部与国内安全" class="headerlink" title="Art. 185 External and internal security 外部与国内安全"></a>Art. 185 External and internal security 外部与国内安全</h4><p>$^1$ The Federal Council takes measures to safeguard external security, independence and neutrality of Switzerland.</p>
+<p>$^2$ It takes measures to safeguard internal security.</p>
+<p>$^3$ It may in direct application of this Article issue ordinances and rulings in order to counter existing or imminent threats of serious disruption to public order or internal or external security. Such ordinances must be limited in duration.</p>
+<p>$^4$ In cases of emergency, it may mobilise the armed forces. Where it mobilises more than 4,000 members of the armed forces for active service or where the deployment of such troops is expected to last for more than three weeks, the Federal Assembly must be convened without delay.</p>
+<p>$^1$ 联邦委员会采取措施，保障瑞士的外部安全、独立和中立。</p>
+<p>$^2$ 联邦委员会采取措施保障国内安全。</p>
+<p>$^3$ 联邦委员会可以直接适用本条规定，发布法令和裁定，以应对现有或即将发生的严重破坏公共秩序、国内安全或外部安全的威胁。这种法令必须有一定的期限。</p>
+<p>$^4$ 在紧急情况下，联邦委员会可以调动武装部队。如果联邦委员会调动4000名以上的武装部队成员服现役，或者武装部队的部署预计将持续三周以上，则必须立即召开联邦议会。</p>
+<h4 id="Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系"><a href="#Art-186-Relations-between-the-Confederation-and-the-Cantons-第186条：联邦与各州之间的关系" class="headerlink" title="Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系"></a>Art. 186 Relations between the Confederation and the Cantons 第186条：联邦与各州之间的关系</h4><p>$^1$ The Federal Council is responsible for maintaining relations between the Confederation and the Cantons and collaborates with the latter.</p>
+<p>$^2$ It may approve cantonal legislation when required to do so by federal law.</p>
+<p>$^3$ It may object to treaties between Cantons or between Cantons and foreign countries.</p>
+<p>$^4$ It ensures compliance with federal law, as well as the cantonal constitutions and cantonal treaties and takes the measures required to fulfil this duty.</p>
+<p>$^1$ 联邦委员会负责维护联邦与各州之间的关系，并与各州进行合作。</p>
+<p>$^2$ 在联邦法律要求下，联邦委员会可以批准各州的立法。</p>
+<p>$^3$ 联邦委员会可以反对各州之间或各州与外国之间的条约。</p>
+<p>$^4$ 联邦委员会确保联邦法律以及各州的宪法和各州的条约得到遵守，并采取必要的措施履行这一职责。</p>
+<h4 id="Art-187-Further-duties-and-powers-第187条：进一步的职责和权力"><a href="#Art-187-Further-duties-and-powers-第187条：进一步的职责和权力" class="headerlink" title="Art. 187 Further duties and powers 第187条：进一步的职责和权力"></a>Art. 187 Further duties and powers 第187条：进一步的职责和权力</h4><p>$^1$ The Federal Council also has the following duties and powers:</p>
+<ol type="a">
+    <li>Supervising the Federal Administration and the other bodies entrusted with federal duties.</li>
+    <li>Reporting regularly to the Federal Assembly on the conduct of its business as well as on the situation in Switzerland.</li>
+    <li>Making appointments that do not fall within the remit of other authorities.</li>
+    <li>Dealing with appeals, where the law so provides.</li>
+</ol>
+
+<p>$^2$ Other duties and powers may be delegated by law to the Federal Council.</p>
+<p>$^1$ 联邦委员会还拥有以下职责和权力：</p>
+<ol type="a">
+    <li>监督联邦行政机关和其他受委托承担联邦职责的机构。</li>
+    <li>定期向联邦议会报告其事务实施情况以及瑞士的情况。</li>
+    <li>做出不属于其他机构职责范围的任命。</li>
+    <li>在法律规定的情况下，处理上诉案件。</li>
+</ol>
+
+<p>$^2$ 其他职责和权力可由法律授权给联邦委员会。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Federal Constitution of the Swiss Confederation, (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>读书</tag>
+        <tag>政治科学</tag>
       </tags>
   </entry>
   <entry>
