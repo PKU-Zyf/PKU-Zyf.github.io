@@ -943,6 +943,72 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
+    <url>/typora/</url>
+    <content><![CDATA[<p>以Whitey主题为例。</p>
+<a id="more"></a>
+<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
+<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
+<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
+<p>找到开头的：</p>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Vollkorn&quot;, Palatino, Times;
+    ...
+&#125;
+</code></pre>
+<p>将<code>font-family</code>改为：</p>
+<pre><code class="lang-css">font-family: Times, 宋体;
+</code></pre>
+<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
+<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
+<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
+<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
+<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
+<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
+<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
+<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
+<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
+<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
+<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
+<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
+<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
+<pre><code class="lang-css">@font-face&#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZSSK.TTF);
+&#125;
+
+@font-face &#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+&#125;
+</code></pre>
+<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
+<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
+<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+</code></pre>
+<p>即可在Typora主界面实现效果：</p>
+<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
+<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
+<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
+<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
+<pre><code class="lang-css">@media print &#123;
+    html &#123;
+        font-size: 13px;
+    &#125;
+&#125;
+</code></pre>
+<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
+]]></content>
+      <tags>
+        <tag>Typora</tag>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
     <url>/swiss_constitution/</url>
     <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
@@ -1037,72 +1103,6 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>读书</tag>
         <tag>政治科学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
-    <url>/typora/</url>
-    <content><![CDATA[<p>以Whitey主题为例。</p>
-<a id="more"></a>
-<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
-<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
-<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
-<p>找到开头的：</p>
-<pre><code class="lang-css">body &#123;
-    font-family: &quot;Vollkorn&quot;, Palatino, Times;
-    ...
-&#125;
-</code></pre>
-<p>将<code>font-family</code>改为：</p>
-<pre><code class="lang-css">font-family: Times, 宋体;
-</code></pre>
-<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
-<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
-<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
-<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
-<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
-<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
-<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
-<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
-<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
-<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
-<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
-<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
-<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<pre><code class="lang-css">@font-face&#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: normal;
-    src: url(whitey_cjk/FZSSK.TTF);
-&#125;
-
-@font-face &#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: bold;
-    src: url(whitey_cjk/FZHT_Document.TTF);
-&#125;
-</code></pre>
-<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
-<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
-</code></pre>
-<p>即可在Typora主界面实现效果：</p>
-<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
-<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
-<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
-<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<pre><code class="lang-css">@media print &#123;
-    html &#123;
-        font-size: 13px;
-    &#125;
-&#125;
-</code></pre>
-<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
-]]></content>
-      <tags>
-        <tag>Typora</tag>
-        <tag>css</tag>
       </tags>
   </entry>
   <entry>
