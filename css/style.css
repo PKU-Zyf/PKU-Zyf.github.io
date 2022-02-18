@@ -904,7 +904,7 @@ html {
 body {
   position: relative;
   background-color: #fff;
-  font-family: "Noto Serif SC", Times, Arial, sans-serif;
+  font-family: "New York", Times, "宋体", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "微软雅黑", serif, sans-serif;
   font-size: 1.75rem;
   line-height: 1.7;
   color: #1e3e3f;
