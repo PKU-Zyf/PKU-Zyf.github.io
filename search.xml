@@ -661,6 +661,168 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>STATA中如何实现「字典」功能？</title>
+    <url>/stata_dict/</url>
+    <content><![CDATA[<p>STATA语言在设计上完全以统计功能为核心，它并不以简洁的语法见长。不过，我们仍然可以用稍微复杂一点的代码，实现它不那么擅长的功能。</p>
+<a id="more"></a>
+<p>例如，我们想要进行一些一一对应的批量操作时，可以在Python等语言中构建<strong>字典（dictionary）</strong>变量。</p>
+<p>通过<strong>循环语句</strong>和<strong>计数器暂元</strong>的结合使用，我们可以在STATA上实现类似功能。</p>
+<h2 id="一、部分语句提供类似「字典」的语法"><a href="#一、部分语句提供类似「字典」的语法" class="headerlink" title="一、部分语句提供类似「字典」的语法"></a>一、部分语句提供类似「字典」的语法</h2><p>其实，有些语句的语法提供了类似的「一一对应」功能。例如，我们想要对变量进行批量重命名时，可以逐个重命名：</p>
+<pre><code class="lang-STATA">sysuse nlsw88, clear
+rename age 年龄
+rename race 种族
+rename married 婚姻状况
+rename occupation 职业
+</code></pre>
+<p>也可以使用以下<strong>更简洁的代码</strong>：</p>
+<pre><code class="lang-STATA">sysuse nlsw88, clear
+rename (age race married occupation) (年龄 种族 婚姻状况 职业)
+</code></pre>
+<p>或者定义两个<strong>局部暂元</strong>（local macro），使得代码的逻辑更清晰：</p>
+<pre><code class="lang-STATA">sysuse nlsw88, clear
+local old_varnames age race married occupation
+local new_varnames 年龄 种族 婚姻状况 职业
+rename (`old_varname&#39;) (`new_varname&#39;)
+</code></pre>
+<p>当需要重命名的变量很多时，后两种写法有明显优势。</p>
+<p>三种写法的运行结果是一致的：</p>
+<p><img src="image-20220316094832045.png" alt="image-20220316094832045"></p>
+<h2 id="二、手动构建「字典」"><a href="#二、手动构建「字典」" class="headerlink" title="二、手动构建「字典」"></a>二、手动构建「字典」</h2><p>但有些语句并不像<code>rename</code>语句一样支持这样的「一一对应」功能。例如，执行完上述代码之后，我们在Data Editor (Edit) 界面右击，选择「Data - Value labels - Manage value labels…」，发现值标签（value labels）的名字依然是旧的：</p>
+<p><img src="image-20220316095133558.png" alt="image-20220316095133558"></p>
+<p>这个时候，我们希望能把值标签的名字也同步更新（这在大型数据集中非常重要）。这需要使用<code>label copy</code>语句先复制一份原来的标签出来，然后再给新变量贴上新的值标签：</p>
+<pre><code class="lang-STATA">sysuse nlsw88, clear
+label copy racelbl 种族值标签
+label copy marlbl 婚姻状况值标签
+label copy occlbl 职业值标签
+rename age 年龄
+rename race 种族
+rename married 婚姻状况
+rename occupation 职业
+label var 种族 种族值标签
+label var 婚姻状况 婚姻状况值标签
+label var 职业 职业值标签
+</code></pre>
+<p>这样就可以更方便地找到新变量名对应的值标签，当然，新的值标签和旧变量名对应的值标签是完全一致的：</p>
+<p><img src="image-20220316095937568.png" alt="image-20220316095937568"></p>
+<p>然而，<code>label copy</code>语句<strong>并不支持</strong><code>label copy (racelbl marlbl occlbl) (种族值标签 婚姻状况值标签 职业值标签)</code>这样的「一一对应」语法功能，只能一行行写重复的代码。当我们需要操作的值标签很多时，这就很耗时耗力。</p>
+<p>一种常见的解决办法是<strong>使用其他工具</strong>（如Excel、Python或一些高级的代码编辑器）批量生成结构相同的STATA语句，再复制到do文件中。这种方法虽然可行，但并不优雅，而且会使后期对代码的勘误更加困难。</p>
+<p>这时，我们可以结合<strong>循环语句</strong>和<strong>计数器暂元</strong>，完成想要的功能：</p>
+<pre><code class="lang-STATA">sysuse nlsw88, clear
+local old_varnames age race married occupation
+local new_varnames 年龄 种族 婚姻状况 职业
+local new_vars_with_val_labels 种族 婚姻状况 职业
+local old_value_labels racelbl marlbl occlbl
+local new_value_labels 种族值标签 婚姻状况值标签 职业值标签
+
+// 复制变量值标签
+local i = 0
+foreach old in `old_value_labels&#39; &#123;
+    local j = 0
+    foreach new in `new_value_labels&#39; &#123;
+        if `i&#39; == `j&#39; &#123;
+            label copy `old&#39; `new&#39;
+        &#125;
+        local j = `j&#39; + 1
+    &#125;
+    local i = `i&#39; + 1
+&#125;
+
+// 重命名变量
+rename (`old_varname&#39;) (`new_varname&#39;)
+
+// 给重命名后的变量贴上新的值标签
+local i = 0
+foreach var of varlist `new_vars_with_val_labels&#39; &#123;
+    local j = 0
+    foreach val_label in `new_value_labels&#39; &#123;
+        if `i&#39; == `j&#39; &#123;
+            label var `var&#39; `val_label&#39;
+        &#125;
+        local j = `j&#39; + 1
+    &#125;
+    local i = `i&#39; + 1
+&#125;
+</code></pre>
+<p>虽然在示例代码中，第二种写法比第一种还多了二十几行，但是第一种写法的代码行数和涉及的变量数量<strong>成正比</strong>，第二种写法的代码行数却<strong>不随变量数的增加而增加</strong>（除了在定义暂元时，为了避免单行过长而手动折行，可能会增加若干行）。当我们需要批量转换的变量有几十个、上百个乃至更多时，后一种的优势自然就体现出来了。</p>
+<p>可以看到，这段代码实现了我们想要的功能：</p>
+<p><img src="image-20220316102923884.png" alt="image-20220316102923884"></p>
+<p>这里我们给值标签的起名字，都是变量名后面加上「值标签」三个字，所以我们还可以<strong>进一步精简</strong>上面的代码：</p>
+<pre><code class="lang-STATA">sysuse nlsw88, clear
+local old_varnames age race married occupation
+local new_varnames 年龄 种族 婚姻状况 职业
+local new_vars_with_val_labels 种族 婚姻状况 职业
+local old_value_labels racelbl marlbl occlbl
+
+local i = 0
+foreach old in `old_value_labels&#39; &#123;
+    local j = 0
+    foreach new in `new_vars_with_val_labels&#39; &#123;
+        if `i&#39; == `j&#39; &#123;
+            label copy `old&#39; `new&#39;值标签
+        &#125;
+        local j = `j&#39; + 1
+    &#125;
+    local i = `i&#39; + 1
+&#125;
+
+rename (`old_varname&#39;) (`new_varname&#39;)
+
+foreach var of varlist `new_vars_with_val_labels&#39; &#123;
+    label var `var&#39; `var&#39;值标签
+&#125;
+</code></pre>
+<h2 id="三、简析"><a href="#三、简析" class="headerlink" title="三、简析"></a>三、简析</h2><p>这里能实现类似「字典」功能，主要依靠两个循环结构的嵌套，以及两个计数器暂元<code>i</code>和<code>j</code>。</p>
+<p>首先，外层循环遍历旧的值标签，每执行完一次循环体，计数器暂元<code>i</code>就增加1。换言之，<code>i</code>代表<strong>外层循环的循环体运行到了第几次</strong>：</p>
+<pre><code class="lang-STATA">local i = 0
+foreach old in `old_value_labels&#39; &#123;
+    local j = 0
+    foreach new in `new_value_labels&#39; &#123;
+        if `i&#39; == `j&#39; &#123;
+            label copy `old&#39; `new&#39;
+        &#125;
+        local j = `j&#39; + 1
+    &#125;
+    local i = `i&#39; + 1
+&#125;
+</code></pre>
+<p>然后，内层循环遍历旧的值标签，每执行完一次循环体，计数器暂元<code>j</code>就增加1。同理，<code>j</code>代表<strong>内层循环的循环体运行到了第几次</strong>：</p>
+<pre><code class="lang-STATA">local i = 0
+foreach old in `old_value_labels&#39; &#123;
+    local j = 0
+    foreach new in `new_value_labels&#39; &#123;
+        ...
+        local j = `j&#39; + 1
+    &#125;
+    local i = `i&#39; + 1
+&#125;
+</code></pre>
+<p>最后，为了完成「<strong>一一对应</strong>」，我们仅在<code>i</code>和<code>j</code>相等时进行复制值标签操作，即当且仅当：</p>
+<ul>
+<li>外层循环遍历至第1个旧的值标签，同时内层循环遍历至第1个新的值标签；或</li>
+<li>外层循环遍历至第2个旧的值标签，同时内层循环遍历至第2个新的值标签；或</li>
+<li>……</li>
+<li>外层循环遍历至第n个旧的值标签，同时内层循环遍历至第n个新的值标签</li>
+</ul>
+<p>时，我们进行复制值标签操作：</p>
+<pre><code class="lang-STATA">local i = 0
+foreach old in `old_value_labels&#39; &#123;
+    local j = 0
+    foreach new in `new_value_labels&#39; &#123;
+        if `i&#39; == `j&#39; &#123;
+            label copy `old&#39; `new&#39;
+        &#125;
+        local j = `j&#39; + 1
+    &#125;
+    local i = `i&#39; + 1
+&#125;
+</code></pre>
+<p>简而言之，当我们有两组内容，并且希望<strong>按顺序</strong>将这两组数据中对应的内容<strong>一一配对</strong>进行操作时，就可以使用上面的代码语法实现。这和Python等语言中「字典」变量的功能是类似的。</p>
+]]></content>
+      <tags>
+        <tag>STATA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python：经典数独的求解</title>
     <url>/sudoku/</url>
     <content><![CDATA[<p>一个求解经典9×9数独的Python程序。</p>
@@ -943,6 +1105,72 @@ if __name__ == &quot;__main__&quot;:
       </tags>
   </entry>
   <entry>
+    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
+    <url>/typora/</url>
+    <content><![CDATA[<p>以Whitey主题为例。</p>
+<a id="more"></a>
+<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
+<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
+<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
+<p>找到开头的：</p>
+<pre><code class="lang-css">body &#123;
+    font-family: &quot;Vollkorn&quot;, Palatino, Times;
+    ...
+&#125;
+</code></pre>
+<p>将<code>font-family</code>改为：</p>
+<pre><code class="lang-css">font-family: Times, 宋体;
+</code></pre>
+<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
+<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
+<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
+<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
+<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
+<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
+<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
+<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
+<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
+<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
+<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
+<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
+<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
+<pre><code class="lang-css">@font-face&#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: normal;
+    src: url(whitey_cjk/FZSSK.TTF);
+&#125;
+
+@font-face &#123;
+    font-family: &quot;My Font Family&quot;;
+    font-style: normal;
+    font-weight: bold;
+    src: url(whitey_cjk/FZHT_Document.TTF);
+&#125;
+</code></pre>
+<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
+<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
+<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
+</code></pre>
+<p>即可在Typora主界面实现效果：</p>
+<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
+<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
+<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
+<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
+<pre><code class="lang-css">@media print &#123;
+    html &#123;
+        font-size: 13px;
+    &#125;
+&#125;
+</code></pre>
+<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
+]]></content>
+      <tags>
+        <tag>Typora</tag>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>联邦委员会的制度设计：《瑞士联邦宪法》选译</title>
     <url>/swiss_constitution/</url>
     <content><![CDATA[<p>Federal Constitution of the Swiss Confederation, § 5.3.1-5.3.2 (2021). <a href="https://www.fedlex.admin.ch/eli/cc/1999/404/en">https://www.fedlex.admin.ch/eli/cc/1999/404/en</a></p>
@@ -1037,72 +1265,6 @@ if __name__ == &quot;__main__&quot;:
       <tags>
         <tag>读书</tag>
         <tag>政治科学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Typora：自定义中文字体与导出PDF无法加粗问题的解决</title>
-    <url>/typora/</url>
-    <content><![CDATA[<p>以Whitey主题为例。</p>
-<a id="more"></a>
-<p>使用默认的Whitey主题时，Typora可以正常显示中文粗体，导出为PDF文件之后也可以正常显示。</p>
-<p>如果对默认的微软雅黑字体不满意，只需修改css文件配置即可。</p>
-<p>在Typora的主题文件夹中找到<code>whitey.css</code>，<strong>复制一份副本并重命名，仍放在原来的文件夹下；文件名最好全由小写字母或下划线组成，确保Typora可以识别新主题。</strong>这里我们将副本命名为<code>whitey_cjk.css</code>。</p>
-<p>找到开头的：</p>
-<pre><code class="lang-css">body &#123;
-    font-family: &quot;Vollkorn&quot;, Palatino, Times;
-    ...
-&#125;
-</code></pre>
-<p>将<code>font-family</code>改为：</p>
-<pre><code class="lang-css">font-family: Times, 宋体;
-</code></pre>
-<p>重启Typora，可以看到主题库里新增了“Whitey Cjk”主题，点击使用，即可使用宋体渲染中文：</p>
-<p><img src="image-20210801153118358.png" alt="image-20210801153118358"></p>
-<p>不过，这里的粗体宋体事实上是<strong>伪粗体</strong>，类似于LaTeX中的<code>AutoFakeBold</code>选项，或Word中常用的加粗功能。当使用Typora导出PDF时，<strong>中文字体的伪粗体功能失效了</strong>：</p>
-<p><img src="image-20210801153543944.png" alt="image-20210801153543944"></p>
-<p>这是因为西文字体Times New Roman事实上是由一套完整的常规（normal）、<strong>粗体（bold）</strong>、<em>斜体（italic）</em>、<strong><em>粗斜体（bold italic）</em></strong>的字体组成的：</p>
-<p><img src="image-20210801154750461.png" alt="image-20210801154750461"></p>
-<p>但在中文字符数量庞大，除了微软雅黑等少数字体之外，中文字体很少会专为粗体/斜体/粗斜体设计不同的字体文件，而是主要依靠Word、Typora等编辑器的渲染功能实现伪粗体、伪斜体等效果。</p>
-<p>中文表达中使用斜体的场合并不多，粗体是主要的需求。</p>
-<p>而<strong>Typora导出PDF的功能恰恰不支持伪粗体的渲染</strong>，导致PDF的质量大打折扣。</p>
-<p>此时就要考虑使用<code>font-face</code>功能来<strong>自定义字体族</strong>。</p>
-<p>我们首先需要找到两个不同的字体，分别充当自定义字体族的常规字体和粗体，这里使用的是“方正书宋_GBK”和“方正公文黑体”（字体仅用于示例，非商用）。</p>
-<p><strong>在Typora的主题文件夹下</strong>新建<code>whitey_cjk</code>文件夹，将这两个字体的字体文件复制到该文件夹之下。</p>
-<p>在<code>whitey_cjk.css</code>的开头添加这样的代码：</p>
-<pre><code class="lang-css">@font-face&#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: normal;
-    src: url(whitey_cjk/FZSSK.TTF);
-&#125;
-
-@font-face &#123;
-    font-family: &quot;My Font Family&quot;;
-    font-style: normal;
-    font-weight: bold;
-    src: url(whitey_cjk/FZHT_Document.TTF);
-&#125;
-</code></pre>
-<p>这样就分别定义了自定义字体族<code>&quot;My Font Family&quot;</code>的normal和bold两种字重。</p>
-<p>然后再修改<code>body</code>的<code>font-family</code>设置：</p>
-<pre><code class="lang-css">font-family: Times, &quot;My Font Family&quot;;
-</code></pre>
-<p>即可在Typora主界面实现效果：</p>
-<p><img src="image-20210801161147876.png" alt="image-20210801161147876"></p>
-<p><strong>再导出PDF，也可正常显示粗体：</strong></p>
-<p><img src="image-20210801162528864.png" alt="image-20210801162528864"></p>
-<p>事实上，<code>whitey_cjk.css</code>中还有<code>media print</code>选项：</p>
-<pre><code class="lang-css">@media print &#123;
-    html &#123;
-        font-size: 13px;
-    &#125;
-&#125;
-</code></pre>
-<p>该选项中可单独为打印/导出PDF设置<code>font-family</code>，但可能导致其他错误，如非粗体文字反而无法显示等，所以<strong>对<code>media print</code>选项一般无需进行修改</strong>。</p>
-]]></content>
-      <tags>
-        <tag>Typora</tag>
-        <tag>css</tag>
       </tags>
   </entry>
   <entry>
