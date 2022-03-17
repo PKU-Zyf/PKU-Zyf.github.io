@@ -73,18 +73,18 @@
 <p>例如，我们想要进行一些一一对应的批量操作时，可以在Python等语言中构建<strong>字典（dictionary）</strong>变量。</p>
 <p>通过<strong>循环语句</strong>和<strong>计数器暂元</strong>的结合使用，我们可以在STATA上实现类似功能。</p>
 <h2 id="一、部分语句提供类似「字典」的语法"><a href="#一、部分语句提供类似「字典」的语法" class="headerlink" title="一、部分语句提供类似「字典」的语法"></a>一、部分语句提供类似「字典」的语法</h2><p>其实，有些语句的语法提供了类似的「一一对应」功能。例如，我们想要对变量进行批量重命名时，可以逐个重命名：</p>
-<pre><code class="lang-STATA">sysuse nlsw88, clear
+<pre><code class="lang-do">sysuse nlsw88, clear
 rename age 年龄
 rename race 种族
 rename married 婚姻状况
 rename occupation 职业
 </code></pre>
 <p>也可以使用以下<strong>更简洁的代码</strong>：</p>
-<pre><code class="lang-STATA">sysuse nlsw88, clear
+<pre><code class="lang-do">sysuse nlsw88, clear
 rename (age race married occupation) (年龄 种族 婚姻状况 职业)
 </code></pre>
 <p>或者定义两个<strong>局部暂元</strong>（local macro），使得代码的逻辑更清晰：</p>
-<pre><code class="lang-STATA">sysuse nlsw88, clear
+<pre><code class="lang-do">sysuse nlsw88, clear
 local old_varnames age race married occupation
 local new_varnames 年龄 种族 婚姻状况 职业
 rename (`old_varname&#39;) (`new_varname&#39;)
@@ -227,7 +227,7 @@ foreach old in `old_value_labels&#39; &#123;
     </div>
     <footer class="article-footer">
       <!--
-      <a data-url="https://pku-zyf.github.io/stata_dict/" data-id="cl0t0z5v70010m4vr38w91wh8" class="article-share-link">
+      <a data-url="https://pku-zyf.github.io/stata_dict/" data-id="cl0ujny0d0014dovr5n3xem50" class="article-share-link">
         分享
       </a>
       注释掉的是分享按钮。
