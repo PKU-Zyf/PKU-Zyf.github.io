@@ -396,25 +396,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
-    <title>马基雅维利《君主论》英译本 (Connell, 2016)</title>
-    <url>/prince/</url>
-    <content><![CDATA[<p>Connell, W. J., &amp; Machiavelli, N. (2016). <em>The Prince: With Related Documents</em> (2 ed.). Bedford/St. Martin’s. </p>
-<a id="more"></a>
-<p>Connell (2016) 对马基雅维利《君主论》的新译是英文世界较好的译本之一。本文以Markdown格式提供了该译本的文本资料。通过这份文本，研究者可以更为便捷地对马基雅维利《君主论》的关键概念进行搜索和分析，为文本事实的操作化提供一个较为可靠的基础。在这个基础上，我们可以更全面、更准确地展开深入的、阐释性的思想研究。</p>
-<p>相关说明如下：</p>
-<ol>
-<li>这份文档以Markdown格式呈现，编码为UTF-8。</li>
-<li>原始文本来自对Connell (2016) 英译本原书的扫描和OCR识别。识别后的文本经过人工复核，改正了各处识别错误，如单词拼写错误、误将单词拆开或合并、错误的分段等；对于译本中原有的表述，一律不作改动。人工复核难免有疏漏之处，请读者指正。</li>
-<li>所有注释均从略，只保留马基雅维利原著的译文。</li>
-</ol>
-<p>获取Markdown文件。</p>
-]]></content>
-      <tags>
-        <tag>读书</tag>
-        <tag>政治哲学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>木心《琼美卡随想录》《素履之往》《即兴判断》《鱼丽之宴》摘录</title>
     <url>/mu_xin/</url>
     <content><![CDATA[<p>木心：《琼美卡随想录》，《素履之往》，《即兴判断》，《鱼丽之宴》，桂林：广西师范大学出版社，2018。</p>
@@ -542,6 +523,24 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>马基雅维利《君主论》英译本 (Connell, 2016)</title>
+    <url>/prince/</url>
+    <content><![CDATA[<p>Connell, W. J., &amp; Machiavelli, N. (2016). <em>The Prince: With Related Documents</em> (2 ed.). Bedford/St. Martin’s. </p>
+<a id="more"></a>
+<p>在英文世界的马基雅维利《君主论》诸译本中，Connell (2016) 的新译是较为理想的一种。本文以Markdown格式提供了该译本的原始文本。通过这份文本，研究者可以更为便捷地对马基雅维利《君主论》的关键概念进行搜索和分析，为文本事实的操作化奠定一个较为可靠的基础。在这个基础上，我们可以更全面、更准确地展开深入的、阐释性的马基雅维利思想研究。</p>
+<p>编辑说明：</p>
+<ol>
+<li>原始文本来自对Connell (2016) 英译本原书的扫描和OCR识别。识别后的文本经过人工复核，改正了各处识别错误，如单词拼写错误、误将单词拆开或合并、错误的分段等；对于译本中原有的表述，一律不作改动。人工复核难免有疏漏之处，请读者指正。</li>
+<li>所有注释均从略，只保留马基雅维利原著的译文。</li>
+</ol>
+<p><a href="prince/The_Prince_Machiavelli_trans_Connell_20220425.txt">点击此处</a>阅读原文。文档的格式为txt，但遵照Markdown格式规范编写。文档编码为UTF-8。</p>
+]]></content>
+      <tags>
+        <tag>读书</tag>
+        <tag>政治哲学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Typora / Hexo：如何优雅地显示中文引号？</title>
     <url>/quotation_mark/</url>
     <content><![CDATA[<p>中文引号的显示问题的解决！以Typora的Whitey主题和Hexo的Ocean主题为例。</p>
@@ -629,16 +628,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
         <tag>Typora</tag>
         <tag>css</tag>
         <tag>Unicode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书</tag>
       </tags>
   </entry>
   <entry>
@@ -743,6 +732,16 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>Unicode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>读书</tag>
       </tags>
   </entry>
   <entry>
