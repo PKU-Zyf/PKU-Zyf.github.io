@@ -84,59 +84,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hexo渲染代码块：Prism插件的配置</title>
-    <url>/code_block/</url>
-    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
-<a id="more"></a>
-<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
-<ol>
-<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
-<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
-<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
-</ol>
-<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
-<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
-<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
-<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
-<pre><code class="lang-ejs">&lt;head&gt;
-  ...
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
-&lt;/head&gt;
-</code></pre>
-<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
-<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
-  ...
-  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
-&lt;/footer&gt;
-</code></pre>
-<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
-<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
-<pre><code class="lang-yml">highlight:
-  enable: false
-  ...
-prismjs:
-  enable: false
-  ...
-</code></pre>
-<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
-<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
-<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
-<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
-  ...
-&lt;/body&gt;
-</code></pre>
-<p>本站使用的是Prism的Tomorrow Night主题。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
-<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
-<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Humphreys：如何述评？</title>
     <url>/critique/</url>
     <content><![CDATA[<p>译自：Humphreys, M. (n.d.). <em>How to critique</em>. Macartan Humphreys. <a href="http://macartan.nyc/teaching/how-to-critique/">http://macartan.nyc/teaching/how-to-critique/</a></p>
@@ -234,6 +181,59 @@ prismjs:
 ]]></content>
       <tags>
         <tag>读书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo渲染代码块：Prism插件的配置</title>
+    <url>/code_block/</url>
+    <content><![CDATA[<p>Prism是一个轻量级的、可扩展的语法高亮器。Prism is a lightweight, extensible syntax highlighter.</p>
+<a id="more"></a>
+<h2 id="1-下载Prism配置文件"><a href="#1-下载Prism配置文件" class="headerlink" title="1. 下载Prism配置文件"></a>1. 下载Prism配置文件</h2><p>前往<a href="https://prismjs.com/download.html">Prismjs官方下载页面</a>，然后：</p>
+<ol>
+<li>选择一款喜欢的<strong>主题（Themes）</strong>。</li>
+<li>选择想要高亮的<strong>语言（Languages）</strong>，可以直接全选。</li>
+<li>选择想要的<strong>插件（Plugins）</strong>，常用的如行号显示（Line Numbers）、语言显示（Show Language）、颜色预览（Inline color）、复制按钮（Copy to Clipboard Button）、下载按钮（Download Button）等，可按需选取。</li>
+</ol>
+<p>随后，网站就会根据我们的选择自动生成两份配置文件，<strong>分别点击页面下方的“DOWNLOAD JS”和“DOWNLOAD CSS”</strong>即可下载。</p>
+<h2 id="2-更改Hexo本地配置"><a href="#2-更改Hexo本地配置" class="headerlink" title="2. 更改Hexo本地配置"></a>2. 更改Hexo本地配置</h2><p>以Ocean主题为例。</p>
+<p>在<code>.themes\ocean\source\js</code>文件夹下新建一个<code>prism</code>文件夹，并将刚才下载的<code>prism.js</code>和<code>prism.css</code>复制到<code>prism</code>文件夹中。</p>
+<p>然后更改配置。打开<code>.\themes\ocean\layout\_partial</code>文件夹，找到<code>head.ejs</code>，在<code>head</code>标签内部的最后增加<strong>一行</strong>代码，<strong>增加之后</strong>形如：</p>
+<pre><code class="lang-ejs">&lt;head&gt;
+  ...
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/js/prism/prism.css&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<p>再找到<code>footer.ejs</code>，类似地，增加一行代码：</p>
+<pre><code class="lang-ejs">&lt;footer class=&quot;footer&quot;&gt;
+  ...
+  &lt;script src=&quot;/js/prism/prism.js&quot; async&gt;&lt;/script&gt;
+&lt;/footer&gt;
+</code></pre>
+<p>当然，也可以选择将下载好的文件放置在其他文件夹，则上面两处配置的<code>href</code>属性和<code>src</code>属性也要相应更改。此处，<code>href</code>属性和<code>src</code>属性的值是主题资源文件夹<code>.themes\ocean\source</code>的相对路径。</p>
+<p>最后，更改<strong>主题配置文件</strong>即<code>_config.yml</code>（关于<strong>站点配置文件</strong>和<strong>主题配置文件</strong>的区别，参见“<a href="/formula/" title="Hexo渲染数学公式：配置方法与原理浅释">Hexo渲染数学公式：配置方法与原理浅释</a>”），将内置的highlight和prismjs功能关闭：</p>
+<pre><code class="lang-yml">highlight:
+  enable: false
+  ...
+prismjs:
+  enable: false
+  ...
+</code></pre>
+<h2 id="3-行号插件配置"><a href="#3-行号插件配置" class="headerlink" title="3. 行号插件配置"></a>3. 行号插件配置</h2><p>经过这样的配置之后，已经可以取得相当不错的代码块渲染效果。</p>
+<p>不过，如果在下载配置文件时勾选了行号显示（Line Numbers）插件的话，还需增加一步，才能看到代码块前的行号。</p>
+<p>打开<code>.\themes\ocean\layout\layout.ejs</code>，指定<code>body</code>标签的类为<code>&quot;line-numbers&quot;</code>，即可全局启用行号显示：</p>
+<pre><code class="lang-ejs">&lt;body class=&quot;line-numbers&quot;&gt;
+  ...
+&lt;/body&gt;
+</code></pre>
+<p>本站使用的是Prism的Tomorrow Night主题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>Prism. <a href="https://prismjs.com/index.html">https://prismjs.com/index.html</a></li>
+<li>使用Prism.js高亮代码. <a href="https://clearsky.me/prism.html">https://clearsky.me/prism.html</a></li>
+<li>魔改hexo博客. <a href="https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke">https://godliuyang.wang/2020/09/18/mo-gai-hexo-bo-ke</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -534,7 +534,7 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 <li>原始文本来自对Connell (2016) 英译本原书的扫描和OCR识别。识别后的文本经过人工复核，改正了各处识别错误，如单词拼写错误、误将单词拆开或合并、错误的分段等；对于译本中原有的表述，一律不作改动。人工复核难免有疏漏之处，请读者指正。</li>
 <li>所有注释均从略，只保留马基雅维利原著的译文。</li>
 </ol>
-<p><img src="The_Prince_Machiavelli_trans_Connell_20220425.md" alt="点击此处">获取Markdown文件。</p>
+<p><a href="The_Prince_Machiavelli_trans_Connell_20220425.md">点击此处</a>获取Markdown文件。</p>
 ]]></content>
       <tags>
         <tag>读书</tag>
@@ -629,6 +629,16 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
         <tag>Typora</tag>
         <tag>css</tag>
         <tag>Unicode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>读书</tag>
       </tags>
   </entry>
   <entry>
@@ -733,16 +743,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>Unicode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书</tag>
       </tags>
   </entry>
   <entry>
