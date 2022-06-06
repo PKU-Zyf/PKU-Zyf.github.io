@@ -6,7 +6,7 @@
   <link href="https://pku-zyf.github.io/atom.xml" rel="self"/>
   
   <link href="https://pku-zyf.github.io/"/>
-  <updated>2022-06-06T07:51:35.533Z</updated>
+  <updated>2022-06-06T07:54:35.852Z</updated>
   <id>https://pku-zyf.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>VBA：指定关键词的加字</title>
+    <title>VBA：指定关键词的加粗显示</title>
     <link href="https://pku-zyf.github.io/vba_bold/"/>
     <id>https://pku-zyf.github.io/vba_bold/</id>
     <published>2022-06-05T16:00:00.000Z</published>
-    <updated>2022-06-06T07:51:35.533Z</updated>
+    <updated>2022-06-06T07:54:35.852Z</updated>
     
     <content type="html"><![CDATA[<p>如何在Excel中加粗指定的关键字？</p><a id="more"></a><p>在Word中，我们可以使用“查找-替换”功能的“格式”选项，指定查找或替换的字符的格式（如加粗、斜体等）。然而在Excel中，当我们设置替换内容的格式时，整个单元格都会被渲染为该格式。</p><p>例如，当我们想要将表格中所有的“月”字加粗时，如果这样操作：</p><p><img src="image-20220606152808027.png" alt="image-20220606152808027"></p><p>则会得到这样的结果：</p><p><img src="image-20220606152841796.png" alt="image-20220606152841796"></p><p>这并不符合我们的预期。为此，可以使用VBA功能。选择“开发工具-宏”并新建一个宏：</p><pre><code class="lang-VB">Sub Emph()    &#39;遍历所有工作表    For n = 1 To Worksheets.Count        Dim ws As Variant        Set ws = Worksheets(n)        &#39;遍历活动单元格        For r = 1 To ws.UsedRange.Rows.Count            For c = 1 To ws.UsedRange.Columns.Count                &#39;匹配关键字                Dim cell_value As String                Dim keyword As String                Dim kw_len As Integer                Dim str_loc As Integer                cell_value = ws.Cells(r, c).Value    &#39;提取单元格的值                keyword = &quot;月&quot;                kw_len = Len(keyword)                start_loc = InStr(1, cell_value, keyword, 1)    &#39;返回匹配到的字符串的起始位置                &#39;对匹配到的关键字加粗、标黑体                If start_loc &gt; 0 Then                    With ws.Cells(r, c).Characters(start_loc, kw_len).Font                        .Bold = True                        .Name = &quot;黑体&quot;                    End With                End If            Next        Next    NextEnd Sub</code></pre><p>在加粗的同时，还顺手修改了字体，使得关键字更加突出。</p><p>点击运行，可以看到运行结果：</p><p><img src="image-20220606154906880.png" alt="image-20220606154906880"></p><p>这正是我们想要的效果。</p>]]></content>
     
