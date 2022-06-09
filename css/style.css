@@ -1,16 +1,14 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: "my_fonts";
-  src: local("华文宋体"), local("宋体"), local("PingFang SC"), local("微软雅黑"),
-       url("../fonts/FZSSK/FZSSK.woff") format("woff"); 
-  /* local选项似乎对Firefox无效 */
+  font-family: "Special";
+  src: url("../fonts/FZSSK/FZSSK.woff") format("woff"),
+       url("../fonts/FZSSK/FZSSK.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
-  unicode-range: U+2018, U+2019, U+201c, U+201d, U+2014, U+2026, U+00B7;
+  unicode-range: U+00B7, U+2018, U+2019, U+201c, U+201d, U+2014, U+2026, U+300A, U+300B;
 }
 
-/*
 @font-face {
   font-family: "FZSSK";
   src: url("../fonts/FZSSK/FZSSK.woff") format("woff"),
@@ -20,15 +18,36 @@
 }
 
 @font-face {
-  font-family: "FZSSK_Quotation";
-  src: url("../fonts/FZSSK/FZSSK.woff") format("woff"),
-       url("../fonts/FZSSK/FZSSK.TTF") format("truetype");
+  font-family: "EB Garamond";
+  src: url("../fonts/EB_Garamond/EBGaramond-Regular.woff") format("woff"),
+       url("../fonts/EB_Garamond/EBGaramond-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-  unicode-range: U+2018, U+2019, U+201c, U+201d, U+2014, U+2026, U+00B7;
 }
 
-*/
+@font-face {
+  font-family: "EB Garamond";
+  src: url("../fonts/EB_Garamond/EBGaramond-Bold.woff") format("woff"),
+       url("../fonts/EB_Garamond/EBGaramond-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("../fonts/EB_Garamond/EBGaramond-Italic.woff") format("woff"),
+       url("../fonts/EB_Garamond/EBGaramond-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("../fonts/EB_Garamond/EBGaramond-BoldItalic.woff") format("woff"),
+       url("../fonts/EB_Garamond/EBGaramond-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
 
 
 
@@ -913,7 +932,7 @@ html {
 body {
   position: relative;
   background-color: #fff;
-  font-family: my_fonts, Times, "华文宋体", "宋体", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "微软雅黑", serif, sans-serif;
+  font-family: Special, EB Garamond, FZSSK, Times, "宋体", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "微软雅黑", serif, sans-serif;
   font-size: 1.75rem;
   line-height: 1.7;
   color: #1e3e3f;
@@ -2388,8 +2407,11 @@ pre .javascript .function {
 .navbar .nav.nav-main .nav-item:nth-child(2) .nav-item-link::before {
   content: '\f12a';
 }
-.navbar .nav.nav-main .nav-item:nth-child(5) .nav-item-link::before {
+.navbar .nav.nav-main .nav-item:nth-child(3) .nav-item-link::before {
   content: '\f153';
+}
+.navbar .nav.nav-main .nav-item:nth-child(4) .nav-item-link::before {
+  content: '\f128';
 }
 .navbar-bottom {
   position: absolute;
