@@ -83,7 +83,7 @@
   </entry>
   <entry>
     <title>中国相关的政治学顶刊：官网与RSS订阅源（2021）</title>
-    <url>/chinese_politics_top_hournal_2021/</url>
+    <url>/chinese_politics_top_journal_2021/</url>
     <content><![CDATA[<p>2021年中国相关的政治学顶刊目录与RSS订阅源。</p>
 <a id="more"></a>
 <p>SCImago的Scientific Journal Rank（SJR）数据库提供了2021年政治科学和国际关系期刊排名（Journal Rankings on Political Science and International Relations）以及社会学和政治科学期刊排名（Journal Rankings on Sociology and Political Science），本文在这两个排行榜上筛选出了中国相关的顶刊。筛选标准为：标题包含“China”或“Chinese”，H index级别为“Q1”或“Q2”。</p>
@@ -516,6 +516,29 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
+    <title>马基雅维利《君主论》《论李维》英译本（Connell, 2016; Mansfield &amp; Tarcov, 1996）</title>
+    <url>/machiavelli/</url>
+    <content><![CDATA[<p>Connell, W. J., &amp; Machiavelli, N. (2016). <em>The Prince: With Related Documents</em> (2 ed.). Bedford/St. Martin’s. </p>
+<p>Mansfield, H. C., Tarcov, N, &amp; Machiavelli, N. (1996). <em>Discourses on Livy</em>. The University of Chicago Press.</p>
+<a id="more"></a>
+<p>在英文世界的《君主论》诸译本中，Connell (2016) 的新译是较为理想的一种；而Mansfield &amp; Tarcov (1996) 英译的《论李维》则堪称经典。本文以纯文本格式提供了这两部译本的原始文本。通过它们，研究者可以更为便捷地对文本中的关键概念进行搜索和分析，为文本事实的操作化奠定一个较为可靠的基础。在这个基础上，我们可以更全面、更准确地对马基雅维利的学说展开进一步的深入研究。</p>
+<p>编辑说明：</p>
+<ol>
+<li>《君主论》文本来自对原书纸质版的扫描和OCR识别；《论李维》则是直接从原书PDF电子版导出。识别后的文本经过人工复核，改正了各处识别错误，如单词拼写错误、误将单词拆开或合并、错误的分段等；对于译本中原有的表述，一律不作改动。人工复核难免有疏漏之处，请读者指正。</li>
+<li>所有注释均从略，只保留马基雅维利原著的译文。</li>
+<li>所有的引号和撇号，使用弯引号 / 弯撇号形式；所有的破折号，使用两个hyphen连写的形式。</li>
+<li>原书中的正体（regular）字和斜体（<em>italic</em>）字，这里不做区分。</li>
+<li>原书中的成段引文，以Markdown格式（“<code>&gt;</code>”前缀）标记。</li>
+<li>文档格式为txt，但遵照Markdown格式规范编写。文档编码为UTF-8，为避免乱码，建议在原文档网页右击选择“页面另存为”保存至本地，而非直接在网页上复制粘贴。</li>
+</ol>
+<p><a href="The_Prince_Machiavelli_trans_Connell_20220425.txt">点击此处</a>查看《君主论》英译；<a href="Discources_on_Livy_Machiavelli_trans_Mansfield_and_Tarcov_20220622.txt">点击此处</a>查看《论李维》英译。</p>
+]]></content>
+      <tags>
+        <tag>读书</tag>
+        <tag>政治哲学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>木心《琼美卡随想录》《素履之往》《即兴判断》《鱼丽之宴》摘录</title>
     <url>/mu_xin/</url>
     <content><![CDATA[<p>木心：《琼美卡随想录》，《素履之往》，《即兴判断》，《鱼丽之宴》，桂林：广西师范大学出版社，2018。</p>
@@ -640,29 +663,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       <tags>
         <tag>读书</tag>
         <tag>文学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>马基雅维利《君主论》《论李维》英译本（Connell, 2016; Mansfield &amp; Tarcov, 1996）</title>
-    <url>/machiavelli/</url>
-    <content><![CDATA[<p>Connell, W. J., &amp; Machiavelli, N. (2016). <em>The Prince: With Related Documents</em> (2 ed.). Bedford/St. Martin’s. </p>
-<p>Mansfield, H. C., Tarcov, N, &amp; Machiavelli, N. (1996). <em>Discourses on Livy</em>. The University of Chicago Press.</p>
-<a id="more"></a>
-<p>在英文世界的《君主论》诸译本中，Connell (2016) 的新译是较为理想的一种；而Mansfield &amp; Tarcov (1996) 英译的《论李维》则堪称经典。本文以纯文本格式提供了这两部译本的原始文本。通过它们，研究者可以更为便捷地对文本中的关键概念进行搜索和分析，为文本事实的操作化奠定一个较为可靠的基础。在这个基础上，我们可以更全面、更准确地对马基雅维利的学说展开进一步的深入研究。</p>
-<p>编辑说明：</p>
-<ol>
-<li>《君主论》文本来自对原书纸质版的扫描和OCR识别；《论李维》则是直接从原书PDF电子版导出。识别后的文本经过人工复核，改正了各处识别错误，如单词拼写错误、误将单词拆开或合并、错误的分段等；对于译本中原有的表述，一律不作改动。人工复核难免有疏漏之处，请读者指正。</li>
-<li>所有注释均从略，只保留马基雅维利原著的译文。</li>
-<li>所有的引号和撇号，使用弯引号 / 弯撇号形式；所有的破折号，使用两个hyphen连写的形式。</li>
-<li>原书中的正体（regular）字和斜体（<em>italic</em>）字，这里不做区分。</li>
-<li>原书中的成段引文，以Markdown格式（“<code>&gt;</code>”前缀）标记。</li>
-<li>文档格式为txt，但遵照Markdown格式规范编写。文档编码为UTF-8，为避免乱码，建议在原文档网页右击选择“页面另存为”保存至本地，而非直接在网页上复制粘贴。</li>
-</ol>
-<p><a href="The_Prince_Machiavelli_trans_Connell_20220425.txt">点击此处</a>查看《君主论》英译；<a href="Discources_on_Livy_Machiavelli_trans_Mansfield_and_Tarcov_20220622.txt">点击此处</a>查看《论李维》英译。</p>
-]]></content>
-      <tags>
-        <tag>读书</tag>
-        <tag>政治哲学</tag>
       </tags>
   </entry>
   <entry>
@@ -798,16 +798,6 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
       </tags>
   </entry>
   <entry>
-    <title>启航</title>
-    <url>/start/</url>
-    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
-<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
-]]></content>
-      <tags>
-        <tag>读书</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Unicode13.0中的17种空白字符</title>
     <url>/space_characters/</url>
     <content><![CDATA[<p>看似简单的“空格”并不简单。混用的空白字符（space characters）是许多网页和文档出现乱码的原因。</p>
@@ -909,6 +899,16 @@ e ^ {i\pi} + 1 = 0</script><p>这行设置需要在<strong>每一篇</strong>用
 ]]></content>
       <tags>
         <tag>Unicode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>启航</title>
+    <url>/start/</url>
+    <content><![CDATA[<p>自诚明，谓之性；自明诚，谓之教。诚则明矣；明则诚矣。（《中庸·第二十一章》）</p>
+<p>Then you will know the truth, and the truth will set you free. (John 8:32 NIV)</p>
+]]></content>
+      <tags>
+        <tag>读书</tag>
       </tags>
   </entry>
   <entry>
