@@ -302,6 +302,27 @@
   </entry>
   
   <entry>
+    <title>Anaconda北京外国语大学镜像源的使用</title>
+    <link href="https://pku-zyf.github.io/anaconda_mirror/"/>
+    <id>https://pku-zyf.github.io/anaconda_mirror/</id>
+    <published>2022-02-10T16:00:00.000Z</published>
+    <updated>2023-02-11T15:45:03.854Z</updated>
+    
+    <content type="html"><![CDATA[<p>目前国内最好用的Anaconda镜像源。</p><a id="more"></a><hr><p>在Anaconda Prompt中进行安装、更新等操作时，一般难以连接官方源。这时需要配置镜像源。网上可以查到的多是清华镜像源或中科大镜像源，但现在<strong>这两个源已经无法使用</strong>。</p><p>目前国内最好用的Anaconda镜像源是<strong>北京外国语大学</strong>提供的。使用说明见<a href="https://mirrors.bfsu.edu.cn/help/anaconda/">https://mirrors.bfsu.edu.cn/help/anaconda/</a>。</p><p>如果找不到 <code>.condarc</code> 文件，可以先运行 <code>conda info</code>，显示相关信息，其中“user config file”即是 <code>.condarc</code> 文件的路径。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;目前国内最好用的Anaconda镜像源。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Python" scheme="https://pku-zyf.github.io/tags/Python/"/>
+    
+    <category term="Anaconda" scheme="https://pku-zyf.github.io/tags/Anaconda/"/>
+    
+  </entry>
+  
+  <entry>
     <title>木心《琼美卡随想录》《素履之往》《即兴判断》《鱼丽之宴》摘录</title>
     <link href="https://pku-zyf.github.io/mu_xin/"/>
     <id>https://pku-zyf.github.io/mu_xin/</id>
